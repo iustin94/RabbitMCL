@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <StartArguments>-f C:\Users\jol\Desktop\Black.txt</StartArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <StartArguments>-v "/" -u "Ninja" -p "ninja" -r "json.red" -h "192.168.99.100" -m "Publish" -q "topic_logs3" -e "topic_logs3" --count -1 --CustomProperties --MsgPersistence</StartArguments>
+  </PropertyGroup>
+</Project>

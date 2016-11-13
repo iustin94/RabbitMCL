@@ -1,0 +1,11 @@
+C:\Users\jol\Documents\Visual Studio 2015\Projects\FileTransferQueue\FileTransferQueue\bin\Debug\FileTransferQueue.exe.config
+C:\Users\jol\Documents\Visual Studio 2015\Projects\FileTransferQueue\FileTransferQueue\bin\Debug\FileTransferQueue.exe
+C:\Users\jol\Documents\Visual Studio 2015\Projects\FileTransferQueue\FileTransferQueue\bin\Debug\FileTransferQueue.pdb
+C:\Users\jol\Documents\Visual Studio 2015\Projects\FileTransferQueue\FileTransferQueue\bin\Debug\CommandLine.dll
+C:\Users\jol\Documents\Visual Studio 2015\Projects\FileTransferQueue\FileTransferQueue\bin\Debug\RabbitMQ.Client.dll
+C:\Users\jol\Documents\Visual Studio 2015\Projects\FileTransferQueue\FileTransferQueue\bin\Debug\RabbitMQ.ServiceModel.dll
+C:\Users\jol\Documents\Visual Studio 2015\Projects\FileTransferQueue\FileTransferQueue\bin\Debug\CommandLine.xml
+C:\Users\jol\Documents\Visual Studio 2015\Projects\FileTransferQueue\FileTransferQueue\bin\Debug\RabbitMQ.Client.xml
+C:\Users\jol\Documents\Visual Studio 2015\Projects\FileTransferQueue\FileTransferQueue\obj\Debug\FileTransferQueue.csprojResolveAssemblyReference.cache
+C:\Users\jol\Documents\Visual Studio 2015\Projects\FileTransferQueue\FileTransferQueue\obj\Debug\FileTransferQueue.exe
+C:\Users\jol\Documents\Visual Studio 2015\Projects\FileTransferQueue\FileTransferQueue\obj\Debug\FileTransferQueue.pdb
