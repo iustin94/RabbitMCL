@@ -2,21 +2,22 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using CommandLine;
+
 namespace ClientApp
 {
     class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
+
             var options = Parser.Default.ParseArguments<PublishSubOptions, ConsumeSubOptions>(args)
-
-
-
+                .WithParsed<PublishSubOptions>(opts => Publish(opts))
+                .WithParsed<ConsumeSubOptions>(opts => Consume(opts))
+                .WithNotParsed(errs => PrintErrors(errs));
         }
 
         private static void Publish(PublishSubOptions options)
@@ -286,5 +287,13 @@ namespace ClientApp
                           "\n\t\tMinimum message length: " + minLength +
                           "\n\t\tAverage message length: " + avrgLength);
         }
+
+        public static void PrintErrors(IEnumerable<Error> errors)
+        {
+            foreach (var err in errors)
+            {
+                Console.WriteLine(err.Tag);   
+            }
+        } 
     }
 }

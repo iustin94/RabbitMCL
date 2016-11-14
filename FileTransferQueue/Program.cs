@@ -19,7 +19,8 @@ namespace Producer
             {
                 bool ready = false;
 
-                var options = CommandLine.Parser.Default.ParseArguments<Options>(args);
+                var options = Parser.Default.ParseArguments<Options>(args).MapResult()
+                .
                 if (options != null)
                 {
                     Console.WriteLine("For single file publishing press A. For multiple file publishing press B");

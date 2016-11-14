@@ -7,7 +7,7 @@ using CommandLine.Text;
 namespace Producer
 
 {
-    static class Options
+     class Options
     {
 
         [Verb("Publish", HelpText = "Publish files to IpAddress")]
