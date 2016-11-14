@@ -4,6 +4,7 @@
     <StartArguments>-f C:\Users\jol\Desktop\Black.txt</StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <StartArguments>-v "/" -u "Ninja" -p "ninja" -r "json.red" -h "192.168.99.100" -m "Publish" -q "topic_logs3" -e "topic_logs3" --count -1 --CustomProperties --MsgPersistence</StartArguments>
+    <StartArguments>-v "xdkwjena" -u xdkwjena-p YkAlZ3jm_5J7TN5mEQ-qFflqP-WMpZZT  Rotate password
+-r "json.red" -h "amqp://xdkwjena:YkAlZ3jm_5J7TN5mEQ-qFflqP-WMpZZT%40chicken.rmq.cloudamqp.com/xdkwjena" -m "Publish" -q "topic_logs3" -e "topic_logs3" --count -1 --CustomProperties --MsgPersistence</StartArguments>
   </PropertyGroup>
 </Project>

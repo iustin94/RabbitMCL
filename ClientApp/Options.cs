@@ -56,14 +56,10 @@ namespace ClientApp
         [Option(longName: "MessageExpiration", HelpText = "")]
         public String MessageExpiration { get; set; }
 
+        public IEnumerable<String> FilePths { get; set; }
+
         [Option(longName: "MessageAcknowledge", HelpText = "Applies if selected action is \"consume\" ")]
         public bool MessageAcknowledge { get; set; }
-        public string GetUsage()
-        {
-            return HelpText.AutoBuild(this,
-              (HelpText current) => HelpText.DefaultParsingErrorsHandler(this, current));
-        }
-
-
+        
     }
 }

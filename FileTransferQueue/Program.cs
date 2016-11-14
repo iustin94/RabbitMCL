@@ -19,9 +19,8 @@ namespace Producer
             {
                 bool ready = false;
 
-
-                var options = new Options();
-                if (CommandLine.Parser.Default.ParseArguments(args, options))
+                var options = CommandLine.Parser.Default.ParseArguments<Options>(args);
+                if (options != null)
                 {
                     Console.WriteLine("For single file publishing press A. For multiple file publishing press B");
 
@@ -36,7 +35,8 @@ namespace Producer
                             string path = Console.ReadLine();
                             if (FileExistsAt(path))
                             {
-                                options.FilesPaths = new string[] { path };
+                                List<String> paths= new List<string>();
+                                paths.Add(path);
                             }
                             else
                             {
@@ -57,7 +57,7 @@ namespace Producer
 
                             }
                             if(paths.Count>0)
-                            { options.FilesPaths = paths.ToArray();}
+                            { options. = paths.ToArray();}
                             ready = true;
                         }
                         else

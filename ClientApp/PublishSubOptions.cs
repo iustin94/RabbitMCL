@@ -8,6 +8,7 @@ using CommandLine.Text;
 
 namespace ClientApp
 {
+    [Verb("Publish", HelpText = "Publish files to IpAddress")]
     class PublishSubOptions
     {
 
@@ -36,24 +37,17 @@ namespace ClientApp
         public String BindingKey { get; set; }
 
         [Option(longName: "FilePaths", HelpText = "")]
-        public String FilePaths { get; set; }
+        public IEnumerable<string> FilePaths { get; set; }
 
 
         [Option(longName: "ConfirmsEnabled", HelpText = "")]
-        public String ConfirmsEnabled { get; set; }
+        public bool ConfirmsEnabled { get; set; }
 
         [Option(longName: "MandatoryEnabled", HelpText = "")]
         public String MandatoryEnabled { get; set; }
 
         [Option(longName:"PublishCount", HelpText = "")]
         public int Count { get; set; }
-
-        public string GetUsage()
-        {
-            return HelpText.AutoBuild(this,
-              (HelpText current) => HelpText.DefaultParsingErrorsHandler(this, current));
-        }
-
 
     }
 }

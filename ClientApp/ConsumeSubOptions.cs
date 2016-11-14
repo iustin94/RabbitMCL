@@ -8,6 +8,7 @@ using CommandLine.Text;
 
 namespace ClientApp
 {
+    [Verb("Consume", HelpText = "Conusme files from IpAddress")]
     class ConsumeSubOptions
     {
         [Option(longName: "QueueName", HelpText = "")]
@@ -34,10 +35,8 @@ namespace ClientApp
         [Option(longName: "BindingKey", HelpText = "")]
         public String BindingKey { get; set; }
 
-        public string GetUsage()
-        {
-            return HelpText.AutoBuild(this,
-              (HelpText current) => HelpText.DefaultParsingErrorsHandler(this, current));
-        }
+        [Option(longName: "MessageAcknowledge", HelpText="")]
+        public bool MessageAcknowledge { get; set; }
+
     }
 }
