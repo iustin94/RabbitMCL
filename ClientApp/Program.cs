@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Mime;
 using System.Text;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -24,6 +25,7 @@ namespace ClientApp
         {
             try
             {
+                options.FilePaths = GetFilePaths();
 
                 var watch = System.Diagnostics.Stopwatch.StartNew();
                 double avrgLength = 0;
@@ -38,9 +40,9 @@ namespace ClientApp
                     messages.Add(fileText);
                 }
 
-                avrgLength = (int)messages.Average(x => x.Length);
-                maxLength = (int)messages.Max(x => x.Length);
-                minLength = (int)messages.Min(x => x.Length);
+                avrgLength = (int) messages.Average(x => x.Length);
+                maxLength = (int) messages.Max(x => x.Length);
+                minLength = (int) messages.Min(x => x.Length);
 
                 var factory = new ConnectionFactory()
                 {
@@ -61,9 +63,11 @@ namespace ClientApp
                         durable: options.PersistentMessages);
 
                     channel.QueueDeclare(queue: queueName,
-                        autoDelete: false, // Delete the queue after all consumers are finished. If there was no consumer, it won't be deleted
+                        autoDelete: false,
+                        // Delete the queue after all consumers are finished. If there was no consumer, it won't be deleted
                         durable: options.PersistentQueue, // Makes queue persist after a server restart.
-                        exclusive: false, // Makes queue exclusive. No other connection can access it while the current connection is running.
+                        exclusive: false,
+                        // Makes queue exclusive. No other connection can access it while the current connection is running.
                         arguments: null); // Set of arguments for the declaration. The syntax depends on the server.
                     if (options.ConfirmsEnabled)
                     {
@@ -77,12 +81,13 @@ namespace ClientApp
 
                     IBasicProperties props = channel.CreateBasicProperties();
 
-                        props.Persistent = options.PersistentMessages;              // Sets delivery mode of message to persistent or non-persistent
+                    props.Persistent = options.PersistentMessages;
+                    // Sets delivery mode of message to persistent or non-persistent
 
-                        props.Headers = new Dictionary<string, object>();
-                        props.Headers.Add("Timestamp", DateTime.Now);
-                        props.Headers.Add("Location", "Aarhus , Denmark");
-                  
+                    props.Headers = new Dictionary<string, object>();
+                    props.Headers.Add("Timestamp", DateTime.Now);
+                    props.Headers.Add("Location", "Aarhus , Denmark");
+
 
                     if (options.Count > 0)
                     {
@@ -183,7 +188,7 @@ namespace ClientApp
                         }
                         else
                         {
-                            avrgLength = (avrgLength + body.Length) / 2;
+                            avrgLength = (avrgLength + body.Length)/2;
                         }
 
                         if (body.Length < minLength)
@@ -192,12 +197,15 @@ namespace ClientApp
                             maxLength = body.Length;
 
                         if (options.MessageAcknowledge)
-                        { channel.BasicAck(ea.DeliveryTag, false); }
+                        {
+                            channel.BasicAck(ea.DeliveryTag, false);
+                        }
                     };
 
                     channel.BasicConsume(queue: options.QueueName,
-                                         noAck: !options.MessageAcknowledge,                              // Sets if the server will wait for acknowledgements before deleting message
-                                         consumer: consumer);
+                        noAck: !options.MessageAcknowledge,
+                        // Sets if the server will wait for acknowledgements before deleting message
+                        consumer: consumer);
 
 
                     Console.WriteLine("Message consumer has started. Press any key to stop consuming.");
@@ -231,24 +239,26 @@ namespace ClientApp
             else
                 ReadLine(channel, connection);
         }
+
+        /// <summary>
+        /// First checks if there the string is null or empty. If not then checks for file at given path.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         private static bool FileExistsAt(string path)
         {
 
-            if (!String.IsNullOrEmpty(path))
+            if (!String.IsNullOrEmpty(path) && System.IO.File.Exists(path))
             {
-                if (System.IO.File.Exists(path))
-                {
-                    return true;
-                }
-                else
-                    Console.WriteLine("Can't see shit captain! File not present at specified path. Try again.");
+                return true;
             }
 
             return false;
         }
 
         // BAD CODE. Showld have base options class with common parameters and separate child classes with the different extra parameters.
-        public static void PrintParameters(PublishSubOptions options, Stopwatch watch, double maxLength, double minLength, double avrgLength)
+        public static void PrintParameters(PublishSubOptions options, Stopwatch watch, double maxLength,
+            double minLength, double avrgLength)
         {
             Console.Write("\n" +
                           "Process has ended: " +
@@ -260,7 +270,7 @@ namespace ClientApp
                           "\n\t\tServer address: " + options.IpAddress +
                           "\n\n" +
                           "\n\tTransmision parameters: " +
-                          "\n\t\tExecuted action: " + "Publish"+
+                          "\n\t\tExecuted action: " + "Publish" +
                           "\n\t\tElapsed miliseconds: " + watch.ElapsedMilliseconds +
                           "\n\t\tMessage confirmations: " + (options.ConfirmsEnabled ? "Enabled" : "Dissabled") +
                           "\n\t\tMessage persistence: " + (options.PersistentMessages ? "Enabled" : "Dissabled") +
@@ -268,7 +278,9 @@ namespace ClientApp
                           "\n\t\tMinimum message length: " + minLength +
                           "\n\t\tAverage message length: " + avrgLength);
         }
-        public static void PrintParameters(ConsumeSubOptions options, Stopwatch watch, double maxLength, double minLength, double avrgLength)
+
+        public static void PrintParameters(ConsumeSubOptions options, Stopwatch watch, double maxLength,
+            double minLength, double avrgLength)
         {
             Console.Write("\n" +
                           "Process has ended: " +
@@ -292,8 +304,111 @@ namespace ClientApp
         {
             foreach (var err in errors)
             {
-                Console.WriteLine(err.Tag);   
+                Console.WriteLine(err.Tag);
             }
-        } 
+
+            Console.ReadKey();
+        }
+
+        /// <summary>
+        /// Read paths to file by command line
+        /// </summary>
+        /// <returns></returns>
+        public static List<String> GetFilePaths()
+        {
+
+            List<String> paths = new List<string>();
+
+            bool ready = false;
+            bool keyIsValid = false;
+
+            Console.WriteLine(
+                "\nFor single file publishing press A. For multiple file publishing press B. To exit press ctl+c.");
+
+            while (!keyIsValid)
+            {
+
+                var key = Console.ReadKey().Key;
+
+                if (key == ConsoleKey.A)
+                {
+
+                    ClearConsoleBuffer();
+                    keyIsValid = true;
+
+                    Console.WriteLine("\n\nEnter path to file: ");
+
+
+                    //Loop to get a good file from the user. If path is empty or null it reprompts for file input.
+                    bool pathIsEmpty = true;
+                    while (pathIsEmpty)
+                    {
+                        string path = Console.ReadLine();
+
+                        if (String.IsNullOrEmpty(path))
+                        {
+                            Console.WriteLine("\n You have not entered a valid path. The application will exit.");
+                            Console.ReadKey();
+                            Environment.Exit(0);
+                        }
+                        else if (FileExistsAt(path))
+                        {
+                            pathIsEmpty = false;
+                            paths.Add(path);
+                        }
+                        else
+                        {
+                            Console.WriteLine("\nFile could not be found. Try again. ");
+
+                            ClearConsoleBuffer();
+                        }
+                    }
+                }
+
+                else if (key == ConsoleKey.B)
+                {
+                    ClearConsoleBuffer();
+                    keyIsValid = true;
+                    Console.WriteLine("\n\nEnter path to file: ");
+
+                    bool finished = false;
+                    while (!finished)
+                    {
+                        string path = Console.ReadLine();
+                        if (String.IsNullOrEmpty(path))
+                        {
+                            finished = true;
+                        }
+                        else if (FileExistsAt(path))
+                        {
+                            paths.Add(path);
+                        }
+                        else
+                        {
+                            Console.Write("\nThe path does not point to a file. Try again or press ctrl+c to exit.");
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("\nThe key you have entered is invalid. Please try again.");
+                    ClearConsoleBuffer();
+                }
+            }
+
+            if (paths.Count <= 0)
+            {
+                Console.WriteLine("\n You have not entered any file path. The application will now exit.");
+                Console.ReadKey();
+                Environment.Exit(0);
+            }
+            return paths;
+        }
+        public static void ClearConsoleBuffer()
+        {
+            while (Console.KeyAvailable)
+                Console.ReadKey(false);
+        }
+
     }
 }

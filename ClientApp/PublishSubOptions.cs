@@ -27,6 +27,9 @@ namespace ClientApp
         [Option(longName: "VirtualHost", HelpText = "")]
         public String VirtualHost { get; set; }
 
+        [Option(longName: "ExchangeName", HelpText = "")]
+        public String EchangeName { get; set; }
+
         [Option(longName: "PersistentQueue", HelpText = "")]
         public bool PersistentQueue { get; set; }
 

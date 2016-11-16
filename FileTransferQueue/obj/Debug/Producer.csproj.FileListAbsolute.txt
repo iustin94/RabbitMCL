@@ -1,1 +1,2 @@
 C:\Users\jol\documents\visual studio 2015\Projects\FileTransferQueue\FileTransferQueue\obj\Debug\Producer.csprojResolveAssemblyReference.cache
+C:\Users\jol\documents\visual studio 2015\Projects\FileTransferQueue\FileTransferQueue\bin\Debug\Producer.exe.config
