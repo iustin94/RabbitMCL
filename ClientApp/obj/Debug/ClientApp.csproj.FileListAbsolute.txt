@@ -5,6 +5,5 @@ C:\Users\jol\documents\visual studio 2015\Projects\FileTransferQueue\ClientApp\b
 C:\Users\jol\documents\visual studio 2015\Projects\FileTransferQueue\ClientApp\bin\Debug\RabbitMQ.Client.dll
 C:\Users\jol\documents\visual studio 2015\Projects\FileTransferQueue\ClientApp\bin\Debug\RabbitMQ.ServiceModel.dll
 C:\Users\jol\documents\visual studio 2015\Projects\FileTransferQueue\ClientApp\bin\Debug\RabbitMQ.Client.xml
-C:\Users\jol\documents\visual studio 2015\Projects\FileTransferQueue\ClientApp\obj\Debug\ClientApp.csprojResolveAssemblyReference.cache
 C:\Users\jol\documents\visual studio 2015\Projects\FileTransferQueue\ClientApp\obj\Debug\ClientApp.exe
 C:\Users\jol\documents\visual studio 2015\Projects\FileTransferQueue\ClientApp\obj\Debug\ClientApp.pdb

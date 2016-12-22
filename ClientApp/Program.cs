@@ -18,7 +18,7 @@ namespace ClientApp
         {
             try
             {
-                var options = Parser.Default.ParseArguments<PublishSubOptions, ConsumeSubOptions>(args)
+                var options = Parser.Default.ParseArguments<PublishSubOptions, ConsumeSubOptions>(args: args)
                     .WithParsed<PublishSubOptions>(opts => Publish(opts))
                     .WithParsed<ConsumeSubOptions>(opts => Consume(opts))
                     .WithNotParsed(errs => PrintErrors(errs));
