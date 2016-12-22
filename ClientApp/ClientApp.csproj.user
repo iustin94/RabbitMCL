@@ -1,8 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <StartArguments>Publish --VirtualHost "xdkwjena" --UserName "xdkwjena" --Password YkAlZ3jm_5J7TN5mEQ-qFflqP-WMpZZT 
---BindingKey "json.red" --IpAddress "amqp://xdkwjena:YkAlZ3jm_5J7TN5mEQ-qFflqP-WMpZZT%40chicken.rmq.cloudamqp.com/xdkwjena" --QueueName "topic_logs3" --ExchangeName "topic_logs3" --PublishCount 1 --PersistentMessages</StartArguments>
+    <StartArguments>Publish</StartArguments>
   </PropertyGroup>
   <PropertyGroup>
     <PublishUrlHistory>publish\</PublishUrlHistory>

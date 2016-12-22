@@ -12,20 +12,34 @@ namespace ClientApp
 {
     class Program
     {
+        private static ConnectionManager ConnectionMngr;
+
         public static void Main(string[] args)
         {
+            try
+            {
+                var options = Parser.Default.ParseArguments<PublishSubOptions, ConsumeSubOptions>(args)
+                    .WithParsed<PublishSubOptions>(opts => Publish(opts))
+                    .WithParsed<ConsumeSubOptions>(opts => Consume(opts))
+                    .WithNotParsed(errs => PrintErrors(errs));
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex.Message+"\n");
+                Console.Write(ex.StackTrace);
+                Console.Read();
+            }
 
-            var options = Parser.Default.ParseArguments<PublishSubOptions, ConsumeSubOptions>(args)
-                .WithParsed<PublishSubOptions>(opts => Publish(opts))
-                .WithParsed<ConsumeSubOptions>(opts => Consume(opts))
-                .WithNotParsed(errs => PrintErrors(errs));
         }
 
         private static void Publish(PublishSubOptions options)
         {
+            //To-Do validate fields
+
             try
             {
-                options.FilePaths = GetFilePaths();
+                if (options.FilePaths == null)
+                    options.FilePaths = GetFilePaths();
 
                 var watch = System.Diagnostics.Stopwatch.StartNew();
                 double avrgLength = 0;
@@ -40,95 +54,54 @@ namespace ClientApp
                     messages.Add(fileText);
                 }
 
-                avrgLength = (int) messages.Average(x => x.Length);
-                maxLength = (int) messages.Max(x => x.Length);
-                minLength = (int) messages.Min(x => x.Length);
+                avrgLength = (int)messages.Average(x => x.Length);
+                maxLength = (int)messages.Max(x => x.Length);
+                minLength = (int)messages.Min(x => x.Length);
 
-                var factory = new ConnectionFactory()
+                ConnectionMngr = ConnectionManager.GetInstance();
+
+                ConnectionMngr.SetConnectionCredentials(Username: options.UserName,
+                    Password: options.Password,
+                    Virtualhost: options.VirtualHost,
+                    IpAddresses: options.IpAddresses,
+                    Port: options.Port);
+
+                ConnectionMngr.CicleToFirstOrNextHost();
+
+                // Will the connection and channel be copied in the using block? Or will they get transfered. Will there still be connection in the ConnectionMngr?
+                using (var connection = ConnectionMngr.Connection)
+                using (var channel = ConnectionMngr.Channel)
                 {
-                    HostName = options.IpAddress,
-                    UserName = options.UserName,
-                    Password = options.Password,
-                    VirtualHost = options.VirtualHost
-                };
-
-                using (var connection = factory.CreateConnection())
-                using (var channel = connection.CreateModel())
-                {
-                    string exchangeName = options.QueueName;
-                    string queueName = options.QueueName;
-
-                    channel.ExchangeDeclare(exchange: exchangeName,
+                    channel.ExchangeDeclare(exchange: options.QueueName,
                         type: "topic",
-                        durable: options.PersistentMessages);
+                        durable: options.PersistentQueue);
 
-                    channel.QueueDeclare(queue: queueName,
+                    // Delete the queue after all consumers are finished. If there was no consumer, it won't be deleted
+                    // Makes queue persist after a server restart.
+                    // Makes queue exclusive. No other connection can access it while the current connection is running.
+                    // Set of arguments for the declaration. The syntax depends on the server.
+                    channel.QueueDeclare(queue: options.QueueName,
                         autoDelete: false,
-                        // Delete the queue after all consumers are finished. If there was no consumer, it won't be deleted
-                        durable: options.PersistentQueue, // Makes queue persist after a server restart.
+                        durable: options.PersistentQueue,
                         exclusive: false,
-                        // Makes queue exclusive. No other connection can access it while the current connection is running.
-                        arguments: null); // Set of arguments for the declaration. The syntax depends on the server.
+                        arguments: null);
+
                     if (options.ConfirmsEnabled)
                     {
                         channel.ConfirmSelect();
                     }
 
-                    channel.QueueBind(queue: queueName,
-                        exchange: exchangeName,
+                    channel.QueueBind(queue: options.QueueName,
+                        exchange: options.QueueName,
                         routingKey: options.BindingKey,
                         arguments: null);
 
-                    IBasicProperties props = channel.CreateBasicProperties();
-
-                    props.Persistent = options.PersistentMessages;
-                    // Sets delivery mode of message to persistent or non-persistent
-
-                    props.Headers = new Dictionary<string, object>();
-                    props.Headers.Add("Timestamp", DateTime.Now);
-                    props.Headers.Add("Location", "Aarhus , Denmark");
-
+                    IBasicProperties props = GenerateMessageProperties(channel, options.PersistentMessages);
 
                     if (options.Count > 0)
-                    {
-                        for (int i = 0; i <= options.Count; i++)
-                        {
-
-                            foreach (var messageBody in messages)
-                            {
-                                var body = Encoding.UTF8.GetBytes(messageBody);
-
-                                channel.BasicPublish(exchange: exchangeName,
-                                    routingKey: options.BindingKey,
-                                    basicProperties: props,
-                                    body: body,
-                                    mandatory: true);
-                                if (options.ConfirmsEnabled)
-                                    channel.WaitForConfirmsOrDie();
-                            }
-                        }
-                    }
+                        PublishWithCount(channel, props, options.Count, messages, options);
                     else
-                    {
-                        Console.WriteLine("Publishing in course. Press ESC to stop");
-                        do
-                        {
-                            while (!Console.KeyAvailable)
-                            {
-                                foreach (var messageBody in messages)
-                                {
-                                    var body = Encoding.UTF8.GetBytes(messageBody);
-
-                                    channel.BasicPublish(exchange: exchangeName,
-                                        routingKey: options.BindingKey,
-                                        basicProperties: props,
-                                        body: body);
-                                    if (options.ConfirmsEnabled)
-                                        channel.WaitForConfirmsOrDie();
-                                }
-                            }
-                        } while (Console.ReadKey(true).Key != ConsoleKey.Escape);
-                    }
+                        PublishUntilStop(channel, props, messages, options);
 
                     channel.Close();
                     connection.Close();
@@ -147,6 +120,64 @@ namespace ClientApp
             }
         }
 
+        private static IBasicProperties GenerateMessageProperties(IModel channel, bool PersistentMessages)
+        {
+
+            IBasicProperties props = channel.CreateBasicProperties();
+
+            // Sets delivery mode of message to persistent or non-persistent
+            props.Persistent = PersistentMessages;
+
+            //props.Headers = new Dictionary<string, object>();
+            //props.Headers.Add("Timestamp", DateTime.Now);
+            //props.Headers.Add("Location", "Aarhus , Denmark");
+
+            return props;
+        }
+
+        private static void PublishUntilStop(IModel channel, IBasicProperties props, List<string> messages, PublishSubOptions options)
+        {
+            Console.WriteLine("Publishing in course. Press ESC to stop");
+            do
+            {
+                while (!Console.KeyAvailable)
+                {
+                    foreach (var messageBody in messages)
+                    {
+                        var body = Encoding.UTF8.GetBytes(messageBody);
+
+                        channel.BasicPublish(exchange: options.QueueName,
+                            routingKey: options.BindingKey,
+                            basicProperties: props,
+                            body: body,
+                            mandatory: true);
+                        if (options.ConfirmsEnabled)
+                            channel.WaitForConfirmsOrDie();
+                    }
+                }
+            } while (Console.ReadKey(true).Key != ConsoleKey.Escape);
+
+        }
+        private static void PublishWithCount(IModel channel, IBasicProperties props, int count, List<String> messages, PublishSubOptions options)
+        {
+            for (int i = 0; i <= options.Count; i++)
+            {
+
+                foreach (var messageBody in messages)
+                {
+                    var body = Encoding.UTF8.GetBytes(messageBody);
+
+                    channel.BasicPublish(exchange: options.ExchangeName,
+                        routingKey: options.BindingKey,
+                        basicProperties: props,
+                        body: body,
+                        mandatory: true);
+                    if (options.ConfirmsEnabled)
+                        channel.WaitForConfirmsOrDie();
+                }
+            }
+        }
+
         private static void Consume(ConsumeSubOptions options)
         {
             try
@@ -159,17 +190,24 @@ namespace ClientApp
 
                 var factory = new ConnectionFactory()
                 {
-                    HostName = options.IpAddress,
+                    HostName = options.Hostname,
                     UserName = options.UserName,
                     Password = options.Password,
                     VirtualHost = options.VirtualHost
                 };
-                factory.AutomaticRecoveryEnabled = true;
-                factory.RequestedHeartbeat = 5;
-                factory.ContinuationTimeout = new TimeSpan(5000);
 
-                using (var connection = factory.CreateConnection())
-                using (var channel = connection.CreateModel())
+                ConnectionMngr = ConnectionManager.GetInstance();
+
+                ConnectionMngr.SetConnectionCredentials(Username: options.UserName,
+                   Password: options.Password,
+                   Virtualhost: options.VirtualHost,
+                   IpAddresses: options.IpAddresses,
+                   Port: options.Port);
+
+                ConnectionMngr.CicleToFirstOrNextHost();
+
+                using (var connection = ConnectionMngr.Connection)
+                using (var channel = ConnectionMngr.Channel)
                 {
                     //channel.BasicQos(1000, 5000, true);
 
@@ -188,7 +226,7 @@ namespace ClientApp
                         }
                         else
                         {
-                            avrgLength = (avrgLength + body.Length)/2;
+                            avrgLength = (avrgLength + body.Length) / 2;
                         }
 
                         if (body.Length < minLength)
@@ -267,13 +305,13 @@ namespace ClientApp
                           "\n\t\tUsername: " + options.UserName +
                           "\n\t\tPassword: " + options.Password +
                           "\n\t\tVirtual host: " + options.VirtualHost +
-                          "\n\t\tServer address: " + options.IpAddress +
+                          "\n\t\tServer address: " + options.Hostname +
                           "\n\n" +
                           "\n\tTransmision parameters: " +
                           "\n\t\tExecuted action: " + "Publish" +
                           "\n\t\tElapsed miliseconds: " + watch.ElapsedMilliseconds +
-                          "\n\t\tMessage confirmations: " + (options.ConfirmsEnabled ? "Enabled" : "Dissabled") +
-                          "\n\t\tMessage persistence: " + (options.PersistentMessages ? "Enabled" : "Dissabled") +
+                          "\n\t\tMessage confirmations: " + (options.ConfirmsEnabled ? "Enabled" : "Disabled") +
+                          "\n\t\tMessage persistence: " + (options.PersistentMessages ? "Enabled" : "Disabled") +
                           "\n\t\tMaximum message length: " + maxLength +
                           "\n\t\tMinimum message length: " + minLength +
                           "\n\t\tAverage message length: " + avrgLength);
@@ -289,12 +327,12 @@ namespace ClientApp
                           "\n\t\tUsername: " + options.UserName +
                           "\n\t\tPassword: " + options.Password +
                           "\n\t\tVirtual host: " + options.VirtualHost +
-                          "\n\t\tServer address: " + options.IpAddress +
+                          "\n\t\tServer address: " + options.Hostname +
                           "\n\n" +
                           "\n\tTransmision parameters: " +
                           "\n\t\tExecuted action: " + "Publish" +
                           "\n\t\tElapsed miliseconds: " + watch.ElapsedMilliseconds +
-                          "\n\t\tMessage persistence: " + (options.PersistentMessages ? "Enabled" : "Dissabled") +
+                          "\n\t\tMessage persistence: " + (options.PersistentMessages ? "Enabled" : "Disabled") +
                           "\n\t\tMaximum message length: " + maxLength +
                           "\n\t\tMinimum message length: " + minLength +
                           "\n\t\tAverage message length: " + avrgLength);
