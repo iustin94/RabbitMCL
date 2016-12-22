@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using CommandLine;
 using CommandLine.Text;
 
-namespace ClientApp
+namespace ClientApp.Model
 {
     [Verb("Consume", HelpText = "Consume files from IpAddress")]
     class ConsumeSubOptions

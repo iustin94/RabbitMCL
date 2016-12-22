@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using CommandLine;
 using CommandLine.Text;
 
-namespace ClientApp
+namespace ClientApp.Model
 {
     [Verb("Publish", HelpText = "Publish files to IpAddress")]
     class PublishSubOptions

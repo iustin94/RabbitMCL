@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net.Mime;
 using System.Text;
+using ClientApp.Model;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using CommandLine;
@@ -12,16 +13,16 @@ namespace ClientApp
 {
     class Program
     {
-        private static ConnectionManager ConnectionMngr;
+        private static ConnectionManager _connectionMngr;
 
         public static void Main(string[] args)
         {
             try
             {
-                var options = Parser.Default.ParseArguments<PublishSubOptions, ConsumeSubOptions>(args: args)
+                var options = Parser.Default.ParseArguments<PublishSubOptions, ConsumeSubOptions>(args)
                     .WithParsed<PublishSubOptions>(opts => Publish(opts))
                     .WithParsed<ConsumeSubOptions>(opts => Consume(opts))
-                    .WithNotParsed(errs => PrintErrors(errs));
+                    .WithNotParsed(Errs => PrintErrors(Errs));
             }
             catch (Exception ex)
             {
@@ -58,19 +59,19 @@ namespace ClientApp
                 maxLength = (int)messages.Max(x => x.Length);
                 minLength = (int)messages.Min(x => x.Length);
 
-                ConnectionMngr = ConnectionManager.GetInstance();
+                _connectionMngr = ConnectionManager.GetInstance();
 
-                ConnectionMngr.SetConnectionCredentials(Username: options.UserName,
+                _connectionMngr.SetConnectionCredentials(Username: options.UserName,
                     Password: options.Password,
                     Virtualhost: options.VirtualHost,
                     IpAddresses: options.IpAddresses,
                     Port: options.Port);
 
-                ConnectionMngr.CicleToFirstOrNextHost();
+                _connectionMngr.CicleToFirstOrNextHost();
 
-                // Will the connection and channel be copied in the using block? Or will they get transfered. Will there still be connection in the ConnectionMngr?
-                using (var connection = ConnectionMngr.Connection)
-                using (var channel = ConnectionMngr.Channel)
+                // Will the connection and channel be copied in the using block? Or will they get transfered. Will there still be connection in the _connectionMngr?
+                using (var connection = _connectionMngr.Connection)
+                using (var channel = _connectionMngr.Channel)
                 {
                     channel.ExchangeDeclare(exchange: options.QueueName,
                         type: "topic",
@@ -196,18 +197,18 @@ namespace ClientApp
                     VirtualHost = options.VirtualHost
                 };
 
-                ConnectionMngr = ConnectionManager.GetInstance();
+                _connectionMngr = ConnectionManager.GetInstance();
 
-                ConnectionMngr.SetConnectionCredentials(Username: options.UserName,
+                _connectionMngr.SetConnectionCredentials(Username: options.UserName,
                    Password: options.Password,
                    Virtualhost: options.VirtualHost,
                    IpAddresses: options.IpAddresses,
                    Port: options.Port);
 
-                ConnectionMngr.CicleToFirstOrNextHost();
+                _connectionMngr.CicleToFirstOrNextHost();
 
-                using (var connection = ConnectionMngr.Connection)
-                using (var channel = ConnectionMngr.Channel)
+                using (var connection = _connectionMngr.Connection)
+                using (var channel = _connectionMngr.Channel)
                 {
                     //channel.BasicQos(1000, 5000, true);
 
