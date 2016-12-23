@@ -358,7 +358,6 @@ namespace ClientApp
 
             List<String> paths = new List<string>();
 
-            bool ready = false;
             bool keyIsValid = false;
 
             Console.WriteLine(

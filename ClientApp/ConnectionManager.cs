@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using RabbitMQ.Client;
+using ClientApp.Model;
 
 namespace ClientApp
 {
