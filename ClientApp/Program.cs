@@ -19,14 +19,68 @@ namespace ClientApp
         {
             try
             {
-                var options = Parser.Default.ParseArguments<PublishSubOptions, ConsumeSubOptions>(args)
-                    .WithParsed<PublishSubOptions>(opts => Publish(opts))
-                    .WithParsed<ConsumeSubOptions>(opts => Consume(opts))
-                    .WithNotParsed(Errs => PrintErrors(Errs));
+
+                var options = new Options();
+
+                string invokedVerb = String.Empty;
+                object invokedVerbInstance = null;
+
+
+                if( !CommandLine.Parser.Default.ParseArguments(args, options,
+
+                        (verb, subOptions) =>
+                        {
+                            // if parsing succeeds the verb name and correct instance
+                            // will be passed to onVerbCommand delegate (string,object)
+                            invokedVerb = verb;
+                            invokedVerbInstance = subOptions;
+                        }))
+                    {
+                    Environment.Exit(CommandLine.Parser.DefaultExitCodeFail);
+                    }
+
+                try
+                {
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    Console.Read();
+
+                    
+                }
+
+
+                if (invokedVerb == "Consume")
+                {
+                    try
+                    {
+                        var consumeSubOptions = (ConsumeSubOptions) invokedVerbInstance;
+                        Consume(consumeSubOptions);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                }
+
+                if (invokedVerb == "Publish")
+                {
+                    try
+                    {
+                        var publishSubOptions = (PublishSubOptions) invokedVerbInstance;
+                        Publish(publishSubOptions);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                }
             }
             catch (Exception ex)
             {
-                Console.Write(ex.Message+"\n");
+                Console.Write(ex.Message + "\n");
                 Console.Write(ex.StackTrace);
                 Console.Read();
             }
@@ -339,11 +393,11 @@ namespace ClientApp
                           "\n\t\tAverage message length: " + avrgLength);
         }
 
-        public static void PrintErrors(IEnumerable<Error> errors)
+        public static void PrintErrors(IEnumerable<ParsingError> errors)
         {
             foreach (var err in errors)
             {
-                Console.WriteLine(err.Tag);
+                Console.WriteLine(err.ToString());
             }
 
             Console.ReadKey();

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using CommandLine;
+using CommandLine.Text;
 
 namespace ClientApp.Model
 {
-    [Verb("Publish", HelpText = "Publish files to IpAddress")]
+
+
     class PublishSubOptions
     {
-
         [Option(longName: "QueueName", HelpText = "")]
         public String QueueName { get; set; }
 

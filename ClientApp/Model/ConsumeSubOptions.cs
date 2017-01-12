@@ -4,7 +4,7 @@ using CommandLine;
 
 namespace ClientApp.Model
 {
-    [Verb("Consume", HelpText = "Consume files from IpAddress")]
+  
     class ConsumeSubOptions
     {
         [Option(longName: "QueueName", HelpText = "")]
