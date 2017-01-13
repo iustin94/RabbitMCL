@@ -24,9 +24,10 @@ namespace ClientApp
 
                 string invokedVerb = String.Empty;
                 object invokedVerbInstance = null;
-
-
-                if( !CommandLine.Parser.Default.ParseArguments(args, options,
+              
+                try
+                {
+                    if (!CommandLine.Parser.Default.ParseArguments(args, options,
 
                         (verb, subOptions) =>
                         {
@@ -36,12 +37,8 @@ namespace ClientApp
                             invokedVerbInstance = subOptions;
                         }))
                     {
-                    Environment.Exit(CommandLine.Parser.DefaultExitCodeFail);
+                        Environment.Exit(CommandLine.Parser.DefaultExitCodeFail);
                     }
-
-                try
-                {
-
                 }
                 catch (Exception ex)
                 {
@@ -118,10 +115,8 @@ namespace ClientApp
                 _connectionMngr.SetConnectionCredentials(Username: options.UserName,
                     Password: options.Password,
                     Virtualhost: options.VirtualHost,
-                    IpAddresses: options.IpAddresses,
-                    Port: options.Port);
-
-                _connectionMngr.CicleToFirstOrNextHost();
+                    Ip: options.Ip
+                    );
 
                 // Will the connection and channel be copied in the using block? Or will they get transfered. Will there still be connection in the _connectionMngr?
                 using (var connection = _connectionMngr.Connection)
@@ -131,10 +126,7 @@ namespace ClientApp
                         type: "topic",
                         durable: options.PersistentQueue);
 
-                    // Delete the queue after all consumers are finished. If there was no consumer, it won't be deleted
-                    // Makes queue persist after a server restart.
-                    // Makes queue exclusive. No other connection can access it while the current connection is running.
-                    // Set of arguments for the declaration. The syntax depends on the server.
+  
                     channel.QueueDeclare(queue: options.QueueName,
                         autoDelete: false,
                         durable: options.PersistentQueue,
@@ -245,7 +237,7 @@ namespace ClientApp
 
                 var factory = new ConnectionFactory()
                 {
-                    HostName = options.Hostname,
+                    HostName = options.Ip,
                     UserName = options.UserName,
                     Password = options.Password,
                     VirtualHost = options.VirtualHost
@@ -256,10 +248,8 @@ namespace ClientApp
                 _connectionMngr.SetConnectionCredentials(Username: options.UserName,
                    Password: options.Password,
                    Virtualhost: options.VirtualHost,
-                   IpAddresses: options.IpAddresses,
-                   Port: options.Port);
-
-                _connectionMngr.CicleToFirstOrNextHost();
+                   Ip: options.Ip
+                    );
 
                 using (var connection = _connectionMngr.Connection)
                 using (var channel = _connectionMngr.Channel)
@@ -341,9 +331,13 @@ namespace ClientApp
         private static bool FileExistsAt(string path)
         {
 
-            if (!String.IsNullOrEmpty(path) && System.IO.File.Exists(path))
+            if (!String.IsNullOrEmpty(path))
             {
+                if(System.IO.File.Exists(path))
                 return true;
+
+                if (System.IO.File.Exists(System.IO.Directory.GetCurrentDirectory() + path))
+                    return true;
             }
 
             return false;
@@ -360,7 +354,7 @@ namespace ClientApp
                           "\n\t\tUsername: " + options.UserName +
                           "\n\t\tPassword: " + options.Password +
                           "\n\t\tVirtual host: " + options.VirtualHost +
-                          "\n\t\tServer address: " + options.Hostname +
+                          "\n\t\tServer address: " + options.Ip +
                           "\n\n" +
                           "\n\tTransmision parameters: " +
                           "\n\t\tExecuted action: " + "Publish" +
@@ -382,7 +376,7 @@ namespace ClientApp
                           "\n\t\tUsername: " + options.UserName +
                           "\n\t\tPassword: " + options.Password +
                           "\n\t\tVirtual host: " + options.VirtualHost +
-                          "\n\t\tServer address: " + options.Hostname +
+                          "\n\t\tServer address: " + options.Ip +
                           "\n\n" +
                           "\n\tTransmision parameters: " +
                           "\n\t\tExecuted action: " + "Publish" +

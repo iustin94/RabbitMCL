@@ -1,5 +1,6 @@
 ﻿using System;
 using CommandLine;
+using CommandLine.Text;
 
 
 namespace ClientApp.Model
@@ -19,11 +20,11 @@ namespace ClientApp.Model
         [Option(longName: "Password", HelpText = "")]
         public String Password { get; set; }
 
-        [Option(longName: "Hostname", HelpText = "")]
-        public String Hostname { get; set; }
+        [Option(longName: "Ip", HelpText = "")]
+        public String Ip { get; set; }
 
-        [Option(longName: "IpAddresses", HelpText = "")]
-        public String[] IpAddresses { get; set; }
+        [Option(longName: "Hosts", HelpText = "")]
+        public String[] Hosts{ get; set; }
 
         [Option(longName: "VirtualHost", HelpText = "")]
         public String VirtualHost { get; set; }
@@ -42,6 +43,13 @@ namespace ClientApp.Model
 
         [Option(longName: "MessageAcknowledge", HelpText="")]
         public bool MessageAcknowledge { get; set; }
+
+        [HelpOption]
+        public string GetUsage()
+        {
+            return HelpText.AutoBuild(this,
+              (HelpText current) => HelpText.DefaultParsingErrorsHandler(this, current));
+        }
 
     }
 }

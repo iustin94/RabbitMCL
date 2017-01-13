@@ -21,11 +21,11 @@ namespace ClientApp.Model
         [Option(longName: "Password", HelpText = "")]
         public String Password { get; set; }
 
-        [Option(longName: "Hostname", HelpText = "")]
-        public String Hostname { get; set; }
+        [Option(longName: "Ip", HelpText = "")]
+        public String Ip { get; set; }
 
-        [Option(longName: "IpAddresses", HelpText = "" )]
-        public String[] IpAddresses { get; set; }
+        [Option(longName: "Hosts", HelpText = "" )]
+        public String[] Hosts { get; set; }
 
         [Option(longName: "VirtualHost", HelpText = "")]
         public String VirtualHost { get; set; }
@@ -45,7 +45,7 @@ namespace ClientApp.Model
         [Option(longName: "BindingKey", HelpText = "")]
         public String BindingKey { get; set; }
 
-        [Option(longName: "FilePaths", HelpText = "")]
+        [Option(longName: "File", HelpText = "")]
         public IEnumerable<string> FilePaths { get; set; }
 
         [Option(longName: "ConfirmsEnabled", HelpText = "")]
@@ -56,6 +56,13 @@ namespace ClientApp.Model
 
         [Option(longName:"PublishCount", HelpText = "")]
         public int Count { get; set; }
+
+        [HelpOption]
+        public string GetUsage()
+        {
+            return HelpText.AutoBuild(this,
+              (HelpText current) => HelpText.DefaultParsingErrorsHandler(this, current));
+        }
 
     }
 }
