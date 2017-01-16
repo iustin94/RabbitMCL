@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Mime;
 using System.Text;
 using ClientApp.Model;
+using ClientApp.Service;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using CommandLine;
@@ -14,7 +15,6 @@ namespace ClientApp
     class Program
     {
         private static ConnectionManager _connectionMngr;
-
 
         public static void Main(string[] args)
         {
@@ -33,7 +33,7 @@ namespace ClientApp
                 string invokedVerb = String.Empty;
                 object invokedVerbInstance = null;
 
-                
+
                 if (!parser.ParseArguments(args, options,
                 (verb, subOptions) =>
                     {
@@ -63,9 +63,7 @@ namespace ClientApp
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message + "\n");
-                Console.WriteLine(ex.StackTrace);
-                Console.Read();
+                ConsoleManager.PrintExceptionWaitForKeyPress(ex);
             }
 
         }
@@ -76,7 +74,7 @@ namespace ClientApp
             try
             {
                 if (options.FilePaths == null)
-                    options.FilePaths = GetFilePaths().ToArray();
+                    options.FilePaths = ConsoleManager.GetFilePaths().ToArray();
 
                 var watch = System.Diagnostics.Stopwatch.StartNew();
                 double avrgLength = 0;
@@ -101,7 +99,7 @@ namespace ClientApp
                     Password: options.Password,
                     Virtualhost: options.VirtualHost,
                     Ip: options.Ip,
-                    Hosts: options.Hosts          
+                    Hosts: options.Hosts
                     );
 
                 using (var connection = _connectionMngr.Connection)
@@ -125,16 +123,14 @@ namespace ClientApp
                     connection.Close();
                 }
 
-                PrintParameters(options, watch, maxLength, minLength, avrgLength);
+                ConsoleManager.PrintParameters(options, watch, maxLength, minLength, avrgLength);
 
                 Console.ReadLine();
             }
 
             catch (Exception ex)
             {
-                Console.Write(ex.Message + "\n\t");
-                Console.Write(ex.StackTrace);
-                Console.ReadLine();
+                ConsoleManager.PrintExceptionWaitForKeyPress(ex);
             }
         }
 
@@ -156,7 +152,8 @@ namespace ClientApp
 
             try
             {
-                Console.WriteLine("Publishing in course. Press ESC to stop");
+                ConsoleManager.AnnouncePublishingStarted();
+
                 do
                 {
                     while (!Console.KeyAvailable)
@@ -165,7 +162,7 @@ namespace ClientApp
                         {
                             var body = Encoding.UTF8.GetBytes(messageBody);
 
-                            channel.BasicPublish(exchange: options.QueueName+"-Exchange",
+                            channel.BasicPublish(exchange: options.QueueName + "-Exchange",
                                 routingKey: options.BindingKey,
                                 basicProperties: props,
                                 body: body,
@@ -179,8 +176,7 @@ namespace ClientApp
 
             catch (Exception ex)
             {
-                Console.Clear();
-                Console.WriteLine(ex.Message);
+                ConsoleManager.PrintExceptionWaitForKeyPress(ex);
             }
 
         }
@@ -207,8 +203,7 @@ namespace ClientApp
             }
             catch (Exception ex)
             {
-                Console.Clear();
-                Console.WriteLine(ex.Message);
+                ConsoleManager.PrintExceptionWaitForKeyPress(ex);
             }
 
         }
@@ -247,6 +242,7 @@ namespace ClientApp
 
 
                     var consumer = new EventingBasicConsumer(channel);
+
                     consumer.Received += (model, ea) =>
                     {
                         var body = ea.Body;
@@ -276,11 +272,10 @@ namespace ClientApp
 
                     channel.BasicConsume(queue: options.QueueName,
                         noAck: !options.MessageAcknowledge,
-                        // Sets if the server will wait for acknowledgements before deleting message
                         consumer: consumer);
 
 
-                    Console.WriteLine("Message consumer has started. Press any key to stop consuming.");
+                    Console.WriteLine();
                     Console.ReadKey();
 
                     channel.Close();
@@ -288,8 +283,8 @@ namespace ClientApp
                 }
 
                 watch.Stop();
-                PrintParameters(options, watch, maxLength, minLength, avrgLength);
-                Console.ReadKey();
+                ConsoleManager.PrintParameters(options, watch, maxLength, minLength, avrgLength);
+               
 
 
             }
@@ -317,174 +312,13 @@ namespace ClientApp
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        private static bool FileExistsAt(string path)
-        {
-
-            if (!String.IsNullOrEmpty(path))
-            {
-                if (System.IO.File.Exists(path))
-                    return true;
-
-                if (System.IO.File.Exists(System.IO.Directory.GetCurrentDirectory() + path))
-                    return true;
-            }
-
-            return false;
-        }
-
-        // BAD CODE. Showld have base options class with common parameters and separate child classes with the different extra parameters.
-        public static void PrintParameters(PublishSubOptions options, Stopwatch watch, double maxLength,
-            double minLength, double avrgLength)
-        {
-            Console.Write("\n" +
-                          "Process has ended: " +
-                          "\n\tConnection parameters:" +
-                          "\n\t\tQueue name: " + options.QueueName +
-                          "\n\t\tUsername: " + options.UserName +
-                          "\n\t\tPassword: " + options.Password +
-                          "\n\t\tVirtual host: " + options.VirtualHost +
-                          "\n\t\tServer address: " + options.Ip +
-                          "\n\n" +
-                          "\n\tTransmision parameters: " +
-                          "\n\t\tExecuted action: " + "Publish" +
-                          "\n\t\tElapsed miliseconds: " + watch.ElapsedMilliseconds +
-                          "\n\t\tMessage confirmations: " + (options.ConfirmsEnabled ? "Enabled" : "Disabled") +
-                          "\n\t\tMessage persistence: " + (options.PersistentMessages ? "Enabled" : "Disabled") +
-                          "\n\t\tMaximum message length: " + maxLength +
-                          "\n\t\tMinimum message length: " + minLength +
-                          "\n\t\tAverage message length: " + avrgLength);
-        }
-
-        public static void PrintParameters(ConsumeSubOptions options, Stopwatch watch, double maxLength,
-            double minLength, double avrgLength)
-        {
-            Console.Write("\n" +
-                          "Process has ended: " +
-                          "\n\tConnection parameters:" +
-                          "\n\t\tQueue name: " + options.QueueName +
-                          "\n\t\tUsername: " + options.UserName +
-                          "\n\t\tPassword: " + options.Password +
-                          "\n\t\tVirtual host: " + options.VirtualHost +
-                          "\n\t\tServer address: " + options.Ip +
-                          "\n\n" +
-                          "\n\tTransmision parameters: " +
-                          "\n\t\tExecuted action: " + "Publish" +
-                          "\n\t\tElapsed miliseconds: " + watch.ElapsedMilliseconds +
-                          "\n\t\tMessage persistence: " + (options.PersistentMessages ? "Enabled" : "Disabled") +
-                          "\n\t\tMaximum message length: " + maxLength +
-                          "\n\t\tMinimum message length: " + minLength +
-                          "\n\t\tAverage message length: " + avrgLength);
-        }
-
-        public static void PrintErrors(IEnumerable<ParsingError> errors)
-        {
-            foreach (var err in errors)
-            {
-                Console.WriteLine(err.ToString());
-            }
-
-            Console.ReadKey();
-        }
+       
 
         /// <summary>
         /// Read paths to file by command line
         /// </summary>
         /// <returns></returns>
-        public static List<string> GetFilePaths()
-        {
-
-            List<String> paths = new List<string>();
-
-            bool keyIsValid = false;
-
-            Console.WriteLine(
-                "\nFor single file publishing press A. For multiple file publishing press B. To exit press ctl+c.");
-
-            while (!keyIsValid)
-            {
-
-                var key = Console.ReadKey().Key;
-
-
-                if (key == ConsoleKey.A)
-                {
-
-                    ClearConsoleBuffer();
-                    keyIsValid = true;
-
-                    Console.WriteLine("\n\nEnter path to file: ");
-
-
-                    //Loop to get a good file from the user. If path is empty or null it reprompts for file input.
-                    bool pathIsEmpty = true;
-                    while (pathIsEmpty)
-                    {
-                        string path = Console.ReadLine();
-
-                        if (String.IsNullOrEmpty(path))
-                        {
-                            Console.WriteLine("\n You have not entered a valid path. The application will exit.");
-                            Console.ReadKey();
-                            Environment.Exit(0);
-                        }
-                        else if (FileExistsAt(path))
-                        {
-                            pathIsEmpty = false;
-                            paths.Add(path);
-                        }
-                        else
-                        {
-                            Console.WriteLine("\nFile could not be found. Try again. ");
-
-                            ClearConsoleBuffer();
-                        }
-                    }
-                }
-
-                else if (key == ConsoleKey.B)
-                {
-                    ClearConsoleBuffer();
-                    keyIsValid = true;
-                    Console.WriteLine("\n\nEnter path to file: ");
-
-                    bool finished = false;
-                    while (!finished)
-                    {
-                        string path = Console.ReadLine();
-                        if (String.IsNullOrEmpty(path))
-                        {
-                            finished = true;
-                        }
-                        else if (FileExistsAt(path))
-                        {
-                            paths.Add(path);
-                        }
-                        else
-                        {
-                            Console.Write("\nThe path does not point to a file. Try again or press ctrl+c to exit.");
-                        }
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("\nThe key you have entered is invalid. Please try again.");
-                    ClearConsoleBuffer();
-                }
-            }
-
-            if (paths.Count <= 0)
-            {
-                Console.WriteLine("\n You have not entered any file path. The application will now exit.");
-                Console.ReadKey();
-                Environment.Exit(0);
-            }
-            return paths;
-        }
-        public static void ClearConsoleBuffer()
-        {
-            while (Console.KeyAvailable)
-                Console.ReadKey(false);
-        }
+      
 
     }
 }
