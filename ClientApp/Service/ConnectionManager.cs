@@ -31,7 +31,7 @@ namespace ClientApp
             
         }
 
-        public bool SetConnectionCredentials(string Ip, string Username, string Password, string Virtualhost, IEnumerable<string> Hosts = null )
+        public bool SetConnectionCredentials(string Ip, string Username, string Password, string Virtualhost, IEnumerable<string> Hosts  )
         {
             try
             {
@@ -45,19 +45,23 @@ namespace ClientApp
                 factory.Password = Password;
                 factory.VirtualHost = Virtualhost;
                 factory.HostName = Ip;
+                factory.TopologyRecoveryEnabled = true;
 
                 if (Hosts != null)
                 {
+                    factory.HostnameSelector = new HostsnameSelector(Hosts.ToList());
                     factory.AutomaticRecoveryEnabled = true;
-                    factory.HostnameSelector = ;
                 }
-                Connection = factory.CreateConnection();
+
+                
+                Connection = Hosts!= null ? factory.CreateConnection(Hosts.ToList()): factory.CreateConnection();
                 Channel = Connection.CreateModel();
 
                 return true;
             }
             catch (Exception ex)
             {
+                
                 Console.Write(ex.Message);
                 return false;
             }       

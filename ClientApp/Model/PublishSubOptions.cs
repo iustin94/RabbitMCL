@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Forms.VisualStyles;
 using CommandLine;
 using CommandLine.Text;
 
@@ -24,7 +25,7 @@ namespace ClientApp.Model
         [Option(longName: "Ip", HelpText = "")]
         public String Ip { get; set; }
 
-        [Option(longName: "Hosts", HelpText = "" )]
+        [OptionArray(longName: "Hosts", HelpText = "" )]
         public String[] Hosts { get; set; }
 
         [Option(longName: "VirtualHost", HelpText = "")]
@@ -45,8 +46,8 @@ namespace ClientApp.Model
         [Option(longName: "BindingKey", HelpText = "")]
         public String BindingKey { get; set; }
 
-        [Option(longName: "File", HelpText = "")]
-        public IEnumerable<string> FilePaths { get; set; }
+        [OptionArray(longName: "File", HelpText = "")]
+        public String[] FilePaths { get; set; }
 
         [Option(longName: "ConfirmsEnabled", HelpText = "")]
         public bool ConfirmsEnabled { get; set; }

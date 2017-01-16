@@ -23,7 +23,7 @@ namespace ClientApp.Model
         [Option(longName: "Ip", HelpText = "")]
         public String Ip { get; set; }
 
-        [Option(longName: "Hosts", HelpText = "")]
+        [OptionArray(longName: "Hosts", HelpText = "")]
         public String[] Hosts{ get; set; }
 
         [Option(longName: "VirtualHost", HelpText = "")]

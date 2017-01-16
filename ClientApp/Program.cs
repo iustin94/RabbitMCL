@@ -15,70 +15,56 @@ namespace ClientApp
     {
         private static ConnectionManager _connectionMngr;
 
+
         public static void Main(string[] args)
         {
             try
             {
 
+                var parser = new Parser(with =>
+                {
+                    with.CaseSensitive = false;
+                    with.HelpWriter = Console.Out;
+                    with.IgnoreUnknownArguments = true;
+                });
+
                 var options = new Options();
 
                 string invokedVerb = String.Empty;
                 object invokedVerbInstance = null;
-              
-                try
-                {
-                    if (!CommandLine.Parser.Default.ParseArguments(args, options,
 
-                        (verb, subOptions) =>
-                        {
-                            // if parsing succeeds the verb name and correct instance
-                            // will be passed to onVerbCommand delegate (string,object)
-                            invokedVerb = verb;
-                            invokedVerbInstance = subOptions;
-                        }))
+                
+                if (!parser.ParseArguments(args, options,
+                (verb, subOptions) =>
                     {
-                        Environment.Exit(CommandLine.Parser.DefaultExitCodeFail);
-                    }
-                }
-                catch (Exception ex)
+                        // if parsing succeeds the verb name and correct instance
+                        // will be passed to onVerbCommand delegate (string,object)
+                        invokedVerb = verb;
+                        invokedVerbInstance = subOptions;
+                    }))
                 {
-                    Console.WriteLine(ex.Message);
-                    Console.Read();
-
-                    
+                    Environment.Exit(CommandLine.Parser.DefaultExitCodeFail);
                 }
-
 
                 if (invokedVerb == "Consume")
                 {
-                    try
-                    {
-                        var consumeSubOptions = (ConsumeSubOptions) invokedVerbInstance;
-                        Consume(consumeSubOptions);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
+
+                    var consumeSubOptions = (ConsumeSubOptions)invokedVerbInstance;
+                    Consume(consumeSubOptions);
+
                 }
 
                 if (invokedVerb == "Publish")
                 {
-                    try
-                    {
-                        var publishSubOptions = (PublishSubOptions) invokedVerbInstance;
-                        Publish(publishSubOptions);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
+
+                    var publishSubOptions = (PublishSubOptions)invokedVerbInstance;
+                    Publish(publishSubOptions);
                 }
             }
             catch (Exception ex)
             {
-                Console.Write(ex.Message + "\n");
-                Console.Write(ex.StackTrace);
+                Console.WriteLine(ex.Message + "\n");
+                Console.WriteLine(ex.StackTrace);
                 Console.Read();
             }
 
@@ -86,12 +72,11 @@ namespace ClientApp
 
         private static void Publish(PublishSubOptions options)
         {
-            //To-Do validate fields
 
             try
             {
                 if (options.FilePaths == null)
-                    options.FilePaths = GetFilePaths();
+                    options.FilePaths = GetFilePaths().ToArray();
 
                 var watch = System.Diagnostics.Stopwatch.StartNew();
                 double avrgLength = 0;
@@ -115,33 +100,19 @@ namespace ClientApp
                 _connectionMngr.SetConnectionCredentials(Username: options.UserName,
                     Password: options.Password,
                     Virtualhost: options.VirtualHost,
-                    Ip: options.Ip
+                    Ip: options.Ip,
+                    Hosts: options.Hosts          
                     );
 
-                // Will the connection and channel be copied in the using block? Or will they get transfered. Will there still be connection in the _connectionMngr?
                 using (var connection = _connectionMngr.Connection)
                 using (var channel = _connectionMngr.Channel)
                 {
-                    channel.ExchangeDeclare(exchange: options.QueueName,
-                        type: "topic",
-                        durable: options.PersistentQueue);
-
-  
-                    channel.QueueDeclare(queue: options.QueueName,
-                        autoDelete: false,
-                        durable: options.PersistentQueue,
-                        exclusive: false,
-                        arguments: null);
+                    TopologyManager.DeclareTopology(channel: channel, options: options);
 
                     if (options.ConfirmsEnabled)
                     {
                         channel.ConfirmSelect();
                     }
-
-                    channel.QueueBind(queue: options.QueueName,
-                        exchange: options.QueueName,
-                        routingKey: options.BindingKey,
-                        arguments: null);
 
                     IBasicProperties props = GenerateMessageProperties(channel, options.PersistentMessages);
 
@@ -172,9 +143,7 @@ namespace ClientApp
 
             IBasicProperties props = channel.CreateBasicProperties();
 
-            // Sets delivery mode of message to persistent or non-persistent
             props.Persistent = PersistentMessages;
-
             //props.Headers = new Dictionary<string, object>();
             //props.Headers.Add("Timestamp", DateTime.Now);
             //props.Headers.Add("Location", "Aarhus , Denmark");
@@ -184,16 +153,49 @@ namespace ClientApp
 
         private static void PublishUntilStop(IModel channel, IBasicProperties props, List<string> messages, PublishSubOptions options)
         {
-            Console.WriteLine("Publishing in course. Press ESC to stop");
-            do
+
+            try
             {
-                while (!Console.KeyAvailable)
+                Console.WriteLine("Publishing in course. Press ESC to stop");
+                do
                 {
+                    while (!Console.KeyAvailable)
+                    {
+                        foreach (var messageBody in messages)
+                        {
+                            var body = Encoding.UTF8.GetBytes(messageBody);
+
+                            channel.BasicPublish(exchange: options.QueueName+"-Exchange",
+                                routingKey: options.BindingKey,
+                                basicProperties: props,
+                                body: body,
+                                mandatory: true);
+                            if (options.ConfirmsEnabled)
+                                channel.WaitForConfirmsOrDie();
+                        }
+                    }
+                } while (Console.ReadKey(true).Key != ConsoleKey.Escape);
+            }
+
+            catch (Exception ex)
+            {
+                Console.Clear();
+                Console.WriteLine(ex.Message);
+            }
+
+        }
+        private static void PublishWithCount(IModel channel, IBasicProperties props, int count, List<String> messages, PublishSubOptions options)
+        {
+            try
+            {
+                for (int i = 0; i <= options.Count; i++)
+                {
+
                     foreach (var messageBody in messages)
                     {
                         var body = Encoding.UTF8.GetBytes(messageBody);
 
-                        channel.BasicPublish(exchange: options.QueueName,
+                        channel.BasicPublish(exchange: options.ExchangeName,
                             routingKey: options.BindingKey,
                             basicProperties: props,
                             body: body,
@@ -202,27 +204,13 @@ namespace ClientApp
                             channel.WaitForConfirmsOrDie();
                     }
                 }
-            } while (Console.ReadKey(true).Key != ConsoleKey.Escape);
-
-        }
-        private static void PublishWithCount(IModel channel, IBasicProperties props, int count, List<String> messages, PublishSubOptions options)
-        {
-            for (int i = 0; i <= options.Count; i++)
-            {
-
-                foreach (var messageBody in messages)
-                {
-                    var body = Encoding.UTF8.GetBytes(messageBody);
-
-                    channel.BasicPublish(exchange: options.ExchangeName,
-                        routingKey: options.BindingKey,
-                        basicProperties: props,
-                        body: body,
-                        mandatory: true);
-                    if (options.ConfirmsEnabled)
-                        channel.WaitForConfirmsOrDie();
-                }
             }
+            catch (Exception ex)
+            {
+                Console.Clear();
+                Console.WriteLine(ex.Message);
+            }
+
         }
 
         private static void Consume(ConsumeSubOptions options)
@@ -248,7 +236,8 @@ namespace ClientApp
                 _connectionMngr.SetConnectionCredentials(Username: options.UserName,
                    Password: options.Password,
                    Virtualhost: options.VirtualHost,
-                   Ip: options.Ip
+                   Ip: options.Ip,
+                   Hosts: options.Hosts
                     );
 
                 using (var connection = _connectionMngr.Connection)
@@ -333,8 +322,8 @@ namespace ClientApp
 
             if (!String.IsNullOrEmpty(path))
             {
-                if(System.IO.File.Exists(path))
-                return true;
+                if (System.IO.File.Exists(path))
+                    return true;
 
                 if (System.IO.File.Exists(System.IO.Directory.GetCurrentDirectory() + path))
                     return true;
@@ -401,7 +390,7 @@ namespace ClientApp
         /// Read paths to file by command line
         /// </summary>
         /// <returns></returns>
-        public static List<String> GetFilePaths()
+        public static List<string> GetFilePaths()
         {
 
             List<String> paths = new List<string>();
@@ -415,6 +404,7 @@ namespace ClientApp
             {
 
                 var key = Console.ReadKey().Key;
+
 
                 if (key == ConsoleKey.A)
                 {
