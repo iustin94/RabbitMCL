@@ -11,25 +11,25 @@ namespace ClientApp.Service
     static class ConsoleManager
     {
 
-        private const string ConsumerStarted = "\t Publishing in course. Press ESC to stop";
-        private const string PublisherStarted = "";
-
+        private const string ConsumerStarted = "";
+        private const string PublisherStarted = "\t Publishing in course. Press ESC to stop";
+        private const string LeftMargin = "\n\t";
 
         public static void AnnouncePublishingStarted()
         {
-            Console.WriteLine(ConsumerStarted);
+            Console.WriteLine(PublisherStarted);
         }
 
         public static void AnnounceConsumingStarted()
         {
-            
+            Console.WriteLine(ConsumerStarted);
         }
 
-        public static void PrintExceptionWaitForKeyPress(Exception ex)
+        public static void PrintException(Exception ex)
         {
             Console.WriteLine(ex.Message);
-                Console.WriteLine(ex.StackTrace);
-                Console.ReadLine();
+            Console.WriteLine(ex.StackTrace);
+
         }
 
         public static void PrintParameters(PublishSubOptions options, Stopwatch watch, double maxLength,
@@ -52,7 +52,7 @@ namespace ClientApp.Service
                           "\n\t\tMaximum message length: " + maxLength +
                           "\n\t\tMinimum message length: " + minLength +
                           "\n\t\tAverage message length: " + avrgLength);
-            
+
         }
 
         public static void PrintParameters(ConsumeSubOptions options, Stopwatch watch, double maxLength,
@@ -74,7 +74,7 @@ namespace ClientApp.Service
                           "\n\t\tMaximum message length: " + maxLength +
                           "\n\t\tMinimum message length: " + minLength +
                           "\n\t\tAverage message length: " + avrgLength);
-            
+
         }
 
         public static List<string> GetFilePaths()
@@ -85,7 +85,7 @@ namespace ClientApp.Service
             bool keyIsValid = false;
 
             Console.WriteLine(
-                "\nFor single file publishing press A. For multiple file publishing press B. To exit press ctl+c.");
+               LeftMargin + "For single file publishing press A. For multiple file publishing press B. To exit press ctl+c.");
 
             while (!keyIsValid)
             {
@@ -99,7 +99,7 @@ namespace ClientApp.Service
                     ClearConsoleBuffer();
                     keyIsValid = true;
 
-                    Console.WriteLine("\n\nEnter path to file: ");
+                    Console.WriteLine(LeftMargin + "Enter path to file: ");
 
 
                     //Loop to get a good file from the user. If path is empty or null it reprompts for file input.
@@ -110,7 +110,7 @@ namespace ClientApp.Service
 
                         if (String.IsNullOrEmpty(path))
                         {
-                            Console.WriteLine("\n You have not entered a valid path. The application will exit.");
+                            Console.WriteLine(LeftMargin + "You have not entered a valid path. The application will exit.");
                             Console.ReadKey();
                             Environment.Exit(0);
                         }
@@ -121,7 +121,7 @@ namespace ClientApp.Service
                         }
                         else
                         {
-                            Console.WriteLine("\nFile could not be found. Try again. ");
+                            Console.WriteLine(LeftMargin + "File could not be found. Try again. ");
 
                             ClearConsoleBuffer();
                         }
@@ -132,7 +132,7 @@ namespace ClientApp.Service
                 {
                     ClearConsoleBuffer();
                     keyIsValid = true;
-                    Console.WriteLine("\n\nEnter path to file: ");
+                    Console.WriteLine(LeftMargin + "Enter path to file: ");
 
                     bool finished = false;
                     while (!finished)
@@ -148,20 +148,20 @@ namespace ClientApp.Service
                         }
                         else
                         {
-                            Console.Write("\nThe path does not point to a file. Try again or press ctrl+c to exit.");
+                            Console.Write(LeftMargin + "The path does not point to a file. Try again or press ctrl+c to exit.");
                         }
                     }
                 }
                 else
                 {
-                    Console.WriteLine("\nThe key you have entered is invalid. Please try again.");
+                    Console.WriteLine(LeftMargin + "The key you have entered is invalid. Please try again.");
                     ClearConsoleBuffer();
                 }
             }
 
             if (paths.Count <= 0)
             {
-                Console.WriteLine("\n You have not entered any file path. The application will now exit.");
+                Console.WriteLine(LeftMargin + "You have not entered any file path. The application will now exit.");
                 Console.ReadKey();
                 Environment.Exit(0);
             }
@@ -187,8 +187,5 @@ namespace ClientApp.Service
 
             return false;
         }
-
-
-
     }
 }

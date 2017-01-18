@@ -45,17 +45,19 @@ namespace ClientApp
                 factory.Password = Password;
                 factory.VirtualHost = Virtualhost;
                 factory.HostName = Ip;
-                factory.TopologyRecoveryEnabled = true;
+                
 
                 if (Hosts != null)
                 {
                     factory.HostnameSelector = new HostsnameSelector(Hosts.ToList());
                     factory.AutomaticRecoveryEnabled = true;
+                    factory.TopologyRecoveryEnabled = true;
                 }
 
                 
                 Connection = Hosts!= null ? factory.CreateConnection(Hosts.ToList()): factory.CreateConnection();
                 Channel = Connection.CreateModel();
+                this.Hosts = Hosts;
 
                 return true;
             }

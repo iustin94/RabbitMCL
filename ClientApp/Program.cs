@@ -18,61 +18,50 @@ namespace ClientApp
 
         public static void Main(string[] args)
         {
-            try
+            var parser = new Parser(with =>
             {
+                with.CaseSensitive = false;
+                with.HelpWriter = Console.Out;
+                with.IgnoreUnknownArguments = true;
+            });
 
-                var parser = new Parser(with =>
+            var options = new Options();
+
+            string invokedVerb = String.Empty;
+            object invokedVerbInstance = null;
+
+
+            if (!parser.ParseArguments(args, options,
+            (verb, subOptions) =>
                 {
-                    with.CaseSensitive = false;
-                    with.HelpWriter = Console.Out;
-                    with.IgnoreUnknownArguments = true;
-                });
+                    // if parsing succeeds the verb name and correct instance
+                    // will be passed to onVerbCommand delegate (string,object)
+                    invokedVerb = verb;
+                    invokedVerbInstance = subOptions;
+                }))
+            {
+                Environment.Exit(CommandLine.Parser.DefaultExitCodeFail);
+            }
 
-                var options = new Options();
-
-                string invokedVerb = String.Empty;
-                object invokedVerbInstance = null;
-
-
-                if (!parser.ParseArguments(args, options,
-                (verb, subOptions) =>
-                    {
-                        // if parsing succeeds the verb name and correct instance
-                        // will be passed to onVerbCommand delegate (string,object)
-                        invokedVerb = verb;
-                        invokedVerbInstance = subOptions;
-                    }))
-                {
-                    Environment.Exit(CommandLine.Parser.DefaultExitCodeFail);
-                }
-
-                if (invokedVerb == "Consume")
-                {
-
+            if (invokedVerb == "Consume")
+            {       
                     var consumeSubOptions = (ConsumeSubOptions)invokedVerbInstance;
                     Consume(consumeSubOptions);
-
-                }
-
-                if (invokedVerb == "Publish")
-                {
-
-                    var publishSubOptions = (PublishSubOptions)invokedVerbInstance;
-                    Publish(publishSubOptions);
-                }
             }
-            catch (Exception ex)
+
+            if (invokedVerb == "Publish")
             {
-                ConsoleManager.PrintExceptionWaitForKeyPress(ex);
+                
+                    var publishSubOptions = (PublishSubOptions)invokedVerbInstance;
+                    Publish(publishSubOptions);            
             }
 
+
+            Console.ReadLine();
         }
 
         private static void Publish(PublishSubOptions options)
         {
-
-            try
-            {
                 if (options.FilePaths == null)
                     options.FilePaths = ConsoleManager.GetFilePaths().ToArray();
 
@@ -100,11 +89,12 @@ namespace ClientApp
                     Virtualhost: options.VirtualHost,
                     Ip: options.Ip,
                     Hosts: options.Hosts
-                    );
+                );
 
                 using (var connection = _connectionMngr.Connection)
                 using (var channel = _connectionMngr.Channel)
                 {
+
                     TopologyManager.DeclareTopology(channel: channel, options: options);
 
                     if (options.ConfirmsEnabled)
@@ -118,20 +108,12 @@ namespace ClientApp
                         PublishWithCount(channel, props, options.Count, messages, options);
                     else
                         PublishUntilStop(channel, props, messages, options);
-
-                    channel.Close();
-                    connection.Close();
                 }
 
                 ConsoleManager.PrintParameters(options, watch, maxLength, minLength, avrgLength);
 
                 Console.ReadLine();
-            }
-
-            catch (Exception ex)
-            {
-                ConsoleManager.PrintExceptionWaitForKeyPress(ex);
-            }
+           
         }
 
         private static IBasicProperties GenerateMessageProperties(IModel channel, bool PersistentMessages)
@@ -149,19 +131,18 @@ namespace ClientApp
 
         private static void PublishUntilStop(IModel channel, IBasicProperties props, List<string> messages, PublishSubOptions options)
         {
+            ConsoleManager.AnnouncePublishingStarted();
 
-            try
+            do
             {
-                ConsoleManager.AnnouncePublishingStarted();
-
-                do
+                while (!Console.KeyAvailable)
                 {
-                    while (!Console.KeyAvailable)
+                    foreach (var messageBody in messages)
                     {
-                        foreach (var messageBody in messages)
-                        {
-                            var body = Encoding.UTF8.GetBytes(messageBody);
+                        var body = Encoding.UTF8.GetBytes(messageBody);
 
+                        try
+                        {
                             channel.BasicPublish(exchange: options.QueueName + "-Exchange",
                                 routingKey: options.BindingKey,
                                 basicProperties: props,
@@ -170,130 +151,130 @@ namespace ClientApp
                             if (options.ConfirmsEnabled)
                                 channel.WaitForConfirmsOrDie();
                         }
-                    }
-                } while (Console.ReadKey(true).Key != ConsoleKey.Escape);
-            }
+                        catch (Exception ex)
+                        {
+                           
+                            ConsoleManager.PrintException(ex);
 
-            catch (Exception ex)
-            {
-                ConsoleManager.PrintExceptionWaitForKeyPress(ex);
-            }
-
-        }
-        private static void PublishWithCount(IModel channel, IBasicProperties props, int count, List<String> messages, PublishSubOptions options)
-        {
-            try
-            {
-                for (int i = 0; i <= options.Count; i++)
-                {
-
-                    foreach (var messageBody in messages)
-                    {
-                        var body = Encoding.UTF8.GetBytes(messageBody);
-
-                        channel.BasicPublish(exchange: options.ExchangeName,
-                            routingKey: options.BindingKey,
-                            basicProperties: props,
-                            body: body,
-                            mandatory: true);
-                        if (options.ConfirmsEnabled)
-                            channel.WaitForConfirmsOrDie();
+                            try
+                            {
+                                channel.BasicPublish(exchange: options.QueueName + "fallback",
+                                    routingKey: options.BindingKey,
+                                    basicProperties: props,
+                                    body: body,
+                                    mandatory: true);
+                                if (options.ConfirmsEnabled)
+                                    channel.WaitForConfirmsOrDie();
+                            }
+                            catch (Exception ex2)
+                            {
+                                ConsoleManager.PrintException(ex2);
+                            }
+                            
+                        }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                ConsoleManager.PrintExceptionWaitForKeyPress(ex);
-            }
+            } while (Console.ReadKey(true).Key != ConsoleKey.Escape);
+        }
 
+
+
+
+        private static void PublishWithCount(IModel channel, IBasicProperties props, int count, List<String> messages, PublishSubOptions options)
+        {
+            for (int i = 0; i <= options.Count; i++)
+            {
+
+                foreach (var messageBody in messages)
+                {
+                    var body = Encoding.UTF8.GetBytes(messageBody);
+
+                    channel.BasicPublish(exchange: options.ExchangeName,
+                        routingKey: options.BindingKey,
+                        basicProperties: props,
+                        body: body,
+                        mandatory: true);
+                    if (options.ConfirmsEnabled)
+                        channel.WaitForConfirmsOrDie();
+                }
+            }
         }
 
         private static void Consume(ConsumeSubOptions options)
         {
-            try
+
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+            double avrgLength = 0;
+            double maxLength = 0;
+            double minLength = 0;
+
+            var factory = new ConnectionFactory()
             {
+                HostName = options.Ip,
+                UserName = options.UserName,
+                Password = options.Password,
+                VirtualHost = options.VirtualHost
+            };
 
-                var watch = System.Diagnostics.Stopwatch.StartNew();
-                double avrgLength = 0;
-                double maxLength = 0;
-                double minLength = 0;
+            _connectionMngr = ConnectionManager.GetInstance();
 
-                var factory = new ConnectionFactory()
+            _connectionMngr.SetConnectionCredentials(Username: options.UserName,
+               Password: options.Password,
+               Virtualhost: options.VirtualHost,
+               Ip: options.Ip,
+               Hosts: options.Hosts
+                );
+
+            using (var connection = _connectionMngr.Connection)
+            using (var channel = _connectionMngr.Channel)
+            {
+                //channel.BasicQos(1000, 5000, true);
+
+
+                var consumer = new EventingBasicConsumer(channel);
+
+                consumer.Received += (model, ea) =>
                 {
-                    HostName = options.Ip,
-                    UserName = options.UserName,
-                    Password = options.Password,
-                    VirtualHost = options.VirtualHost
+                    var body = ea.Body;
+                    options.PersistentMessages = ea.BasicProperties.Persistent;
+                    var message = Encoding.UTF8.GetString(body);
+                    var routingKey = ea.RoutingKey;
+
+                    if (avrgLength == 0)
+                    {
+                        avrgLength = body.Length;
+                    }
+                    else
+                    {
+                        avrgLength = (avrgLength + body.Length) / 2;
+                    }
+
+                    if (body.Length < minLength)
+                        minLength = body.Length;
+                    if (body.Length > maxLength)
+                        maxLength = body.Length;
+
+                    if (options.MessageAcknowledge)
+                    {
+                        channel.BasicAck(ea.DeliveryTag, false);
+                    }
                 };
 
-                _connectionMngr = ConnectionManager.GetInstance();
-
-                _connectionMngr.SetConnectionCredentials(Username: options.UserName,
-                   Password: options.Password,
-                   Virtualhost: options.VirtualHost,
-                   Ip: options.Ip,
-                   Hosts: options.Hosts
-                    );
-
-                using (var connection = _connectionMngr.Connection)
-                using (var channel = _connectionMngr.Channel)
-                {
-                    //channel.BasicQos(1000, 5000, true);
+                channel.BasicConsume(queue: options.QueueName,
+                    noAck: !options.MessageAcknowledge,
+                    consumer: consumer);
 
 
-                    var consumer = new EventingBasicConsumer(channel);
+                Console.WriteLine();
+                Console.ReadKey();
 
-                    consumer.Received += (model, ea) =>
-                    {
-                        var body = ea.Body;
-                        options.PersistentMessages = ea.BasicProperties.Persistent;
-                        var message = Encoding.UTF8.GetString(body);
-                        var routingKey = ea.RoutingKey;
-
-                        if (avrgLength == 0)
-                        {
-                            avrgLength = body.Length;
-                        }
-                        else
-                        {
-                            avrgLength = (avrgLength + body.Length) / 2;
-                        }
-
-                        if (body.Length < minLength)
-                            minLength = body.Length;
-                        if (body.Length > maxLength)
-                            maxLength = body.Length;
-
-                        if (options.MessageAcknowledge)
-                        {
-                            channel.BasicAck(ea.DeliveryTag, false);
-                        }
-                    };
-
-                    channel.BasicConsume(queue: options.QueueName,
-                        noAck: !options.MessageAcknowledge,
-                        consumer: consumer);
-
-
-                    Console.WriteLine();
-                    Console.ReadKey();
-
-                    channel.Close();
-                    connection.Close();
-                }
-
-                watch.Stop();
-                ConsoleManager.PrintParameters(options, watch, maxLength, minLength, avrgLength);
-               
-
-
+                channel.Close();
+                connection.Close();
             }
-            catch (Exception ex)
-            {
-                Console.Write(ex.Message);
-                Console.Write(ex.StackTrace);
-                Console.ReadLine();
-            }
+
+            watch.Stop();
+            ConsoleManager.PrintParameters(options, watch, maxLength, minLength, avrgLength);
+
         }
 
         public static void ReadLine(IModel channel, IConnection connection)
@@ -306,19 +287,5 @@ namespace ClientApp
             else
                 ReadLine(channel, connection);
         }
-
-        /// <summary>
-        /// First checks if there the string is null or empty. If not then checks for file at given path.
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-       
-
-        /// <summary>
-        /// Read paths to file by command line
-        /// </summary>
-        /// <returns></returns>
-      
-
     }
 }

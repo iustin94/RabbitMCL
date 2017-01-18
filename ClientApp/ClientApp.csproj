@@ -70,6 +70,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Service\ConsoleManager.cs" />
     <Compile Include="Service\HostnameSelector.cs" />
     <Compile Include="Model\ConnectionInfo.cs" />
     <Compile Include="Service\ConnectionManager.cs" />
