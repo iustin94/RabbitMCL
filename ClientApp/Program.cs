@@ -153,24 +153,7 @@ namespace ClientApp
                         }
                         catch (Exception ex)
                         {
-                           
                             ConsoleManager.PrintException(ex);
-
-                            try
-                            {
-                                channel.BasicPublish(exchange: options.QueueName + "fallback",
-                                    routingKey: options.BindingKey,
-                                    basicProperties: props,
-                                    body: body,
-                                    mandatory: true);
-                                if (options.ConfirmsEnabled)
-                                    channel.WaitForConfirmsOrDie();
-                            }
-                            catch (Exception ex2)
-                            {
-                                ConsoleManager.PrintException(ex2);
-                            }
-                            
                         }
                     }
                 }
