@@ -131,7 +131,7 @@ namespace ClientApp
 
         private static void PublishUntilStop(IModel channel, IBasicProperties props, List<string> messages, PublishSubOptions options)
         {
-            ConsoleManager.AnnouncePublishingStarted();
+            ConsoleManager.AnnouncePublishingStarted(); 
 
             do
             {
