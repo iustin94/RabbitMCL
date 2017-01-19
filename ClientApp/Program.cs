@@ -44,16 +44,16 @@ namespace ClientApp
             }
 
             if (invokedVerb == "Consume")
-            {       
-                    var consumeSubOptions = (ConsumeSubOptions)invokedVerbInstance;
-                    Consume(consumeSubOptions);
+            {
+                var consumeSubOptions = (ConsumeSubOptions)invokedVerbInstance;
+                Consume(consumeSubOptions);
             }
 
             if (invokedVerb == "Publish")
             {
-                
-                    var publishSubOptions = (PublishSubOptions)invokedVerbInstance;
-                    Publish(publishSubOptions);            
+
+                var publishSubOptions = (PublishSubOptions)invokedVerbInstance;
+                Publish(publishSubOptions);
             }
 
 
@@ -62,58 +62,58 @@ namespace ClientApp
 
         private static void Publish(PublishSubOptions options)
         {
-                if (options.FilePaths == null)
-                    options.FilePaths = ConsoleManager.GetFilePaths().ToArray();
+            if (options.FilePaths == null)
+                options.FilePaths = ConsoleManager.GetFilePaths().ToArray();
 
-                var watch = System.Diagnostics.Stopwatch.StartNew();
-                double avrgLength = 0;
-                double minLength = 0;
-                double maxLength = 0;
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+            double avrgLength = 0;
+            double minLength = 0;
+            double maxLength = 0;
 
-                List<String> messages = new List<String>();
+            List<String> messages = new List<String>();
 
-                foreach (string f in options.FilePaths)
+            foreach (string f in options.FilePaths)
+            {
+                string fileText = System.IO.File.ReadAllText(f);
+                messages.Add(fileText);
+            }
+
+            avrgLength = (int)messages.Average(x => x.Length);
+            maxLength = (int)messages.Max(x => x.Length);
+            minLength = (int)messages.Min(x => x.Length);
+
+            _connectionMngr = ConnectionManager.GetInstance();
+
+            _connectionMngr.SetConnectionCredentials(Username: options.UserName,
+                Password: options.Password,
+                Virtualhost: options.VirtualHost,
+                Ip: options.Ip,
+                Hosts: options.Hosts
+            );
+
+            using (var connection = _connectionMngr.Connection)
+            using (var channel = connection.CreateModel())
+            {
+
+                TopologyManager.DeclareTopology(channel: channel, options: options);
+
+                if (options.ConfirmsEnabled)
                 {
-                    string fileText = System.IO.File.ReadAllText(f);
-                    messages.Add(fileText);
+                    channel.ConfirmSelect();
                 }
 
-                avrgLength = (int)messages.Average(x => x.Length);
-                maxLength = (int)messages.Max(x => x.Length);
-                minLength = (int)messages.Min(x => x.Length);
+                IBasicProperties props = GenerateMessageProperties(channel, options.PersistentMessages);
 
-                _connectionMngr = ConnectionManager.GetInstance();
+                if (options.Count > 0)
+                    PublishWithCount(channel, props, options.Count, messages, options);
+                else
+                    PublishUntilStop(channel, props, messages, options);
+            }
 
-                _connectionMngr.SetConnectionCredentials(Username: options.UserName,
-                    Password: options.Password,
-                    Virtualhost: options.VirtualHost,
-                    Ip: options.Ip,
-                    Hosts: options.Hosts
-                );
+            ConsoleManager.PrintParameters(options, watch, maxLength, minLength, avrgLength);
 
-                using (var connection = _connectionMngr.Connection)
-                using (var channel = _connectionMngr.Channel)
-                {
+            Console.ReadLine();
 
-                    TopologyManager.DeclareTopology(channel: channel, options: options);
-
-                    if (options.ConfirmsEnabled)
-                    {
-                        channel.ConfirmSelect();
-                    }
-
-                    IBasicProperties props = GenerateMessageProperties(channel, options.PersistentMessages);
-
-                    if (options.Count > 0)
-                        PublishWithCount(channel, props, options.Count, messages, options);
-                    else
-                        PublishUntilStop(channel, props, messages, options);
-                }
-
-                ConsoleManager.PrintParameters(options, watch, maxLength, minLength, avrgLength);
-
-                Console.ReadLine();
-           
         }
 
         private static IBasicProperties GenerateMessageProperties(IModel channel, bool PersistentMessages)
@@ -131,7 +131,7 @@ namespace ClientApp
 
         private static void PublishUntilStop(IModel channel, IBasicProperties props, List<string> messages, PublishSubOptions options)
         {
-            ConsoleManager.AnnouncePublishingStarted(); 
+            ConsoleManager.AnnouncePublishingStarted();
 
             do
             {
@@ -191,14 +191,6 @@ namespace ClientApp
             double maxLength = 0;
             double minLength = 0;
 
-            var factory = new ConnectionFactory()
-            {
-                HostName = options.Ip,
-                UserName = options.UserName,
-                Password = options.Password,
-                VirtualHost = options.VirtualHost
-            };
-
             _connectionMngr = ConnectionManager.GetInstance();
 
             _connectionMngr.SetConnectionCredentials(Username: options.UserName,
@@ -209,10 +201,8 @@ namespace ClientApp
                 );
 
             using (var connection = _connectionMngr.Connection)
-            using (var channel = _connectionMngr.Channel)
-            {
-                //channel.BasicQos(1000, 5000, true);
-
+            using (var channel = connection.CreateModel())
+            { 
 
                 var consumer = new EventingBasicConsumer(channel);
 
@@ -250,9 +240,6 @@ namespace ClientApp
 
                 Console.WriteLine();
                 Console.ReadKey();
-
-                channel.Close();
-                connection.Close();
             }
 
             watch.Stop();

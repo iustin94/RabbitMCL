@@ -8,5 +8,17 @@ namespace ClientApp.Service
 {
     class RabbitMQAPIWrapper
     {
+
+
+        public static async Task ServerOverview()
+        {
+
+            var result;
+
+            using (var client = new HttpClient())
+            {
+                result = clinet.
+            }
+        }
     }
 }

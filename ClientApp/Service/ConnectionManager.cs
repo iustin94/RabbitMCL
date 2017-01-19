@@ -11,8 +11,7 @@ namespace ClientApp
         private static ConnectionManager Instance;
 
         private ConnectionFactory factory;
-        public IConnection Connection ;
-        public IModel Channel;
+        public IConnection Connection;
 
         private ConnectionInfo info;
         private IEnumerable<String> Hosts;
@@ -56,7 +55,7 @@ namespace ClientApp
 
                 
                 Connection = Hosts!= null ? factory.CreateConnection(Hosts.ToList()): factory.CreateConnection();
-                Channel = Connection.CreateModel();
+                
                 this.Hosts = Hosts;
 
                 return true;
