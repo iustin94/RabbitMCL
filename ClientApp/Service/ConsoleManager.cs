@@ -28,6 +28,7 @@ namespace ClientApp.Service
         public static void PrintException(Exception ex)
         {
             Console.WriteLine(ex.Message);
+            Console.WriteLine(ex.InnerException);
             Console.WriteLine(ex.StackTrace);
 
         }

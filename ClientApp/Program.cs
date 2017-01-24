@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net.Mime;
 using System.Text;
+using System.Threading.Tasks;
+using System.Xml;
 using ClientApp.Model;
 using ClientApp.Service;
 using RabbitMQ.Client;
@@ -91,15 +93,36 @@ namespace ClientApp
                 Hosts: options.Hosts
             );
 
-            using (var connection = _connectionMngr.Connection)
+            using (var connection = _connectionMngr.Factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
 
                 TopologyManager.DeclareTopology(channel: channel, options: options);
 
+                connection.ConnectionBlocked += (sender, args) =>
+                {
+                    Console.WriteLine("Connection state: Blocked \n");
+                };
+
+                connection.ConnectionShutdown += (sender, args) =>
+                {
+                    Console.WriteLine("Connection state: Shutdown \n");
+                };
+
+                connection.ConnectionUnblocked += (sender, args) =>
+                {
+                    Console.WriteLine("Connection state: Unblocked \n");
+                };
+
+                connection.ConnectionShutdown += (sender, args) =>
+                {
+                    Console.WriteLine("Connection state: Shutdown," +args.Cause+", "+", "+args.ReplyText+", " + args.Initiator);
+                };
+
                 if (options.ConfirmsEnabled)
                 {
                     channel.ConfirmSelect();
+                    channel.WaitForConfirmsOrDie();
                 }
 
                 IBasicProperties props = GenerateMessageProperties(channel, options.PersistentMessages);
@@ -107,6 +130,7 @@ namespace ClientApp
                 if (options.Count > 0)
                     PublishWithCount(channel, props, options.Count, messages, options);
                 else
+
                     PublishUntilStop(channel, props, messages, options);
             }
 
@@ -116,12 +140,12 @@ namespace ClientApp
 
         }
 
-        private static IBasicProperties GenerateMessageProperties(IModel channel, bool PersistentMessages)
+        private static IBasicProperties GenerateMessageProperties(IModel channel, bool persistentMessages)
         {
 
             IBasicProperties props = channel.CreateBasicProperties();
 
-            props.Persistent = PersistentMessages;
+            props.Persistent = persistentMessages;
             //props.Headers = new Dictionary<string, object>();
             //props.Headers.Add("Timestamp", DateTime.Now);
             //props.Headers.Add("Location", "Aarhus , Denmark");
@@ -133,31 +157,57 @@ namespace ClientApp
         {
             ConsoleManager.AnnouncePublishingStarted();
 
-            do
+            while (!Console.KeyAvailable)
             {
-                while (!Console.KeyAvailable)
+                foreach (var messageBody in messages)
                 {
-                    foreach (var messageBody in messages)
-                    {
-                        var body = Encoding.UTF8.GetBytes(messageBody);
+                    var body = Encoding.UTF8.GetBytes(messageBody);
 
-                        try
+                    try
+                    {
+                        channel.BasicPublish(exchange: options.ExchangeName,
+                            routingKey: options.BindingKey,
+                            basicProperties: props,
+                            body: body,
+                            mandatory: true);
+
+                        System.Threading.Thread.Sleep(100);
+                    }
+                    catch (System.IO.IOException ex)
+                    {
+                        ConsoleManager.PrintException(ex);
+
+                        if (options.ExchangeName.EndsWith("-MainExchange"))
                         {
-                            channel.BasicPublish(exchange: options.QueueName + "-Exchange",
-                                routingKey: options.BindingKey,
-                                basicProperties: props,
-                                body: body,
-                                mandatory: true);
-                            if (options.ConfirmsEnabled)
-                                channel.WaitForConfirmsOrDie();
+                            options.ExchangeName = options.ExchangeName.Remove(options.ExchangeName.Length - 13);
+                            options.ExchangeName = options.ExchangeName + "-alternativeExchange";
                         }
-                        catch (Exception ex)
+                        else
                         {
-                            ConsoleManager.PrintException(ex);
+                            options.ExchangeName = options.ExchangeName.Remove(options.ExchangeName.Length - 20);
+                            options.ExchangeName = options.ExchangeName + "-MainExchange";
                         }
                     }
+
+                    catch (RabbitMQ.Client.Exceptions.AlreadyClosedException ex)
+                    {
+                        ConsoleManager.PrintException(ex);
+                        break;
+                    }
+
+                    catch (RabbitMQ.Client.Exceptions.ConnectFailureException ex)
+                    {
+                        ConsoleManager.PrintException(ex);
+                    }
+
+                    catch (Exception ex)
+                    {
+                        ConsoleManager.PrintException(ex);
+                    }
+
                 }
-            } while (Console.ReadKey(true).Key != ConsoleKey.Escape);
+            }
+
         }
 
 
@@ -200,9 +250,9 @@ namespace ClientApp
                Hosts: options.Hosts
                 );
 
-            using (var connection = _connectionMngr.Connection)
+            using (var connection = _connectionMngr.Factory.CreateConnection())
             using (var channel = connection.CreateModel())
-            { 
+            {
 
                 var consumer = new EventingBasicConsumer(channel);
 
@@ -245,17 +295,6 @@ namespace ClientApp
             watch.Stop();
             ConsoleManager.PrintParameters(options, watch, maxLength, minLength, avrgLength);
 
-        }
-
-        public static void ReadLine(IModel channel, IConnection connection)
-        {
-            if (Console.ReadLine().ToLower().Trim() == "Stop")
-            {
-                channel.Close();
-                connection.Close();
-            }
-            else
-                ReadLine(channel, connection);
         }
     }
 }

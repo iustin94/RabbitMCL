@@ -11,3 +11,5 @@ C:\Users\jol\Documents\Visual Studio 2015\Projects\FileTransferQueue\ClientApp\b
 C:\Users\jol\Documents\Visual Studio 2015\Projects\FileTransferQueue\ClientApp\bin\Debug\RabbitMQ.Client.xml
 C:\Users\jol\Documents\Visual Studio 2015\Projects\FileTransferQueue\ClientApp\obj\Debug\ClientApp.exe
 C:\Users\jol\Documents\Visual Studio 2015\Projects\FileTransferQueue\ClientApp\obj\Debug\ClientApp.pdb
+C:\Users\jol\documents\visual studio 2015\Projects\FileTransferQueue\ClientApp\bin\Debug\Newtonsoft.Json.dll
+C:\Users\jol\documents\visual studio 2015\Projects\FileTransferQueue\ClientApp\bin\Debug\Newtonsoft.Json.xml

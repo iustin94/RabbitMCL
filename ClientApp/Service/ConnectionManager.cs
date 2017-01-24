@@ -10,11 +10,10 @@ namespace ClientApp
     {
         private static ConnectionManager Instance;
 
-        private ConnectionFactory factory;
-        public IConnection Connection;
+        public ConnectionFactory Factory;
 
         private ConnectionInfo info;
-        private IEnumerable<String> Hosts;
+
 
         public static ConnectionManager GetInstance()
         {
@@ -39,24 +38,20 @@ namespace ClientApp
         
                 info = new ConnectionInfo(Username, Password,Virtualhost);
 
-                factory = new ConnectionFactory();
-                factory.UserName = Username;
-                factory.Password = Password;
-                factory.VirtualHost = Virtualhost;
-                factory.HostName = Ip;
-                
+                Factory = new ConnectionFactory();
+                Factory.UserName = Username;
+                Factory.Password = Password;
+                Factory.VirtualHost = Virtualhost;
+                Factory.HostName = Ip;
+                Factory.RequestedHeartbeat = 20;
 
                 if (Hosts != null)
                 {
-                    factory.HostnameSelector = new HostsnameSelector(Hosts.ToList());
-                    factory.AutomaticRecoveryEnabled = true;
-                    factory.TopologyRecoveryEnabled = true;
+                    Factory.HostnameSelector = new HostsnameSelector(Hosts.ToList());
+                    Factory.AutomaticRecoveryEnabled = true;
+                    Factory.TopologyRecoveryEnabled = true;
+                    Factory.NetworkRecoveryInterval = TimeSpan.FromSeconds(5);
                 }
-
-                
-                Connection = Hosts!= null ? factory.CreateConnection(Hosts.ToList()): factory.CreateConnection();
-                
-                this.Hosts = Hosts;
 
                 return true;
             }
