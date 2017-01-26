@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -20,15 +21,14 @@ namespace ClientApp.Service
             await RabbitMqHttpApiMeth.ServerOverview();
         }
 
-
-        public static async void Queues()
+        public static IEnumerable<QueueInfo> GetQueueInfos()
         {
-            await RabbitMqHttpApiMeth.Queues();
+            return RabbitMqHttpApiMeth.GetQueueInfos();
         }
 
-        public static void GetQueueStatus()
+        public static IEnumerable<ExchangeInfo> GetExchangeInfos()
         {
-            RabbitMqHttpApiMeth.GetQueueStatus();
+            return RabbitMqHttpApiMeth.GetExchangeInfos();
         }
 
 
@@ -48,7 +48,7 @@ namespace ClientApp.Service
                         Credentials = new NetworkCredential(userName: userName, password: password)
                     })
                 {
-                    using (var client = new HttpClient(handler) {BaseAddress = new Uri(baseAddress)})
+                    using (var client = new HttpClient(handler) { BaseAddress = new Uri(baseAddress) })
                     {
                         using (
                             var response =
@@ -72,7 +72,7 @@ namespace ClientApp.Service
 
             }
 
-            public static async Task<JArray> Queues()
+            private static async Task<JArray> Queues()
             {
 
                 using (var handler = new HttpClientHandler()
@@ -80,7 +80,7 @@ namespace ClientApp.Service
                     Credentials = new NetworkCredential(userName: userName, password: password)
                 })
                 {
-                    using (var client = new HttpClient(handler) {BaseAddress = new Uri(baseAddress)})
+                    using (var client = new HttpClient(handler) { BaseAddress = new Uri(baseAddress) })
                     {
                         using (
                             var response =
@@ -98,9 +98,32 @@ namespace ClientApp.Service
                 }
             }
 
-            public static void GetQueueStatus()
+            private static async Task<JArray> Exchanges()
             {
+                using (var handler = new HttpClientHandler()
+                {
+                    Credentials = new NetworkCredential(userName: userName, password: password)
+                })
+                {
+                    using (var client = new HttpClient(handler) {BaseAddress = new Uri(baseAddress)})
+                    {
+                        using (
+                            var response =
+                                await
+                                    client.GetAsync("exchanges", HttpCompletionOption.ResponseContentRead)
+                                        .ConfigureAwait(false))
+                        {
+                            string result = await response.Content.ReadAsStringAsync();
+                            dynamic info = JsonConvert.DeserializeObject(result);
+                            return info;
+                        }
+                    }  
+                }
+            }
 
+
+            public static IEnumerable<QueueInfo> GetQueueInfos()
+            {
                 List<QueueInfo> queues = new List<QueueInfo>();
 
                 JArray queuesDataSet = Queues().Result;
@@ -114,11 +137,21 @@ namespace ClientApp.Service
                     bool durable = queueData["durable"].ToString() == "True";
                     string state = queueData["state"].ToString();
 
-                 QueueInfo queueInfo = new QueueInfo(name, state, exclusive, auto_delete, durable, vhost);        
+                    QueueInfo queueInfo = new QueueInfo(name, state, exclusive, auto_delete, durable, vhost);
+                    queues.Add(queueInfo);
                 }
-            } 
 
+                return queues;
+            }
 
+            public static IEnumerable<ExchangeInfo> GetExchangeInfos()
+            {
+                List<ExchangeInfo> exchanges = new List<ExchangeInfo>();
+
+                JArray exchangeDataSet = Exchanges().Result;
+
+                return null;
+            }
 
 
 

@@ -74,6 +74,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\ExchangeInfo.cs" />
     <Compile Include="Model\QueueInfo.cs" />
     <Compile Include="Service\RabbitMqHttpApiFacade.cs" />
     <Compile Include="Service\ConsoleManager.cs" />

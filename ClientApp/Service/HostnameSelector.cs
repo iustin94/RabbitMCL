@@ -13,6 +13,7 @@ namespace ClientApp
         private int count;
         private int _currentIndex;
 
+        //Do I really need this?
         public HostsnameSelector(IList<String> Hosts)
         {
            

@@ -8,12 +8,12 @@ namespace ClientApp.Model
 {
     class QueueInfo
     {
-        private string Name;
-        private string State;
-        private bool Exclusive;
-        private bool AutoDelete;
-        private bool Durable;
-        private string VHost;
+        public string Name;
+        public string State;
+        public bool Exclusive;
+        public bool AutoDelete;
+        public bool Durable;
+        public string VHost;
 
         public QueueInfo(string Name, string State, bool Exclusive, bool AutoDelete, bool Durable, string VHost)
         {

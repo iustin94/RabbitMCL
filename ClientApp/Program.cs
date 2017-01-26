@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net.Mime;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using ClientApp.Model;
@@ -17,6 +18,8 @@ namespace ClientApp
     class Program
     {
         private static ConnectionManager _connectionMngr;
+
+        public QueueInfo latestQueueStatus;
 
         public static void Main(string[] args)
         {
@@ -53,7 +56,6 @@ namespace ClientApp
 
             if (invokedVerb == "Publish")
             {
-
                 var publishSubOptions = (PublishSubOptions)invokedVerbInstance;
                 Publish(publishSubOptions);
             }
@@ -64,80 +66,93 @@ namespace ClientApp
 
         private static void Publish(PublishSubOptions options)
         {
-            if (options.FilePaths == null)
-                options.FilePaths = ConsoleManager.GetFilePaths().ToArray();
-
-            var watch = System.Diagnostics.Stopwatch.StartNew();
-            double avrgLength = 0;
-            double minLength = 0;
-            double maxLength = 0;
-
-            List<String> messages = new List<String>();
-
-            foreach (string f in options.FilePaths)
+            try
             {
-                string fileText = System.IO.File.ReadAllText(f);
-                messages.Add(fileText);
-            }
+                if (options.FilePaths == null)
+                    options.FilePaths = ConsoleManager.GetFilePaths().ToArray();
 
-            avrgLength = (int)messages.Average(x => x.Length);
-            maxLength = (int)messages.Max(x => x.Length);
-            minLength = (int)messages.Min(x => x.Length);
+                var watch = System.Diagnostics.Stopwatch.StartNew();
+                double avrgLength = 0;
+                double minLength = 0;
+                double maxLength = 0;
 
-            _connectionMngr = ConnectionManager.GetInstance();
+                List<String> messages = new List<String>();
 
-            _connectionMngr.SetConnectionCredentials(Username: options.UserName,
-                Password: options.Password,
-                Virtualhost: options.VirtualHost,
-                Ip: options.Ip,
-                Hosts: options.Hosts
-            );
-
-            using (var connection = _connectionMngr.Factory.CreateConnection())
-            using (var channel = connection.CreateModel())
-            {
-
-                TopologyManager.DeclareTopology(channel: channel, options: options);
-
-                connection.ConnectionBlocked += (sender, args) =>
+                foreach (string f in options.FilePaths)
                 {
-                    Console.WriteLine("Connection state: Blocked \n");
-                };
-
-                connection.ConnectionShutdown += (sender, args) =>
-                {
-                    Console.WriteLine("Connection state: Shutdown \n");
-                };
-
-                connection.ConnectionUnblocked += (sender, args) =>
-                {
-                    Console.WriteLine("Connection state: Unblocked \n");
-                };
-
-                connection.ConnectionShutdown += (sender, args) =>
-                {
-                    Console.WriteLine("Connection state: Shutdown," +args.Cause+", "+", "+args.ReplyText+", " + args.Initiator);
-                };
-
-                if (options.ConfirmsEnabled)
-                {
-                    channel.ConfirmSelect();
-                    channel.WaitForConfirmsOrDie();
+                    string fileText = System.IO.File.ReadAllText(f);
+                    messages.Add(fileText);
                 }
 
-                IBasicProperties props = GenerateMessageProperties(channel, options.PersistentMessages);
+                avrgLength = (int)messages.Average(x => x.Length);
+                maxLength = (int)messages.Max(x => x.Length);
+                minLength = (int)messages.Min(x => x.Length);
 
-                if (options.Count > 0)
-                    PublishWithCount(channel, props, options.Count, messages, options);
-                else
+                _connectionMngr = ConnectionManager.GetInstance();
 
-                    PublishUntilStop(channel, props, messages, options);
+                _connectionMngr.CreateFactory(Username: options.UserName,
+                    Password: options.Password,
+                    Virtualhost: options.VirtualHost,
+                    Ip: options.Ip,
+                    Hosts: options.Hosts
+                );
+
+
+
+                using (var connection = _connectionMngr.CreateConnection(options.Hosts))
+                using (var channel = connection.CreateModel())
+                {
+
+                    TopologyManager.DeclareTopology(channel: channel, options: options);
+
+                    connection.ConnectionBlocked += (sender, args) =>
+                    {
+                        Console.WriteLine("Connection state: Blocked \n");
+                    };
+
+                    connection.ConnectionShutdown += (sender, args) =>
+                    {
+                        Console.WriteLine("Connection state: Shutdown \n");
+                    };
+
+                    connection.ConnectionUnblocked += (sender, args) =>
+                    {
+                        Console.WriteLine("Connection state: Unblocked \n");
+                    };
+
+                    connection.ConnectionShutdown += (sender, args) =>
+                    {
+                        Console.WriteLine("Connection state: Shutdown," + args.Cause + ", " + ", " + args.ReplyText +
+                                          ", " + args.Initiator);
+                    };
+
+                    connection.CallbackException += (sender, args) =>
+                    {
+                        Console.WriteLine("Connection state: callback exception");
+                    };
+
+                    if (options.ConfirmsEnabled)
+                    {
+                        channel.ConfirmSelect();
+                        channel.WaitForConfirmsOrDie();
+                    }
+
+                    IBasicProperties props = GenerateMessageProperties(channel, options.PersistentMessages);
+
+                    if (options.Count > 0)
+                        PublishWithCount(channel, props, options.Count, messages, options);
+                    else
+
+                        PublishUntilStop(channel, props, messages, options);
+                }
+
+                ConsoleManager.PrintParameters(options, watch, maxLength, minLength, avrgLength);
+
             }
-
-            ConsoleManager.PrintParameters(options, watch, maxLength, minLength, avrgLength);
-
-            Console.ReadLine();
-
+            catch (Exception ex)
+            {
+                ConsoleManager.PrintException(ex);
+            }
         }
 
         private static IBasicProperties GenerateMessageProperties(IModel channel, bool persistentMessages)
@@ -146,15 +161,37 @@ namespace ClientApp
             IBasicProperties props = channel.CreateBasicProperties();
 
             props.Persistent = persistentMessages;
-            //props.Headers = new Dictionary<string, object>();
-            //props.Headers.Add("Timestamp", DateTime.Now);
-            //props.Headers.Add("Location", "Aarhus , Denmark");
 
             return props;
         }
 
         private static void PublishUntilStop(IModel channel, IBasicProperties props, List<string> messages, PublishSubOptions options)
         {
+            IEnumerable<QueueInfo> latestQueueInfo = new List<QueueInfo>();
+            
+            IDictionary<string, bool> queueStatuses = new Dictionary<string, bool>();
+
+
+
+            Thread queueInfoPoolingThread = new Thread(() =>
+            {
+                do
+                {
+                    latestQueueInfo = RabbitMqHttpApiFacade.GetQueueInfos();
+
+                    foreach (QueueInfo q in latestQueueInfo)
+                    {
+                        queueStatuses.Add(q.Name, q.State != "Syncing"); //If queue not syncing it means we can publish
+                    }
+
+                    Thread.Sleep(15000);
+                } while (true);
+            });
+
+            queueInfoPoolingThread.Name = "Queue Info Pooling Thread"; 
+            queueInfoPoolingThread.IsBackground = true;
+            queueInfoPoolingThread.Start();
+ 
             ConsoleManager.AnnouncePublishingStarted();
 
             while (!Console.KeyAvailable)
@@ -173,7 +210,7 @@ namespace ClientApp
 
                         System.Threading.Thread.Sleep(100);
                     }
-                    catch (System.IO.IOException ex)
+                    catch (System.Net.Sockets.SocketException ex)
                     {
                         ConsoleManager.PrintException(ex);
 
@@ -189,24 +226,14 @@ namespace ClientApp
                         }
                     }
 
-                    catch (RabbitMQ.Client.Exceptions.AlreadyClosedException ex)
-                    {
-                        ConsoleManager.PrintException(ex);
-                        break;
-                    }
-
-                    catch (RabbitMQ.Client.Exceptions.ConnectFailureException ex)
-                    {
-                        ConsoleManager.PrintException(ex);
-                    }
-
                     catch (Exception ex)
                     {
                         ConsoleManager.PrintException(ex);
                     }
-
                 }
             }
+
+            queueInfoPoolingThread.Abort();
 
         }
 
@@ -217,7 +244,6 @@ namespace ClientApp
         {
             for (int i = 0; i <= options.Count; i++)
             {
-
                 foreach (var messageBody in messages)
                 {
                     var body = Encoding.UTF8.GetBytes(messageBody);
@@ -243,7 +269,7 @@ namespace ClientApp
 
             _connectionMngr = ConnectionManager.GetInstance();
 
-            _connectionMngr.SetConnectionCredentials(Username: options.UserName,
+            _connectionMngr.CreateFactory(Username: options.UserName,
                Password: options.Password,
                Virtualhost: options.VirtualHost,
                Ip: options.Ip,

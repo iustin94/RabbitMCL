@@ -10,10 +10,12 @@ namespace ClientApp
     {
         private static ConnectionManager Instance;
 
-        public ConnectionFactory Factory;
+        public ConnectionFactory Factory { get; set; }
+        public IConnection Connection { get; set; }
 
-        private ConnectionInfo info;
 
+        private ConnectionInfo info { get; set; }
+        private static IEnumerable<string> Hosts { get; set; }
 
         public static ConnectionManager GetInstance()
         {
@@ -29,7 +31,7 @@ namespace ClientApp
             
         }
 
-        public bool SetConnectionCredentials(string Ip, string Username, string Password, string Virtualhost, IEnumerable<string> Hosts  )
+        public bool CreateFactory(string Ip, string Username, string Password, string Virtualhost, IEnumerable<string> Hosts  )
         {
             try
             {
@@ -43,25 +45,38 @@ namespace ClientApp
                 Factory.Password = Password;
                 Factory.VirtualHost = Virtualhost;
                 Factory.HostName = Ip;
-                Factory.RequestedHeartbeat = 20;
-
+                Factory.ContinuationTimeout = new TimeSpan(5);
+                Factory.RequestedHeartbeat = 40;
                 if (Hosts != null)
                 {
                     Factory.HostnameSelector = new HostsnameSelector(Hosts.ToList());
                     Factory.AutomaticRecoveryEnabled = true;
                     Factory.TopologyRecoveryEnabled = true;
-                    Factory.NetworkRecoveryInterval = TimeSpan.FromSeconds(5);
                 }
 
                 return true;
             }
             catch (Exception ex)
             {
-                
                 Console.Write(ex.Message);
                 return false;
             }       
         }
-        
+
+
+        /// <summary>
+        /// Returns a connection item. If the ConnectionManager class has a list of host names set then it will use that list.
+        /// </summary>
+        /// <returns></returns>
+        public IConnection CreateConnection(IEnumerable<string> Hosts)
+        {
+            if(this.Factory == null)
+                throw new Exception("ConnectioManager does not have a RabbitMQ factory to use.");
+
+            if (Hosts != null)
+                return Factory.CreateConnection(Hosts.ToList());
+            else
+                return Factory.CreateConnection();
+        }
     }
 }
