@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using ClientApp.Model;
+using ClientApp.RabbitServer.DataAccess;
 using ClientApp.Service;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -18,8 +19,6 @@ namespace ClientApp
     class Program
     {
         private static ConnectionManager _connectionMngr;
-
-        public QueueInfo latestQueueStatus;
 
         public static void Main(string[] args)
         {
@@ -177,7 +176,7 @@ namespace ClientApp
             {
                 do
                 {
-                    latestQueueInfo = RabbitMqHttpApiFacade.GetQueueInfos();
+                    latestQueueInfo = Queues.GetQueueInfos();
 
                     foreach (QueueInfo q in latestQueueInfo)
                     {
