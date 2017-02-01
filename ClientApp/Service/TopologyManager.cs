@@ -7,7 +7,7 @@ using ClientApp.Model;
 using ClientApp.Service;
 using RabbitMQ.Client;
 
-namespace ClientApp
+namespace ClientApp.Service
 {
      static class TopologyManager
     {

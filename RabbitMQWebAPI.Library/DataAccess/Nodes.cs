@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClientApp.RabbitServer.DataAccess
+namespace RabbitMQWebAPI.Library.DataAccess
 {
-    class Bindings
+    class Nodes
     {
-
-
+        //TODO Constructor and async data get.
     }
 }

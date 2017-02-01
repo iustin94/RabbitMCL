@@ -63,6 +63,7 @@
       <HintPath>..\..\..\..\..\Downloads\rabbitmq-dotnet-client-3.6.5-dotnet-4.5\bin\RabbitMQ.ServiceModel.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -74,12 +75,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RabbitServer\DataAccess\Bindings.cs" />
-    <Compile Include="RabbitServer\DataAccess\Exchanges.cs" />
-    <Compile Include="RabbitServer\DataAccess\Queues.cs" />
-    <Compile Include="RabbitServer\Model\BindingInfo.cs" />
-    <Compile Include="RabbitServer\Model\ExchangeInfo.cs" />
-    <Compile Include="RabbitServer\Model\QueueInfo.cs" />
     <Compile Include="Service\ConsoleManager.cs" />
     <Compile Include="Service\HostnameSelector.cs" />
     <Compile Include="Model\ConnectionInfo.cs" />
@@ -97,7 +92,9 @@
     <Compile Include="Service\TopologyManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -118,7 +115,12 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\RabbitMQWebAPI.Library\RabbitMQWebAPI.Library.csproj">
+      <Project>{a71a6e31-36ee-4864-829a-bc65258554ca}</Project>
+      <Name>RabbitMQWebAPI.Library</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

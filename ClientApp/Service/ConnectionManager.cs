@@ -4,7 +4,7 @@ using System.Linq;
 using RabbitMQ.Client;
 using ClientApp.Model;
 
-namespace ClientApp
+namespace ClientApp.Service
 {
     public class ConnectionManager
     {

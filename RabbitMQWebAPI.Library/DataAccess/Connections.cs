@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClientApp.Model
+namespace RabbitMQWebAPI.Library.DataAccess
 {
-    class ExchangeInfo
+    class Connections
     {
-        //TO-DO
+        //TODO Constructor and async data get.
     }
 }

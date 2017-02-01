@@ -8,11 +8,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using ClientApp.Model;
-using ClientApp.RabbitServer.DataAccess;
 using ClientApp.Service;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using CommandLine;
+using RabbitDataAccess = RabbitMQWebAPI.Library;
+using RabbitMQWebAPI.Library.Models;
 
 namespace ClientApp
 {
@@ -22,6 +23,9 @@ namespace ClientApp
 
         public static void Main(string[] args)
         {
+
+            System.Threading.Thread.CurrentThread.Name = "Main thread";
+
             var parser = new Parser(with =>
             {
                 with.CaseSensitive = false;
@@ -93,10 +97,7 @@ namespace ClientApp
                     Password: options.Password,
                     Virtualhost: options.VirtualHost,
                     Ip: options.Ip,
-                    Hosts: options.Hosts
-                );
-
-
+                    Hosts: options.Hosts);
 
                 using (var connection = _connectionMngr.CreateConnection(options.Hosts))
                 using (var channel = connection.CreateModel())
@@ -165,32 +166,47 @@ namespace ClientApp
         }
 
         private static void PublishUntilStop(IModel channel, IBasicProperties props, List<string> messages, PublishSubOptions options)
-        {
-            IEnumerable<QueueInfo> latestQueueInfo = new List<QueueInfo>();
-            
-            IDictionary<string, bool> queueStatuses = new Dictionary<string, bool>();
+            {
+            IEnumerable<RabbitMQWebAPI.Library.Models.QueueInfo> latestQueueInfo = new List<QueueInfo>();
 
+            IDictionary<string, QueueInfo.StateEnum> queueStatuses = new Dictionary<string, QueueInfo.StateEnum>();
 
 
             Thread queueInfoPoolingThread = new Thread(() =>
-            {
-                do
-                {
-                    latestQueueInfo = Queues.GetQueueInfos();
+           {
+               do
+               {
+                   lock (queueStatuses)
+                   {
+                       try
+                       {
+                           queueStatuses = new Dictionary<string, QueueInfo.StateEnum>();
+                           var latestQueueInfos = RabbitDataAccess.DataAccess.Queues.GetQueueInfos().Result;
 
-                    foreach (QueueInfo q in latestQueueInfo)
-                    {
-                        queueStatuses.Add(q.Name, q.State != "Syncing"); //If queue not syncing it means we can publish
-                    }
+                           foreach (QueueInfo q in latestQueueInfos)
+                           {
+                               queueStatuses.Add(q.Name, q.State);
+                               Console.WriteLine(q.Name + ": " + q.State.ToString());
+                           }
 
-                    Thread.Sleep(15000);
-                } while (true);
-            });
+                       }
+                       catch (Exception ex)
+                       {
+                           ConsoleManager.PrintException(ex);
+                       }
+                   }
+                   Thread.Sleep(15000);
 
-            queueInfoPoolingThread.Name = "Queue Info Pooling Thread"; 
+               } while (true);
+           });
+
+            queueInfoPoolingThread.Name = "Queue Info Pooling Thread";
             queueInfoPoolingThread.IsBackground = true;
             queueInfoPoolingThread.Start();
- 
+
+            ExchangeInfo ei1 = RabbitDataAccess.Service.ExchangesQueues.getExchangeForQueue("ha.queue1").Result;
+            ExchangeInfo ei2 = RabbitDataAccess.Service.ExchangesQueues.getExchangeForQueue("ha.queue1-Fallback").Result;
+
             ConsoleManager.AnnouncePublishingStarted();
 
             while (!Console.KeyAvailable)
@@ -201,13 +217,27 @@ namespace ClientApp
 
                     try
                     {
-                        channel.BasicPublish(exchange: options.ExchangeName,
+                        
+
+                        if (queueStatuses.ContainsKey("ha.queue1") &&
+                            queueStatuses["ha.queue1"] != QueueInfo.StateEnum.Syncing)
+                        {
+                            channel.BasicPublish(exchange: ei1.name,
                             routingKey: options.BindingKey,
                             basicProperties: props,
                             body: body,
                             mandatory: true);
+                        }
+                        else if (queueStatuses.ContainsKey("ha.queue1-Fallback") &&
+                                 queueStatuses["ha.queue1-Fallback"] != QueueInfo.StateEnum.Syncing)
+                        {
+                            channel.BasicPublish(exchange: ei2.name,
+                            routingKey: options.BindingKey,
+                            basicProperties: props,
+                            body: body,
+                            mandatory: true);
+                        }
 
-                        System.Threading.Thread.Sleep(100);
                     }
                     catch (System.Net.Sockets.SocketException ex)
                     {

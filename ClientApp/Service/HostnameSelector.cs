@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using ClientApp.Service;
 using RabbitMQ.Client;
 
-namespace ClientApp
+namespace ClientApp.Service
 {
     class HostsnameSelector : IHostnameSelector
     {

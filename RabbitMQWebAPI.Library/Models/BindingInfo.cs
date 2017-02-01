@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClientApp.Model
+namespace RabbitMQWebApi.Library.Models
 {
-    class BindingInfo
+    public class BindingInfo
     {
         public string source;
         public string vhost;
