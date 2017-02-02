@@ -15,11 +15,16 @@ namespace RabbitMQWebAPI.Library.DataAccess
 {
     public static class Queues
     {
+        /// <summary>
+        /// A list of all queues.
+        /// </summary>
+        /// <returns></returns>
         public static async Task<IEnumerable<QueueInfo>> GetQueueInfos()
         {
             return await GetQueueInfosInternal();
         }
 
+        // /api/queues	
         private static async Task<IEnumerable<QueueInfo>> GetQueueInfosInternal()
         {
             dynamic info;
@@ -70,6 +75,17 @@ namespace RabbitMQWebAPI.Library.DataAccess
             return queues;
         }
 
+        /* TODO /api/queues/vhost	
+         * A list of all queues in a given virtual host.
+         */
+
+        /* TODO /api/queues/vhost/name	
+         * An individual queue. 
+         */
+
+        /* TODO /api/queues/vhost/name/bindings	
+         * A list of all bindings on a given queue.
+         */
 
     }
 }

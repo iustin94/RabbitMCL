@@ -7,13 +7,9 @@ using System.Threading.Tasks;
 namespace RabbitMQWebAPI.Library.Models
 {
     public class QueueInfo
-    {
-
-        //TODO Enum for states
-        public enum StateEnum { Syncing = 0, Running = 1, Idle = 2, Flow = 3, Blocked = 4}
-
+    {       
         public string Name;
-        public StateEnum State;
+        public State.StateEnum State;
         public bool Exclusive;
         public bool AutoDelete;
         public bool Durable;
@@ -27,13 +23,8 @@ namespace RabbitMQWebAPI.Library.Models
             this.Durable = Durable;
             this.VHost = VHost;
 
-            if (State == "syncing") this.State = StateEnum.Syncing;
-            if (State == "running") this.State = StateEnum.Running;
-            if (State == "idle") this.State = StateEnum.Idle;
-            if (State == "flow") this.State = StateEnum.Flow;
-            if (State == "blocked") this.State = StateEnum.Blocked;
+            this.State = RabbitMQWebAPI.Library.Models.State.EvaluateState(State);
         }
-
 
     }
 }

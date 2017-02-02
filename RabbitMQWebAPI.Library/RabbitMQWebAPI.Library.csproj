@@ -48,11 +48,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAccess\Bindings.cs" />
+    <Compile Include="DataAccess\Channels.cs" />
     <Compile Include="DataAccess\Connections.cs" />
+    <Compile Include="DataAccess\Consumers.cs" />
     <Compile Include="DataAccess\Exchanges.cs" />
+    <Compile Include="DataAccess\Miscellaneous.cs" />
     <Compile Include="DataAccess\Nodes.cs" />
+    <Compile Include="DataAccess\Parameters.cs" />
+    <Compile Include="DataAccess\Policies.cs" />
     <Compile Include="DataAccess\Queues.cs" />
+    <Compile Include="DataAccess\Users.cs" />
+    <Compile Include="DataAccess\VHosts.cs" />
     <Compile Include="Models\BindingInfo.cs" />
+    <Compile Include="Models\ChannelInfo.cs" />
     <Compile Include="Models\ConnectionInfo.cs" />
     <Compile Include="Models\ExchangeInfo.cs" />
     <Compile Include="Models\NodeInfo.cs" />

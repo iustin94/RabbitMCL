@@ -15,26 +15,24 @@ namespace RabbitMQWebAPI.Library.DataAccess
 {
     public class Exchanges
     {
+
+
+        /// <summary>
+        /// An individual exchance
+        /// </summary>
+        /// <param name="exchangeName"></param>
+        /// <param name="vhost"></param>
+        /// <returns></returns>
         public static async Task<ExchangeInfo> GetExchangeInfo(string exchangeName, string vhost = "/")
         {
             return await GetExchangeInfoInternal(exchangeName, vhost);
         }
 
-        public static async Task<IEnumerable<ExchangeInfo>> GetExchangeInfos()
-        {
-            return await GetExchangeInfosInternal();
-        }
-
-
-        /// <summary>
-        /// Retrieves the exchange in the node with the specified parameter 
-        /// </summary>
-        /// <param name="exchangeName"></param>
-        /// <returns></returns>
+        /* /api/exchanges/vhost/name	
+         */
         private static async Task<ExchangeInfo> GetExchangeInfoInternal(string exchangeName, string vhost)
         {
             dynamic exchangeData;
-
 
             var builder = new DbConnectionStringBuilder();
             builder.ConnectionString = ConfigurationManager.ConnectionStrings["HTTPapi"].ConnectionString;
@@ -80,6 +78,18 @@ namespace RabbitMQWebAPI.Library.DataAccess
             }
         }
 
+
+
+        /// <summary>
+        /// A list of all exchanges.
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<IEnumerable<ExchangeInfo>> GetExchangeInfos()
+        {
+            return await GetExchangeInfosInternal();
+        }
+
+        // /api/exchanges	
         private static async Task<IEnumerable<ExchangeInfo>> GetExchangeInfosInternal()
         {
             dynamic info;
@@ -134,5 +144,18 @@ namespace RabbitMQWebAPI.Library.DataAccess
             return exchanges;
         }
 
+
+        /*TODO /api/exchanges/vhost	
+         * A list of all exchanges in a given virtual host.
+         */
+
+        /*TODO /api/exchanges/vhost/name/bindings/source	
+         * A list of all bindings in which a given exchange is the source.
+         */
+
+        /*TODO /api/exchanges/vhost/name/bindings/destination	
+         * A list of all bindings in which a given exchange is the destination.
+         */
+      
     }
 }

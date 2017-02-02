@@ -21,6 +21,8 @@ namespace RabbitMQWebAPI.Library.DataAccess
             return GetBindingInfosInternal();
         }
 
+
+        // /api/bindings
         private static async Task<IEnumerable<BindingInfo>> GetBindingInfosInternal()
         {
             dynamic info;
@@ -68,6 +70,33 @@ namespace RabbitMQWebAPI.Library.DataAccess
 
             return bindings;
         }
+
+
+        /* TODO /api/bindings/vhost 
+         * A list of all bindings in a given virtual host.
+         * */
+
+        /* TODO /api/bindings/vhost/e/exchange/q/queue
+         * A list of all bindings between an exchange and a queue. Remember, an exchange and a queue can be bound together many times! 
+         * To create a new binding, POST to this URI. You will need a body looking something like this:
+         * 
+         * EX: {"routing_key":"my_routing_key","arguments":{}}
+         *
+         * All keys are optional. The response will contain a Location header telling you the URI of your new binding.
+         */
+
+        /* TODO /api/bindings/vhost/e/exchange/q/queue/props	
+         * 
+         * An individual binding between an exchange and a queue. The props part of the URI is a "name" for the binding composed of its routing key and a hash of its arguments.
+         */
+
+        /* TODO /api/bindings/vhost/e/source/e/destination	
+         * A list of all bindings between two exchanges. Similar to the list of all bindings between an exchange and a queue, above.
+         */
+
+        /* TODO /api/bindings/vhost/e/source/e/destination/props	
+         * An individual binding between two exchanges. Similar to the individual binding between an exchange and a queue, above.
+         */
 
     }
 }
