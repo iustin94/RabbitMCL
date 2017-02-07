@@ -69,7 +69,7 @@ namespace RabbitMQWebAPI.Library.DataAccess
 
                         Dictionary<string, string> arguments =
                             JsonConvert.DeserializeObject<Dictionary<string, string>>(
-                                exchangeData["arguments"].ToString());
+                                exchangeData["parametersDictionary"].ToString());
 
                         return new ExchangeInfo(name: name, vhost: e_vhost, type: type, durable: durable,
                             auto_delete: auto_delete, internal_exchange: internal_exchange, arguments: arguments);
@@ -132,7 +132,7 @@ namespace RabbitMQWebAPI.Library.DataAccess
 
                             Dictionary<string, string> arguments =
                                 JsonConvert.DeserializeObject<Dictionary<string, string>>(
-                                    exchangeData["arguments"].ToString());
+                                    exchangeData["parametersDictionary"].ToString());
 
                             exchanges.Add(new ExchangeInfo(name: name, vhost: vhost, type: type, auto_delete: auto_delete, durable: durable, internal_exchange: internal_exchange, arguments: arguments));
                         }

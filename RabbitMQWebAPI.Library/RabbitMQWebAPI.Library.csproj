@@ -62,9 +62,18 @@
     <Compile Include="Models\BindingInfo.cs" />
     <Compile Include="Models\ChannelInfo.cs" />
     <Compile Include="Models\ConnectionInfo.cs" />
+    <Compile Include="Models\ConsumerInfocs.cs" />
+    <Compile Include="Models\DefinitionInfo.cs" />
     <Compile Include="Models\ExchangeInfo.cs" />
+    <Compile Include="Models\ExtentionInfo.cs" />
     <Compile Include="Models\NodeInfo.cs" />
+    <Compile Include="Models\ParameterInfo.cs" />
+    <Compile Include="Models\PermissionInfo.cs" />
+    <Compile Include="Models\PoliciInfo.cs" />
     <Compile Include="Models\QueueInfo.cs" />
+    <Compile Include="Models\State.cs" />
+    <Compile Include="Models\UserInfo.cs" />
+    <Compile Include="Models\VhostInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\ExchangeQueues.cs" />
   </ItemGroup>

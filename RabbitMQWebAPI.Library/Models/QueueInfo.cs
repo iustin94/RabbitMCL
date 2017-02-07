@@ -9,7 +9,7 @@ namespace RabbitMQWebAPI.Library.Models
     public class QueueInfo
     {       
         public string Name;
-        public State.StateEnum State;
+        public State.QueueStateEnum QueueState;
         public bool Exclusive;
         public bool AutoDelete;
         public bool Durable;
@@ -23,7 +23,7 @@ namespace RabbitMQWebAPI.Library.Models
             this.Durable = Durable;
             this.VHost = VHost;
 
-            this.State = RabbitMQWebAPI.Library.Models.State.EvaluateState(State);
+            this.QueueState = RabbitMQWebAPI.Library.Models.State.EvaluateState(State);
         }
 
     }

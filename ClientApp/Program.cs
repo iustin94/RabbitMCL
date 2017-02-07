@@ -74,7 +74,7 @@ namespace ClientApp
                 if (options.FilePaths == null)
                     options.FilePaths = ConsoleManager.GetFilePaths().ToArray();
 
-                var watch = System.Diagnostics.Stopwatch.StartNew();
+                Stopwatch watch = System.Diagnostics.Stopwatch.StartNew();
                 double avrgLength = 0;
                 double minLength = 0;
                 double maxLength = 0;
@@ -107,28 +107,28 @@ namespace ClientApp
 
                     connection.ConnectionBlocked += (sender, args) =>
                     {
-                        Console.WriteLine("Connection state: Blocked \n");
+                        Console.WriteLine("Connection queueState: Blocked \n");
                     };
 
                     connection.ConnectionShutdown += (sender, args) =>
                     {
-                        Console.WriteLine("Connection state: Shutdown \n");
+                        Console.WriteLine("Connection queueState: Shutdown \n");
                     };
 
                     connection.ConnectionUnblocked += (sender, args) =>
                     {
-                        Console.WriteLine("Connection state: Unblocked \n");
+                        Console.WriteLine("Connection queueState: Unblocked \n");
                     };
 
                     connection.ConnectionShutdown += (sender, args) =>
                     {
-                        Console.WriteLine("Connection state: Shutdown," + args.Cause + ", " + ", " + args.ReplyText +
+                        Console.WriteLine("Connection queueState: Shutdown," + args.Cause + ", " + ", " + args.ReplyText +
                                           ", " + args.Initiator);
                     };
 
                     connection.CallbackException += (sender, args) =>
                     {
-                        Console.WriteLine("Connection state: callback exception");
+                        Console.WriteLine("Connection queueState: callback exception");
                     };
 
                     if (options.ConfirmsEnabled)
@@ -169,7 +169,7 @@ namespace ClientApp
             {
             IEnumerable<RabbitMQWebAPI.Library.Models.QueueInfo> latestQueueInfo = new List<QueueInfo>();
 
-            IDictionary<string, QueueInfo.StateEnum> queueStatuses = new Dictionary<string, QueueInfo.StateEnum>();
+            IDictionary<string, State.QueueStateEnum> queueStatuses = new Dictionary<string, State.QueueStateEnum>();
 
 
             Thread queueInfoPoolingThread = new Thread(() =>
@@ -180,13 +180,13 @@ namespace ClientApp
                    {
                        try
                        {
-                           queueStatuses = new Dictionary<string, QueueInfo.StateEnum>();
+                           queueStatuses = new Dictionary<string, State.QueueStateEnum>();
                            var latestQueueInfos = RabbitDataAccess.DataAccess.Queues.GetQueueInfos().Result;
 
                            foreach (QueueInfo q in latestQueueInfos)
                            {
-                               queueStatuses.Add(q.Name, q.State);
-                               Console.WriteLine(q.Name + ": " + q.State.ToString());
+                               queueStatuses.Add(q.Name, q.QueueState);
+                               Console.WriteLine(q.Name + ": " + q.QueueState.ToString());
                            }
 
                        }
@@ -220,7 +220,7 @@ namespace ClientApp
                         
 
                         if (queueStatuses.ContainsKey("ha.queue1") &&
-                            queueStatuses["ha.queue1"] != QueueInfo.StateEnum.Syncing)
+                            queueStatuses["ha.queue1"] != State.QueueStateEnum.Syncing)
                         {
                             channel.BasicPublish(exchange: ei1.name,
                             routingKey: options.BindingKey,
@@ -229,7 +229,7 @@ namespace ClientApp
                             mandatory: true);
                         }
                         else if (queueStatuses.ContainsKey("ha.queue1-Fallback") &&
-                                 queueStatuses["ha.queue1-Fallback"] != QueueInfo.StateEnum.Syncing)
+                                 queueStatuses["ha.queue1-Fallback"] != State.QueueStateEnum.Syncing)
                         {
                             channel.BasicPublish(exchange: ei2.name,
                             routingKey: options.BindingKey,

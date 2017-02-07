@@ -8,22 +8,22 @@ namespace RabbitMQWebAPI.Library.Models
 {
     public class State
     {
-        public enum StateEnum { Syncing = 0, Running = 1, Idle = 2, Flow = 3, Blocked = 4 }
+        public enum QueueStateEnum { Syncing = 0, Running = 1, Idle = 2, Flow = 3, Blocked = 4 }
 
-        public static StateEnum EvaluateState( string State)
+        public static QueueStateEnum EvaluateState( string State)
         {
             if (State == "syncing")
-                return Models.State.StateEnum.Syncing;
+                return Models.State.QueueStateEnum.Syncing;
             if (State == "running")
-                return Models.State.StateEnum.Running;
+                return Models.State.QueueStateEnum.Running;
             if (State == "idle")
-                return Models.State.StateEnum.Idle;
+                return Models.State.QueueStateEnum.Idle;
             if (State == "flow")
-                return Models.State.StateEnum.Flow;
+                return Models.State.QueueStateEnum.Flow;
             if (State == "blocked")
-                return Models.State.StateEnum.Blocked;
+                return Models.State.QueueStateEnum.Blocked;
 
-            throw new Exception("Could not evaluate state.");
+            throw new Exception("Could not evaluate queueState.");
         }
     }
 }
