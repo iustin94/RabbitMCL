@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using RabbitMQWebAPI.Library.Interfaces;
 using RabbitMQWebAPI.Library.Models.Binding;
 
 namespace RabbitMQWebApi.Library.Models.Binding
@@ -13,15 +14,14 @@ namespace RabbitMQWebApi.Library.Models.Binding
     /// </summary>
     public class BindingInfo
     {
-        readonly string source;
-        readonly string vhost;
-        readonly string destination;
-        readonly string destination_type;
-        readonly string routing_key;
-        readonly IDictionary<string, string> arguments;
-        readonly string properties_key;
+        public string source { private set; get; }
+        public string vhost { private set; get; }
+        public string destination { private set; get; }
+        public string destination_type { private set; get; }
+        public string routing_key { private set; get; }
+        public IDictionary<string, string> arguments { private set; get; }
+        public string properties_key { private set; get; }
 
-    
         /// <summary>
         /// The class constructor.
         /// </summary>
@@ -35,5 +35,7 @@ namespace RabbitMQWebApi.Library.Models.Binding
             this.source = parameters.source;
             this.vhost = parameters.vhost;
         }
+
+        public BindingInfo() { }
     }
 }

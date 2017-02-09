@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using RabbitMQWebApi.Library.Models;
 using RabbitMQWebApi.Library.Models.Binding;
+using RabbitMQWebAPI.Library.Interfaces;
 
 namespace RabbitMQWebAPI.Library.Models.Binding
 {
     /// <summary>
     /// Class that inspects parameters before creating a BindingInfo. This prevents creation of invalid objects. Use this to create the BindingInfo object then store that object.
     /// </summary>
-    public static class BingindInfoSentinel
+    public class BindingInfoSentinel: IParameterSentinel<BindingInfo, BindingInfoParameters>
     {
 
 
@@ -29,15 +29,16 @@ namespace RabbitMQWebAPI.Library.Models.Binding
         /// arguments: Dictionary of type string, string
         /// properties_key: string
         /// </param>
-        public static BindingInfo CreateBindingInfo(IDictionary<string, object> parametersDictionary)
+
+        public BindingInfo CreateModel(IDictionary<String, Object> parametersDictionary)
         {
             BindingInfo toReturn;
 
-            if (CheckParatemersDictionaryIfAllKeysArePresent(parametersDictionary) != true)
+            if (ValidateDictionary(parametersDictionary) != true)
                 return null;
             else
             {
-                toReturn = new BindingInfo(ParseDictionaryToBindingParameters(parametersDictionary));
+                toReturn = new BindingInfo(ParseDictionaryToParameters(parametersDictionary));
             }
 
             //If we got this far then everything should be fine.
@@ -49,7 +50,7 @@ namespace RabbitMQWebAPI.Library.Models.Binding
         /// </summary>
         /// <param name="parametersDictionary"></param>
         /// <returns>True if all keys are present. Throws an exceptiopn with the message to indicate which key is missing</returns>
-        private static bool CheckParatemersDictionaryIfAllKeysArePresent(
+        public bool ValidateDictionary(
             IDictionary<string, object> parametersDictionary)
         {
             if (!parametersDictionary.ContainsKey("vhost"))
@@ -62,27 +63,27 @@ namespace RabbitMQWebAPI.Library.Models.Binding
                 throw new Exception("Arguments dictionary does not contain \"source\" key.");
             }
 
-            if (parametersDictionary.ContainsKey("destination"))
+            if (!parametersDictionary.ContainsKey("destination"))
             {
                 throw new Exception("Arguments dictionary does not contain \"destination\'");
             }
 
-            if (parametersDictionary.ContainsKey("destination_type"))
+            if (!parametersDictionary.ContainsKey("destination_type"))
             {
                 throw new Exception("Arguments dictionary does not contain \"destination_type\" of value type String");
             }
 
-            if (parametersDictionary.ContainsKey("routing_key"))
+            if (!parametersDictionary.ContainsKey("routing_key"))
             {
                 throw new Exception("Arguments dictionary does not contain \"routing_key\" of value type string");
             }
 
-            if (parametersDictionary.ContainsKey("arguments"))
+            if (!parametersDictionary.ContainsKey("arguments"))
             {
                 throw new Exception("Arguments dictionary does not contain \"arguments\" of value type Dictionary<string, string>");
             }
 
-            if (parametersDictionary.ContainsKey("properties_key"))
+            if (!parametersDictionary.ContainsKey("properties_key"))
             {
                 throw new Exception("Arguments dictionary does not containe \"properties_key\" key of value type string");
             }
@@ -104,7 +105,7 @@ namespace RabbitMQWebAPI.Library.Models.Binding
         /// properties_key: string
         /// </param>
         /// <returns>Returns struct containing the parsed parameters for BindingInfo</returns>
-        private static BindingInfoParameters ParseDictionaryToBindingParameters(
+        public BindingInfoParameters ParseDictionaryToParameters(
             IDictionary<string, object> parametersDictionary)
         {
 
@@ -121,5 +122,6 @@ namespace RabbitMQWebAPI.Library.Models.Binding
             return parameters;
         }
 
+       
     }
 }

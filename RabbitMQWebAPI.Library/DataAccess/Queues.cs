@@ -63,7 +63,7 @@ namespace RabbitMQWebAPI.Library.DataAccess
                             bool exclusive = queueData["exclusive"].ToString() == "True";
                             bool auto_delete = queueData["auto_delete"].ToString() == "True";
                             bool durable = queueData["durable"].ToString() == "True";
-                            string state = queueData["queueState"].ToString();
+                            string state = queueData["State"].ToString();
 
                             QueueInfo queueInfo = new QueueInfo(name, state, exclusive, auto_delete, durable, vhost);
                             queues.Add(queueInfo);

@@ -107,28 +107,28 @@ namespace ClientApp
 
                     connection.ConnectionBlocked += (sender, args) =>
                     {
-                        Console.WriteLine("Connection queueState: Blocked \n");
+                        Console.WriteLine("Connection State: Blocked \n");
                     };
 
                     connection.ConnectionShutdown += (sender, args) =>
                     {
-                        Console.WriteLine("Connection queueState: Shutdown \n");
+                        Console.WriteLine("Connection State: Shutdown \n");
                     };
 
                     connection.ConnectionUnblocked += (sender, args) =>
                     {
-                        Console.WriteLine("Connection queueState: Unblocked \n");
+                        Console.WriteLine("Connection State: Unblocked \n");
                     };
 
                     connection.ConnectionShutdown += (sender, args) =>
                     {
-                        Console.WriteLine("Connection queueState: Shutdown," + args.Cause + ", " + ", " + args.ReplyText +
+                        Console.WriteLine("Connection State: Shutdown," + args.Cause + ", " + ", " + args.ReplyText +
                                           ", " + args.Initiator);
                     };
 
                     connection.CallbackException += (sender, args) =>
                     {
-                        Console.WriteLine("Connection queueState: callback exception");
+                        Console.WriteLine("Connection State: callback exception");
                     };
 
                     if (options.ConfirmsEnabled)
@@ -169,7 +169,7 @@ namespace ClientApp
             {
             IEnumerable<RabbitMQWebAPI.Library.Models.QueueInfo> latestQueueInfo = new List<QueueInfo>();
 
-            IDictionary<string, State.QueueStateEnum> queueStatuses = new Dictionary<string, State.QueueStateEnum>();
+            IDictionary<string, State.StateEnum> queueStatuses = new Dictionary<string, State.StateEnum>();
 
 
             Thread queueInfoPoolingThread = new Thread(() =>
@@ -180,13 +180,13 @@ namespace ClientApp
                    {
                        try
                        {
-                           queueStatuses = new Dictionary<string, State.QueueStateEnum>();
+                           queueStatuses = new Dictionary<string, State.StateEnum>();
                            var latestQueueInfos = RabbitDataAccess.DataAccess.Queues.GetQueueInfos().Result;
 
                            foreach (QueueInfo q in latestQueueInfos)
                            {
-                               queueStatuses.Add(q.Name, q.QueueState);
-                               Console.WriteLine(q.Name + ": " + q.QueueState.ToString());
+                               queueStatuses.Add(q.Name, q.State);
+                               Console.WriteLine(q.Name + ": " + q.State.ToString());
                            }
 
                        }
@@ -220,7 +220,7 @@ namespace ClientApp
                         
 
                         if (queueStatuses.ContainsKey("ha.queue1") &&
-                            queueStatuses["ha.queue1"] != State.QueueStateEnum.Syncing)
+                            queueStatuses["ha.queue1"] != State.StateEnum.Syncing)
                         {
                             channel.BasicPublish(exchange: ei1.name,
                             routingKey: options.BindingKey,
@@ -229,7 +229,7 @@ namespace ClientApp
                             mandatory: true);
                         }
                         else if (queueStatuses.ContainsKey("ha.queue1-Fallback") &&
-                                 queueStatuses["ha.queue1-Fallback"] != State.QueueStateEnum.Syncing)
+                                 queueStatuses["ha.queue1-Fallback"] != State.StateEnum.Syncing)
                         {
                             channel.BasicPublish(exchange: ei2.name,
                             routingKey: options.BindingKey,

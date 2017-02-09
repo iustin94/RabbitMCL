@@ -10,10 +10,12 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RabbitMQWebApi.Library.Models;
+using RabbitMQWebApi.Library.Models.Binding;
+using RabbitMQWebAPI.Library.Models.Binding;
 
 namespace RabbitMQWebAPI.Library.DataAccess
 {
-    public class Bindings
+    public static class Bindings
     {
 
         public static Task<IEnumerable<BindingInfo>> GetBindingInfos()
@@ -62,7 +64,10 @@ namespace RabbitMQWebAPI.Library.DataAccess
                             Dictionary<string, string> arguments =
                                 JsonConvert.DeserializeObject<Dictionary<string, string>>(bindingData["arguments"].ToString());
 
-                            bindings.Add(new BindingInfo(source, vhost, destination, destination_type, routing_key, arguments, properties_key));
+                            BindingInfoSentinel sentinel = new BindingInfoSentinel();
+
+                            BindingInfo binding = sentinel.CreateModel(JsonConvert.DeserializeObject<Dictionary<string,object>>(bindingData.ToString()));
+                            bindings.Add(info);
                         }
                     }
                 }

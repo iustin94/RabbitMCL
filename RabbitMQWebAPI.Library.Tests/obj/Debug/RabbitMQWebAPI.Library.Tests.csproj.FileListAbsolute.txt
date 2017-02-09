@@ -1,0 +1,6 @@
+C:\Users\jol\documents\visual studio 2015\Projects\FileTransferQueue\RabbitMQWebAPI.Library.Tests\bin\Debug\RabbitMQWebAPI.Library.Tests.dll
+C:\Users\jol\documents\visual studio 2015\Projects\FileTransferQueue\RabbitMQWebAPI.Library.Tests\bin\Debug\RabbitMQWebAPI.Library.Tests.pdb
+C:\Users\jol\documents\visual studio 2015\Projects\FileTransferQueue\RabbitMQWebAPI.Library.Tests\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+C:\Users\jol\documents\visual studio 2015\Projects\FileTransferQueue\RabbitMQWebAPI.Library.Tests\obj\Debug\RabbitMQWebAPI.Library.Tests.csprojResolveAssemblyReference.cache
+C:\Users\jol\documents\visual studio 2015\Projects\FileTransferQueue\RabbitMQWebAPI.Library.Tests\obj\Debug\RabbitMQWebAPI.Library.Tests.dll
+C:\Users\jol\documents\visual studio 2015\Projects\FileTransferQueue\RabbitMQWebAPI.Library.Tests\obj\Debug\RabbitMQWebAPI.Library.Tests.pdb

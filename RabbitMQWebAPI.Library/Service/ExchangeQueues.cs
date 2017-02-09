@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RabbitMQWebApi.Library.Models;
+using RabbitMQWebApi.Library.Models.Binding;
 using RabbitMQWebAPI.Library.DataAccess;
 using RabbitMQWebAPI.Library.Models;
 
