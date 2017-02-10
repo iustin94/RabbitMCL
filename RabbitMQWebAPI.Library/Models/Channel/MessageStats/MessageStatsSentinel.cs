@@ -11,6 +11,9 @@ namespace RabbitMQWebAPI.Library.Models.Channel.MessageStats
 {
     class MessageStatsSentinel : IParameterSentinel<MessageStats, MessageStatsParameters>
     {
+
+        private HashSet<string> keys= new HashSet<string>();
+
         public MessageStats CreateModel(IDictionary<String, Object> parametersDictionary)
         {
             MessageStats toReturn;
@@ -30,8 +33,6 @@ namespace RabbitMQWebAPI.Library.Models.Channel.MessageStats
         public MessageStatsParameters ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary)
         {
             MessageStatsParameters parameters = new MessageStatsParameters();
-
-           
 
             parameters.publish_in = Int32.Parse(parametersDictionary["publish_int"].ToString());
             parameters.publish_in_details =
@@ -93,67 +94,14 @@ namespace RabbitMQWebAPI.Library.Models.Channel.MessageStats
         //God, don't look here pls
         public Boolean ValidateDictionary(IDictionary<String, Object> parametersDictionary)
         {
-            if (!parametersDictionary.ContainsKey("publish"))
-                throw new DictionaryMissingArgumentException("publish");
-            if (!parametersDictionary.ContainsKey("publish_details"))
-                throw new DictionaryMissingArgumentException("publish_details");
-
-            if (!parametersDictionary.ContainsKey("publish_in"))
-                throw new DictionaryMissingArgumentException("publish_in");
-            if (!parametersDictionary.ContainsKey("publish_in_details"))
-                throw new DictionaryMissingArgumentException("publish_in_details");
-
-            if (!parametersDictionary.ContainsKey("publish_out"))
-                throw new DictionaryMissingArgumentException("publish_out");
-            if (!parametersDictionary.ContainsKey("publish_out_details"))
-                throw new DictionaryMissingArgumentException("publish_out_details");
-
-            if (!parametersDictionary.ContainsKey("ack"))
-                throw new DictionaryMissingArgumentException("ack");
-            if (!parametersDictionary.ContainsKey("ack_details"))
-                throw new DictionaryMissingArgumentException("ack_details");
-
-            if (!parametersDictionary.ContainsKey("deliver_get"))
-                throw new DictionaryMissingArgumentException("deliver_get");
-            if (!parametersDictionary.ContainsKey("deliver_get_details"))
-                throw new DictionaryMissingArgumentException("deliver_get_details");
-
-            if (!parametersDictionary.ContainsKey("confirm"))
-                throw new DictionaryMissingArgumentException("confirm");
-            if (!parametersDictionary.ContainsKey("confirm_details"))
-                throw new DictionaryMissingArgumentException("confirm_details");
-
-            if (!parametersDictionary.ContainsKey("return_unroutable"))
-                throw new DictionaryMissingArgumentException("return_unroutable");
-            if (!parametersDictionary.ContainsKey("return_unroutable_details"))
-                throw new DictionaryMissingArgumentException("return_unroutable_details");
-
-            if (!parametersDictionary.ContainsKey("redeliver"))
-                throw new DictionaryMissingArgumentException("redeliver");
-            if (!parametersDictionary.ContainsKey("redeliver_details"))
-                throw new DictionaryMissingArgumentException("redeliver_details");
-
-            if (!parametersDictionary.ContainsKey("deliver"))
-                throw new DictionaryMissingArgumentException("deliver");
-            if (!parametersDictionary.ContainsKey("deliver_details"))
-                throw new DictionaryMissingArgumentException("deliver_details");
-
-            if (!parametersDictionary.ContainsKey("deliver_no_ack"))
-                throw new DictionaryMissingArgumentException("deliver_no_ack");
-            if (!parametersDictionary.ContainsKey("deliver_no_ack_details"))
-                throw new DictionaryMissingArgumentException("deliver_no_ack_details");
-
-            if (!parametersDictionary.ContainsKey("get"))
-                throw new DictionaryMissingArgumentException("get");
-            if (!parametersDictionary.ContainsKey("get_details"))
-                throw new DictionaryMissingArgumentException("get_details");
-
-            if (!parametersDictionary.ContainsKey("get_no_ack"))
-                throw new DictionaryMissingArgumentException("get_no_ack");
-            if (!parametersDictionary.ContainsKey("get_no_ack_details"))
-                throw new DictionaryMissingArgumentException("get_no_ack_details");
-
+            foreach (string key in MessageStatsKeys.keys)
+            {
+                if(!parametersDictionary.ContainsKey(key))
+                    throw new DictionaryMissingArgumentException(key);
+            }
             return true;
+
+            
         }
     }
 }

@@ -77,65 +77,11 @@ namespace RabbitMQWebAPI.Library.Models.Channel
 
         public Boolean ValidateDictionary(IDictionary<String, Object> parametersDictionary)
         {
-            if (!parametersDictionary.ContainsKey("vhost"))
-                throw new DictionaryMissingArgumentException("vhost");
-
-            if (!parametersDictionary.ContainsKey("user"))
-                throw new DictionaryMissingArgumentException("user");
-
-            if (!parametersDictionary.ContainsKey("number"))
-                throw new DictionaryMissingArgumentException("number");
-
-            if (!parametersDictionary.ContainsKey("name"))
-                throw new DictionaryMissingArgumentException("name");
-
-            if (!parametersDictionary.ContainsKey("node"))
-                throw new DictionaryMissingArgumentException("node");
-
-            if (!parametersDictionary.ContainsKey("garbage_collection"))
-                throw new DictionaryMissingArgumentException("garbage_collection");
-
-            if (!parametersDictionary.ContainsKey("reductions"))
-                throw new DictionaryMissingArgumentException("reductions");
-
-            if (!parametersDictionary.ContainsKey("State"))
-                throw new DictionaryMissingArgumentException("State");
-
-            if (!parametersDictionary.ContainsKey("global_prefetch_count"))
-                throw new DictionaryMissingArgumentException("global_prefectch_count");
-
-            if (!parametersDictionary.ContainsKey("prefetch_count"))
-                throw new DictionaryMissingArgumentException("prefetch_count");
-
-            if (!parametersDictionary.ContainsKey("acks_uncomitted"))
-                throw new DictionaryMissingArgumentException("acks_uncomitted");
-
-            if (!parametersDictionary.ContainsKey("messages_unconfirmed"))
-                throw new DictionaryMissingArgumentException("messages_unconfirmed");
-
-            if (!parametersDictionary.ContainsKey("messages_unacknowledge"))
-                throw new DictionaryMissingArgumentException("messages_unacknowledge");
-
-            if (!parametersDictionary.ContainsKey("consumer_count"))
-                throw new DictionaryMissingArgumentException("consumer_count");
-
-            if (!parametersDictionary.ContainsKey("confirms"))
-                throw new DictionaryMissingArgumentException("confirms");
-
-            if (!parametersDictionary.ContainsKey("transactional"))
-                throw new DictionaryMissingArgumentException("transactional");
-
-            if (!parametersDictionary.ContainsKey("idle_since"))
-                throw new DictionaryMissingArgumentException("idle_since");
-
-            if (!parametersDictionary.ContainsKey("reduction_details"))
-                throw new DictionaryMissingArgumentException("reduction_details");
-
-            if (!parametersDictionary.ContainsKey("message_stats"))
-                throw new DictionaryMissingArgumentException("messageStats");
-
-            if (!parametersDictionary.ContainsKey("connection_details"))
-                throw new DictionaryMissingArgumentException("connection_details");
+            foreach (string key in ChannelInfoKeys.keys)
+            {
+                if(!parametersDictionary.ContainsKey(key))
+                    throw new DictionaryMissingArgumentException(key);
+            }
 
             return true;
         }

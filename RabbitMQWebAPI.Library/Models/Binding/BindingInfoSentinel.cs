@@ -15,7 +15,6 @@ namespace RabbitMQWebAPI.Library.Models.Binding
     public class BindingInfoSentinel: IParameterSentinel<BindingInfo, BindingInfoParameters>
     {
 
-
         /// <summary>
         /// The class sentinel. Will throw an exception if the parametersDictionary is missing one of the neccessary key, value paris or if the values can not be cast to the expected data type.
         /// </summary>
@@ -53,39 +52,10 @@ namespace RabbitMQWebAPI.Library.Models.Binding
         public bool ValidateDictionary(
             IDictionary<string, object> parametersDictionary)
         {
-            if (!parametersDictionary.ContainsKey("vhost"))
+            foreach (string key in BindingInfoKeys.keys)
             {
-                throw new Exception("Arguments dictionary does not contain \"vhost\" key.");
-            }
-
-            if (!parametersDictionary.ContainsKey("source"))
-            {
-                throw new Exception("Arguments dictionary does not contain \"source\" key.");
-            }
-
-            if (!parametersDictionary.ContainsKey("destination"))
-            {
-                throw new Exception("Arguments dictionary does not contain \"destination\'");
-            }
-
-            if (!parametersDictionary.ContainsKey("destination_type"))
-            {
-                throw new Exception("Arguments dictionary does not contain \"destination_type\" of value type String");
-            }
-
-            if (!parametersDictionary.ContainsKey("routing_key"))
-            {
-                throw new Exception("Arguments dictionary does not contain \"routing_key\" of value type string");
-            }
-
-            if (!parametersDictionary.ContainsKey("arguments"))
-            {
-                throw new Exception("Arguments dictionary does not contain \"arguments\" of value type Dictionary<string, string>");
-            }
-
-            if (!parametersDictionary.ContainsKey("properties_key"))
-            {
-                throw new Exception("Arguments dictionary does not containe \"properties_key\" key of value type string");
+                if (!parametersDictionary.ContainsKey(key))
+                    throw new DictionaryMissingArgumentException(key);
             }
 
             return true;

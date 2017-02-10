@@ -52,15 +52,12 @@ namespace RabbitMQWebAPI.Library.Models.Channel.ConnectionDetails
 
         public Boolean ValidateDictionary(IDictionary<String, Object> parametersDictionary)
         {
-            if (!parametersDictionary.ContainsKey("name"))
-                throw new DictionaryMissingArgumentException("name");
 
-            if (!parametersDictionary.ContainsKey("peer_port"))
-                throw new DictionaryMissingArgumentException("peer_port");
-
-            if (!parametersDictionary.ContainsKey("peer_host"))
-                throw new DictionaryMissingArgumentException("peer_host");
-
+            foreach (string key in ConnectionDetailsKeys.keys)
+            {
+                if(!parametersDictionary.ContainsKey(key))
+                    throw new DictionaryMissingArgumentException(key);
+            }
             return true;
         }
     }

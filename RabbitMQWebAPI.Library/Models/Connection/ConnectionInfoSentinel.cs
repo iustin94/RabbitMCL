@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using RabbitMQWebAPI.Library.Interfaces;
+using RabbitMQWebAPI.Library.Models.Connection;
 
 namespace RabbitMQWebAPI.Library.Models.Channel.Connection
 {
@@ -42,22 +43,11 @@ namespace RabbitMQWebAPI.Library.Models.Channel.Connection
 
         public Boolean ValidateDictionary(IDictionary<String, Object> parametersDictionary)
         {
-            if(!parametersDictionary.ContainsKey("connected_at"))
-                throw new DictionaryMissingArgumentException("connected_at");
-            if (!parametersDictionary.ContainsKey("type"))
-                throw new DictionaryMissingArgumentException("type");
-            if (!parametersDictionary.ContainsKey("client_properties"))
-                throw new DictionaryMissingArgumentException("client_properties");
-            if (!parametersDictionary.ContainsKey("vhost"))
-                throw new DictionaryMissingArgumentException("vhost");
-            if (!parametersDictionary.ContainsKey("user"))
-                throw new DictionaryMissingArgumentException("user");
-            if (!parametersDictionary.ContainsKey("name"))
-                throw new DictionaryMissingArgumentException("name");
-            if (!parametersDictionary.ContainsKey("protocol"))
-                throw new DictionaryMissingArgumentException("protocol");
-            if (!parametersDictionary.ContainsKey("node"))
-                throw new DictionaryMissingArgumentException("node");
+            foreach (string key in ConnectionInfoKeys.keys)
+            {
+                if (!parametersDictionary.ContainsKey(key))
+                    throw new DictionaryMissingArgumentException(key);
+            }
 
             return true;
         }

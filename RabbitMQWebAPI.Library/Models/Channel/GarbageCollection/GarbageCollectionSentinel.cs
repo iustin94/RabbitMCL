@@ -38,20 +38,11 @@ namespace RabbitMQWebAPI.Library.Models.Channel.GarbageCollection
 
         public Boolean ValidateDictionary(IDictionary<String, Object> parametersDictionary)
         {
-            if(!parametersDictionary.ContainsKey("max_heap_size"))
-                throw new DictionaryMissingArgumentException("max_heap_size");
-
-            if(!parametersDictionary.ContainsKey("min_bin_vheap_size"))
-                throw new DictionaryMissingArgumentException("min_bin_vheap_size");
-
-            if(!parametersDictionary.ContainsKey("min_heap_size"))
-                throw new DictionaryMissingArgumentException("min_heap_size");
-
-            if(!parametersDictionary.ContainsKey("fullsweep_after"))
-                throw new DictionaryMissingArgumentException("fullsweep_after");
-
-            if(!parametersDictionary.ContainsKey("minor_gcs"))
-                throw new DictionaryMissingArgumentException("minor_gcs");
+            foreach (string key in GarbageCollectionKeys.keys)
+            {
+                if(!parametersDictionary.ContainsKey(key))
+                    throw new DictionaryMissingArgumentException(key);
+            }
 
             return true;
         }
