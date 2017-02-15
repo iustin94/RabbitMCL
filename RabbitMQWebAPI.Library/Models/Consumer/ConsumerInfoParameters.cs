@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using RabbitMQWebAPI.Library.Models.Consumer.ChannelDetails;
+using RabbitMQWebAPI.Library.Models.Consumer.ConsumerChannelDetails;
 
 namespace RabbitMQWebAPI.Library.Models.Consumer
 {
@@ -15,6 +15,6 @@ namespace RabbitMQWebAPI.Library.Models.Consumer
         public bool exclusive;
         public string consumer_tag;
         public Dictionary<string, string> queue;
-        public ChannelDetailsInfo channel_details;
+        public ConsumerChannelDetailsInfo ConsumerChannelDetails;
     }
 }

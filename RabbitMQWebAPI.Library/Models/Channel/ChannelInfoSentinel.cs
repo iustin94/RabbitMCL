@@ -5,34 +5,20 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using RabbitMQWebAPI.Library.Interfaces;
-using RabbitMQWebAPI.Library.Models.Channel.ConnectionDetails;
-using RabbitMQWebAPI.Library.Models.Channel.GarbageCollection;
-using RabbitMQWebAPI.Library.Models.Channel.MessageStats;
+using RabbitMQWebAPI.Library.Models.Channel.ChannelConnectionDetails;
+using RabbitMQWebAPI.Library.Models.Channel.ChannelGarbageCollection;
+using RabbitMQWebAPI.Library.Models.Channel.ChannelMessageStats;
 
 namespace RabbitMQWebAPI.Library.Models.Channel
 {
-    public class ChannelInfoSentinel : IParameterSentinel<ChannelInfo, ChannelInfoParameters>
+    public class ChannelInfoSentinel : Sentinel<ChannelInfo, ChannelInfoParameters>
     {
-        public ChannelInfo CreateModel(IDictionary<String, Object> parametersDictionary)
+      
+        public override ChannelInfoParameters ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary)
         {
-            ChannelInfo toReturn;
-
-            if (ValidateDictionary(parametersDictionary) != true)
-                return null;
-            else
-            {
-                toReturn = new ChannelInfo(ParseDictionaryToParameters(parametersDictionary));
-            }
-
-            //If we got this far then everything should be fine.
-            return toReturn;
-        }
-
-        public ChannelInfoParameters ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary)
-        {
-            ConnectionDetailsSentinel connectionDetailsSentinel = new ConnectionDetailsSentinel();
-            GarbageCollectionSentinel garbageCollectionSentinel = new GarbageCollectionSentinel();
-            MessageStatsSentinel messageStatsSentinel = new MessageStatsSentinel();
+            ChannelConnectionDetailsSentinel channelConnectionDetailsSentinel = new ChannelConnectionDetailsSentinel();
+            ChannelGarbageCollectionSentinel garbageCollectionSentinel = new ChannelGarbageCollectionSentinel();
+            ChannelMessageStatsSentinel channelMessageStatsSentinel = new ChannelMessageStatsSentinel();
 
             ChannelInfoParameters parameters = new ChannelInfoParameters();
 
@@ -61,13 +47,13 @@ namespace RabbitMQWebAPI.Library.Models.Channel
                 JsonConvert.DeserializeObject<Dictionary<string, int>>(
                     parametersDictionary["reduction_details"].ToString());
 
-            parameters.message_stats =
-                messageStatsSentinel.CreateModel(
+            parameters.ChannelMessageStats =
+                channelMessageStatsSentinel.CreateModel(
                     JsonConvert.DeserializeObject<Dictionary<string, object>>(
-                        parametersDictionary["message_stats"].ToString()));
+                        parametersDictionary["ChannelMessageStats"].ToString()));
 
-            parameters.connection_details =
-                connectionDetailsSentinel.CreateModel(
+            parameters.ChannelConnectionDetails =
+                channelConnectionDetailsSentinel.CreateModel(
                     JsonConvert.DeserializeObject<Dictionary<string, object>>(
                         parametersDictionary["connection_details"].ToString()));
 
@@ -75,7 +61,7 @@ namespace RabbitMQWebAPI.Library.Models.Channel
 
         }
 
-        public Boolean ValidateDictionary(IDictionary<String, Object> parametersDictionary)
+        public override Boolean ValidateDictionary(IDictionary<String, Object> parametersDictionary)
         {
             foreach (string key in ChannelInfoKeys.keys)
             {

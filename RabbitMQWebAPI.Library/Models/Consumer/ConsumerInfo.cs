@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RabbitMQWebAPI.Library.Models.Consumer;
-using RabbitMQWebAPI.Library.Models.Consumer.ChannelDetails;
+using RabbitMQWebAPI.Library.Models.Consumer.ConsumerChannelDetails;
 
-namespace RabbitMQWebAPI.Library.Models
+namespace RabbitMQWebAPI.Library.Models.Consumer
 {
     public class ConsumerInfo
     {
@@ -16,8 +16,9 @@ namespace RabbitMQWebAPI.Library.Models
         public bool exclusive { get; private set; }
         public string consumer_tag { get; private set; }
         public Dictionary<string, string> queue { get; private set; }
-        public ChannelDetailsInfo channel_details { get; private set; }
+        public ConsumerChannelDetailsInfo ConsumerChannelDetails { get; private set; }
 
+        public ConsumerInfo() { }
         public ConsumerInfo(ConsumerInfoParameters parameters)
         {
             this.arguments = parameters.arguments;
@@ -26,7 +27,7 @@ namespace RabbitMQWebAPI.Library.Models
             this.exclusive = parameters.exclusive;
             this.consumer_tag = parameters.consumer_tag;
             this.queue = parameters.queue;
-            this.channel_details = parameters.channel_details;
+            this.ConsumerChannelDetails = parameters.ConsumerChannelDetails;
         }
 
     }

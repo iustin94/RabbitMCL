@@ -14,6 +14,7 @@ using RabbitMQ.Client.Events;
 using CommandLine;
 using RabbitDataAccess = RabbitMQWebAPI.Library;
 using RabbitMQWebAPI.Library.Models;
+using RabbitMQWebAPI.Library.Models.Exchange;
 
 namespace ClientApp
 {

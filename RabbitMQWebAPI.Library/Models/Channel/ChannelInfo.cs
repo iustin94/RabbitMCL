@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RabbitMQWebAPI.Library.Models.Channel;
-using RabbitMQWebAPI.Library.Models.Channel.ConnectionDetails;
-using RabbitMQWebAPI.Library.Models.Channel.GarbageCollection;
-using RabbitMQWebAPI.Library.Models.Channel.MessageStats;
+using RabbitMQWebAPI.Library.Models.Channel.ChannelConnectionDetails;
+using RabbitMQWebAPI.Library.Models.Channel.ChannelGarbageCollection;
+using RabbitMQWebAPI.Library.Models.Channel.ChannelMessageStats;
 
 
 //I call this the franken class
@@ -21,7 +21,7 @@ namespace RabbitMQWebAPI.Library.Models
         public int number { private set; get; }
         public string name { private set; get; }
         public string node { private set; get; }
-        public GarbageCollection garbade_collection { private set; get; }
+        public ChannelGarbageCollection garbade_collection { private set; get; }
         public int reductions { private set; get; }
         public State.StateEnum State { private set; get; }
         public int prefetch_count { private set; get; }
@@ -34,10 +34,11 @@ namespace RabbitMQWebAPI.Library.Models
         public bool transactional { private set; get; }
         public string idle_since { private set; get; }
         public IDictionary<string, int> reduction_details { private set; get; }
-        public MessageStats message_stats { private set; get; }
-        public ConnectionDetails connection_details { private set; get; }
+        public ChannelMessageStats channel_message_stats { private set; get; }
+        public ChannelConnectionDetails channel_connection_details { private set; get; }
         public int global_prefetch_count { private set; get; }
 
+        public ChannelInfo() { }
         public ChannelInfo(ChannelInfoParameters parameters)
         {
             this.vhost = parameters.vhost;
@@ -58,8 +59,8 @@ namespace RabbitMQWebAPI.Library.Models
             this.transactional = parameters.transactional;
             this.idle_since = parameters.idle_since;
             this.reduction_details = parameters.reduction_details;
-            this.message_stats = parameters.message_stats;
-            this.connection_details = parameters.connection_details;
+            this.channel_message_stats = parameters.ChannelMessageStats;
+            this.channel_connection_details = parameters.ChannelConnectionDetails;
             this.global_prefetch_count = parameters.global_prefetch_count;
         }
     }

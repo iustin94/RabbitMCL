@@ -13,7 +13,7 @@ namespace RabbitMQWebAPI.Library.Models.Channel
         public int number;
         public string name;
         public string node;
-        public GarbageCollection.GarbageCollection garbade_collection;
+        public ChannelGarbageCollection.ChannelGarbageCollection garbade_collection;
         public int reductions;
         public State.StateEnum state;
         public int prefetch_count;
@@ -26,8 +26,8 @@ namespace RabbitMQWebAPI.Library.Models.Channel
         public bool transactional;
         public string idle_since;
         public IDictionary<string, int> reduction_details;
-        public MessageStats.MessageStats message_stats;
-        public ConnectionDetails.ConnectionDetails connection_details;
+        public ChannelMessageStats.ChannelMessageStats ChannelMessageStats;
+        public ChannelConnectionDetails.ChannelConnectionDetails ChannelConnectionDetails;
         public int global_prefetch_count;
     }
 }

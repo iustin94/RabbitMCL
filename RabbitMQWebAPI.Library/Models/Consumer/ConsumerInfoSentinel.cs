@@ -7,30 +7,15 @@ using RabbitMQWebAPI.Library.Interfaces;
 using Newtonsoft.Json;
 using RabbitMQWebAPI.Library.Models.Channel;
 using RabbitMQWebAPI.Library.Models.Connection;
-using RabbitMQWebAPI.Library.Models.Consumer.ChannelDetails;
+using RabbitMQWebAPI.Library.Models.Consumer.ConsumerChannelDetails;
 
 namespace RabbitMQWebAPI.Library.Models.Consumer
 {
-    public class ConsumerInfoSentinel : IParameterSentinel<ConsumerInfo, ConsumerInfoParameters>
+    public class ConsumerInfoSentinel : Sentinel<ConsumerInfo, ConsumerInfoParameters>
     {
-        public ConsumerInfo CreateModel(IDictionary<String, Object> parametersDictionary)
+        public override ConsumerInfoParameters ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary)
         {
-            ConsumerInfo toReturn;
-
-            if (ValidateDictionary(parametersDictionary) != true)
-                return null;
-            else
-            {
-                toReturn = new ConsumerInfo(ParseDictionaryToParameters(parametersDictionary));
-            }
-
-            //If we got this far then everything should be fine.
-            return toReturn;
-        }
-
-        public ConsumerInfoParameters ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary)
-        {
-            ChannelDetailsSentinel sentinel = new ChannelDetailsSentinel();
+            ConsumerChannelDetailsSentinel sentinel = new ConsumerChannelDetailsSentinel();
 
             ConsumerInfoParameters parameters = new ConsumerInfoParameters();
             parameters.arguments = JsonConvert.DeserializeObject<Dictionary<string, string>>(parametersDictionary["arguments"].ToString());
@@ -42,13 +27,13 @@ namespace RabbitMQWebAPI.Library.Models.Consumer
             parameters.queue =
                 JsonConvert.DeserializeObject<Dictionary<string, string>>(parametersDictionary["queue"].ToString());
 
-            parameters.channel_details = sentinel.CreateModel(
+            parameters.ConsumerChannelDetails = sentinel.CreateModel(
                 JsonConvert.DeserializeObject<Dictionary<string, object>>(parametersDictionary["channel_details"].ToString()));
 
             return parameters;
         }
 
-        public Boolean ValidateDictionary(IDictionary<String, Object> parametersDictionary)
+        public override Boolean ValidateDictionary(IDictionary<String, Object> parametersDictionary)
         {
             foreach (string key in ConnectionInfoKeys.keys)
             {
@@ -57,7 +42,6 @@ namespace RabbitMQWebAPI.Library.Models.Consumer
             }
             
             return true;
-
         }
     }
 }

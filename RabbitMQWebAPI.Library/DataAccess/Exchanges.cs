@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RabbitMQWebAPI.Library.Models;
+using RabbitMQWebAPI.Library.Models.Exchange;
 
 namespace RabbitMQWebAPI.Library.DataAccess
 {
@@ -67,12 +68,13 @@ namespace RabbitMQWebAPI.Library.DataAccess
                         bool auto_delete = exchangeData["auto_delete"].ToString() == "true";
                         bool internal_exchange = exchangeData["internal"].ToString() == "true";
 
-                        Dictionary<string, string> arguments =
-                            JsonConvert.DeserializeObject<Dictionary<string, string>>(
+                        Dictionary<string, object> arguments =
+                            JsonConvert.DeserializeObject<Dictionary<string, object>>(
                                 exchangeData["parametersDictionary"].ToString());
 
-                        return new ExchangeInfo(name: name, vhost: e_vhost, type: type, durable: durable,
-                            auto_delete: auto_delete, internal_exchange: internal_exchange, arguments: arguments);
+                        ExchangeInfoSentinel sentinel = new ExchangeInfoSentinel();
+
+                        return sentinel.CreateModel(arguments);
                     }
                 }
             }
@@ -130,11 +132,13 @@ namespace RabbitMQWebAPI.Library.DataAccess
                             bool auto_delete = exchangeData["auto_delete"].ToString() == "true";
                             bool internal_exchange = exchangeData["internal"].ToString() == "true";
 
-                            Dictionary<string, string> arguments =
-                                JsonConvert.DeserializeObject<Dictionary<string, string>>(
+                            Dictionary<string, object> arguments =
+                                JsonConvert.DeserializeObject<Dictionary<string, object>>(
                                     exchangeData["parametersDictionary"].ToString());
 
-                            exchanges.Add(new ExchangeInfo(name: name, vhost: vhost, type: type, auto_delete: auto_delete, durable: durable, internal_exchange: internal_exchange, arguments: arguments));
+                            ExchangeInfoSentinel sentinel = new ExchangeInfoSentinel();
+
+                            exchanges.Add(sentinel.CreateModel(arguments));
                         }
 
                     }

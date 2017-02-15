@@ -18,6 +18,7 @@ namespace RabbitMQWebAPI.Library.Models
         public string protocol { get; private set; }
         public string node { get; private set; }
 
+        public ConnectionInfo() { }
         public ConnectionInfo(ConnectionInfoParameters parameters)
         {
             this.connected_at = parameters.connected_at;

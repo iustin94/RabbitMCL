@@ -12,44 +12,9 @@ namespace RabbitMQWebAPI.Library.Models.Binding
     /// <summary>
     /// Class that inspects parameters before creating a BindingInfo. This prevents creation of invalid objects. Use this to create the BindingInfo object then store that object.
     /// </summary>
-    public class BindingInfoSentinel: IParameterSentinel<BindingInfo, BindingInfoParameters>
+    public class BindingInfoSentinel: Sentinel<BindingInfo, BindingInfoParameters>
     {
-
-        /// <summary>
-        /// The class sentinel. Will throw an exception if the parametersDictionary is missing one of the neccessary key, value paris or if the values can not be cast to the expected data type.
-        /// </summary>
-        /// <param name="parametersDictionary">
-        /// Dictionary needs to have these fields ONLY
-        /// vhost:string
-        /// source: string
-        /// destination: string
-        /// destination_type: string
-        /// routing_key: string
-        /// arguments: Dictionary of type string, string
-        /// properties_key: string
-        /// </param>
-
-        public BindingInfo CreateModel(IDictionary<String, Object> parametersDictionary)
-        {
-            BindingInfo toReturn;
-
-            if (ValidateDictionary(parametersDictionary) != true)
-                return null;
-            else
-            {
-                toReturn = new BindingInfo(ParseDictionaryToParameters(parametersDictionary));
-            }
-
-            //If we got this far then everything should be fine.
-            return toReturn;
-        }
-
-        /// <summary>
-        /// Ensures the dictionary has the 
-        /// </summary>
-        /// <param name="parametersDictionary"></param>
-        /// <returns>True if all keys are present. Throws an exceptiopn with the message to indicate which key is missing</returns>
-        public bool ValidateDictionary(
+        public override bool ValidateDictionary(
             IDictionary<string, object> parametersDictionary)
         {
             foreach (string key in BindingInfoKeys.keys)
@@ -61,21 +26,7 @@ namespace RabbitMQWebAPI.Library.Models.Binding
             return true;
         }
 
-        /// <summary>
-        /// Calls dictionary casting to check if it works. Has to be called before binding info constructor.
-        /// </summary>
-        /// <param name="parametersDictionary">
-        /// Dictionary needs to have these fields ONLY
-        /// vhost:string
-        /// source: string
-        /// destination: string
-        /// destination_type: string
-        /// routing_key: string
-        /// arguments: Dictionary of type string, string
-        /// properties_key: string
-        /// </param>
-        /// <returns>Returns struct containing the parsed parameters for BindingInfo</returns>
-        public BindingInfoParameters ParseDictionaryToParameters(
+        public override BindingInfoParameters ParseDictionaryToParameters(
             IDictionary<string, object> parametersDictionary)
         {
 

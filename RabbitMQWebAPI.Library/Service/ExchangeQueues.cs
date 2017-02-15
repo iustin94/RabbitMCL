@@ -7,6 +7,7 @@ using RabbitMQWebApi.Library.Models;
 using RabbitMQWebApi.Library.Models.Binding;
 using RabbitMQWebAPI.Library.DataAccess;
 using RabbitMQWebAPI.Library.Models;
+using RabbitMQWebAPI.Library.Models.Exchange;
 
 namespace RabbitMQWebAPI.Library.Service
 {

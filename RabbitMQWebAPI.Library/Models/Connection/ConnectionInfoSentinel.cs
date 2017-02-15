@@ -9,24 +9,10 @@ using RabbitMQWebAPI.Library.Models.Connection;
 
 namespace RabbitMQWebAPI.Library.Models.Channel.Connection
 {
-    class ConnectionInfoSentinel : IParameterSentinel<ConnectionInfo, ConnectionInfoParameters>
+    class ConnectionInfoSentinel : Sentinel<ConnectionInfo, ConnectionInfoParameters>
     {
-        public ConnectionInfo CreateModel(IDictionary<String, Object> parametersDictionary)
-        {
-            ConnectionInfo toReturn;
-
-            if (ValidateDictionary(parametersDictionary) != true)
-                return null;
-            else
-            {
-                toReturn = new ConnectionInfo(ParseDictionaryToParameters(parametersDictionary));
-            }
-
-            //If we got this far then everything should be fine.
-            return toReturn;
-        }
-
-        public ConnectionInfoParameters ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary)
+        
+        public override ConnectionInfoParameters ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary)
         {
             ConnectionInfoParameters parameters =new ConnectionInfoParameters();
             parameters.connected_at = parametersDictionary["connected_at"].ToString();
@@ -41,7 +27,7 @@ namespace RabbitMQWebAPI.Library.Models.Channel.Connection
             return parameters;
         }
 
-        public Boolean ValidateDictionary(IDictionary<String, Object> parametersDictionary)
+        public override Boolean ValidateDictionary(IDictionary<String, Object> parametersDictionary)
         {
             foreach (string key in ConnectionInfoKeys.keys)
             {
