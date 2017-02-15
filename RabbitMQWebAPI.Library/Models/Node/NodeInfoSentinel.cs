@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RabbitMQWebAPI.Library.Models
+namespace RabbitMQWebAPI.Library.Models.Node
 {
-    class NodeInfo
+    class NodeInfoSentinel
     {
-        //TODO Node model
     }
 }
