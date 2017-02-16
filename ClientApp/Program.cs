@@ -15,6 +15,7 @@ using CommandLine;
 using RabbitDataAccess = RabbitMQWebAPI.Library;
 using RabbitMQWebAPI.Library.Models;
 using RabbitMQWebAPI.Library.Models.Exchange;
+using RabbitMQWebAPI.Library.Models.Queue;
 
 namespace ClientApp
 {
@@ -168,7 +169,7 @@ namespace ClientApp
 
         private static void PublishUntilStop(IModel channel, IBasicProperties props, List<string> messages, PublishSubOptions options)
             {
-            IEnumerable<RabbitMQWebAPI.Library.Models.QueueInfo> latestQueueInfo = new List<QueueInfo>();
+            IEnumerable<RabbitMQWebAPI.Library.Models.Queue.QueueInfo> latestQueueInfo = new List<QueueInfo>();
 
             IDictionary<string, State.StateEnum> queueStatuses = new Dictionary<string, State.StateEnum>();
 
@@ -186,8 +187,7 @@ namespace ClientApp
 
                            foreach (QueueInfo q in latestQueueInfos)
                            {
-                               queueStatuses.Add(q.Name, q.State);
-                               Console.WriteLine(q.Name + ": " + q.State.ToString());
+                              //??
                            }
 
                        }

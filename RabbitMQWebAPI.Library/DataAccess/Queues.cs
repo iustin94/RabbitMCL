@@ -10,6 +10,7 @@ using Newtonsoft.Json.Linq;
 using System.Configuration;
 using System.Data.Common;
 using RabbitMQWebAPI.Library.Models;
+using RabbitMQWebAPI.Library.Models.Queue;
 
 namespace RabbitMQWebAPI.Library.DataAccess
 {
@@ -58,15 +59,13 @@ namespace RabbitMQWebAPI.Library.DataAccess
 
                         foreach (JObject queueData in queuesDataSet)
                         {
-                            string name = queueData["name"].ToString();
-                            string vhost = queueData["vhost"].ToString();
-                            bool exclusive = queueData["exclusive"].ToString() == "True";
-                            bool auto_delete = queueData["auto_delete"].ToString() == "True";
-                            bool durable = queueData["durable"].ToString() == "True";
-                            string state = queueData["State"].ToString();
+                            Dictionary<string, string> arguments =
+                               JsonConvert.DeserializeObject<Dictionary<string, string>>(queueData["arguments"].ToString());
 
-                            QueueInfo queueInfo = new QueueInfo(name, state, exclusive, auto_delete, durable, vhost);
-                            queues.Add(queueInfo);
+                            QueueInfoSentinel sentinel = new QueueInfoSentinel();
+
+                            QueueInfo binding = sentinel.CreateModel(JsonConvert.DeserializeObject<Dictionary<string, object>>(queueData.ToString()));
+                            queues.Add(info);
                         }
                     }
                 }

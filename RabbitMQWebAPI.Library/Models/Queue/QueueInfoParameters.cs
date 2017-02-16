@@ -24,7 +24,7 @@ namespace RabbitMQWebAPI.Library.Models.Queue
         public string exclusive_consumer_tag;
         public int consumers;
         public string recoverable_slaves;
-        public State state;
+        public State.StateEnum state;
         public QueueGarbageCollection.QueueGarbageCollection garbage_collection;
         public int messages_ram;
         public int messages_ready_ram;
@@ -33,6 +33,7 @@ namespace RabbitMQWebAPI.Library.Models.Queue
         public int message_bytes;
         public int message_bytes_unacknowledged;
         public int message_bytes_ram;
+        public int message_bytes_ready;
         public int message_bytes_persistent;
         public string head_message_timestamp;
         public int disk_reads;

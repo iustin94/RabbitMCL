@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RabbitMQWebApi.Library.Models.Binding;
 using RabbitMQWebAPI.Library.Models.Binding;
@@ -40,6 +41,7 @@ namespace RabbitMQWebAPI.Tests
         [TestMethod]
         public void validateDictionary_Test()
         {
+            //Setup
             populateTestValues();
 
             List<bool> expectedList = new List<bool>();
@@ -47,33 +49,36 @@ namespace RabbitMQWebAPI.Tests
 
             expectedList.Add(true);
             expectedList.Add(true);
-            expectedList.Add(true);
-            expectedList.Add(true);
 
             BindingInfoSentinel sentinel = new BindingInfoSentinel();
+
+            //Method calling
 
             foreach (Dictionary<string, object> dictionary in testValues)
             {
                 actualList.Add(sentinel.ValidateDictionary(dictionary));
             }
 
-            for (int i = 0; i <= expectedList.Count; i++)
+            //Assertion
+
+            for (int i = 0; i <= expectedList.Count - 1; i++)
             {
-                Assert.IsTrue(expectedList[i] == actualList[i]);
+                Assert.AreEqual(expectedList[i], actualList[i]);
             }
-
-
-        }
+    }
 
         [TestMethod]
         public void ParseDictionaryToBindingParameters_Test()
         {
+            //Setup
             populateTestValues();
             List<BindingInfoParameters> expectedList = new List<BindingInfoParameters>();
             List<BindingInfoParameters> actualList = new List<BindingInfoParameters>();
+            BindingInfoSentinel sentinel = new BindingInfoSentinel();
 
             BindingInfoParameters parameters1 = new BindingInfoParameters();
-            parameters1.arguments = null;
+
+            parameters1.arguments = new Dictionary<string, string>();
             parameters1.destination = "abc";
             parameters1.destination_type = "abc";
             parameters1.properties_key = "abc";
@@ -81,7 +86,11 @@ namespace RabbitMQWebAPI.Tests
             parameters1.source = "abc";
             parameters1.vhost = "abc";
 
+            expectedList.Add(parameters1);
+
+
             BindingInfoParameters parameters2 = new BindingInfoParameters();
+
             parameters2.arguments = new Dictionary<string,string>();
             parameters2.destination = "def";
             parameters2.destination_type = "def";
@@ -90,28 +99,41 @@ namespace RabbitMQWebAPI.Tests
             parameters2.source = "def";
             parameters2.vhost = "def";
 
-            
-            expectedList.Add(parameters1);
             expectedList.Add(parameters2);
             
-
-            BindingInfoSentinel sentinel = new BindingInfoSentinel();
-
+            //Method calling
             foreach (Dictionary<string, object> dictionary in testValues)
             {
                 actualList.Add(sentinel.ParseDictionaryToParameters(dictionary));
             }
 
-            for (int i = 0; i <= expectedList.Count; i++)
+
+            //Assertion
+            for (int i = 0; i <= expectedList.Count-1; i++)
             {
-                Assert.IsTrue(expectedList[i].arguments == actualList[i].arguments);
-                Assert.IsTrue(expectedList[i].destination == actualList[i].destination);
-                Assert.IsTrue(expectedList[i].destination_type == actualList[i].destination_type);
-                Assert.IsTrue(expectedList[i].properties_key == actualList[i].properties_key);
-                Assert.IsTrue(expectedList[i].routing_key == actualList[i].routing_key);
-                Assert.IsTrue(expectedList[i].source == actualList[i].source);
-                Assert.IsTrue(expectedList[i].vhost == actualList[i].source);
+                var expEnumerator = expectedList[i].arguments.GetEnumerator();
+                var actEnumerator = actualList[i].arguments.GetEnumerator();
+
+                for (int j = 0; j<= expectedList[i].arguments.Count; j++)
+                {
+                    expEnumerator.MoveNext();
+                    KeyValuePair<string, string> expPair = expEnumerator.Current;
+
+                    actEnumerator.MoveNext();
+                    KeyValuePair<string, string> actPair = actEnumerator.Current;
+                   
+
+                    Assert.AreEqual(expPair, actPair);
+                }
+
+                Assert.IsTrue(expectedList[i].destination.Equals(actualList[i].destination));
+                Assert.IsTrue(expectedList[i].destination_type.Equals(actualList[i].destination_type));
+                Assert.IsTrue(expectedList[i].properties_key.Equals(actualList[i].properties_key));
+                Assert.IsTrue(expectedList[i].routing_key.Equals(actualList[i].routing_key));
+                Assert.IsTrue(expectedList[i].source.Equals(actualList[i].source));
+                Assert.IsTrue(expectedList[i].vhost.Equals(actualList[i].source));
             }
+
 
         }
     }

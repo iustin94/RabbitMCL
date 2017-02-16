@@ -145,7 +145,34 @@
     <Compile Include="Models\Extention\ExtentionInfoKeys.cs" />
     <Compile Include="Models\Extention\ExtentionInfoParameters.cs" />
     <Compile Include="Models\Extention\ExtentionInfoSentinel.cs" />
-    <Compile Include="Models\NodeInfo.cs" />
+    <Compile Include="Models\Node\NodeApplication\NodeApplication.cs" />
+    <Compile Include="Models\Node\NodeApplication\NodeApplicationKeys.cs" />
+    <Compile Include="Models\Node\NodeApplication\NodeApplicationParameters.cs" />
+    <Compile Include="Models\Node\NodeApplication\NodeApplicationSentinel.cs" />
+    <Compile Include="Models\Node\NodeAuthMechanisms\NodeAuthMechanisms.cs" />
+    <Compile Include="Models\Node\NodeAuthMechanisms\NodeAuthMechanismsKeys.cs" />
+    <Compile Include="Models\Node\NodeAuthMechanisms\NodeAuthMechanismsParameters.cs" />
+    <Compile Include="Models\Node\NodeAuthMechanisms\NodeAuthMechanismsSentinel.cs" />
+    <Compile Include="Models\Node\NodeClusterLink\NodeClusterLink.cs" />
+    <Compile Include="Models\Node\NodeClusterLink\NodeClusterLinkKeys.cs" />
+    <Compile Include="Models\Node\NodeClusterLink\NodeClusterLinkParameters.cs" />
+    <Compile Include="Models\Node\NodeClusterLink\NodeClusterLinkSentinel.cs" />
+    <Compile Include="Models\Node\NodeClusterLink\NodeClusterLinkStats\NodeClusterLinkStats.cs" />
+    <Compile Include="Models\Node\NodeClusterLink\NodeClusterLinkStats\NodeClusterLinkStatsKeys.cs" />
+    <Compile Include="Models\Node\NodeClusterLink\NodeClusterLinkStats\NodeClusterLinkStatsParameters.cs" />
+    <Compile Include="Models\Node\NodeClusterLink\NodeClusterLinkStats\NodeClusterLinkStatsSentinel.cs" />
+    <Compile Include="Models\Node\NodeContext\NodeContext.cs" />
+    <Compile Include="Models\Node\NodeContext\NodeContextKeys.cs" />
+    <Compile Include="Models\Node\NodeContext\NodeContextParameters.cs" />
+    <Compile Include="Models\Node\NodeContext\NodeContextSentinel.cs" />
+    <Compile Include="Models\Node\NodeExchangeType\NodeExchangeType.cs" />
+    <Compile Include="Models\Node\NodeExchangeType\NodeExchangeTypeKeys.cs" />
+    <Compile Include="Models\Node\NodeExchangeType\NodeExchangeTypeParameters.cs" />
+    <Compile Include="Models\Node\NodeExchangeType\NodeExchangeTypeSentinel.cs" />
+    <Compile Include="Models\Node\NodeInfo.cs" />
+    <Compile Include="Models\Node\NodeInfoKeys.cs" />
+    <Compile Include="Models\Node\NodeInfoParameters.cs" />
+    <Compile Include="Models\Node\NodeInfoSentinel.cs" />
     <Compile Include="Models\Parameter\ParameterInfo.cs" />
     <Compile Include="Models\Parameter\ParameterInfoKeys.cs" />
     <Compile Include="Models\Parameter\ParameterInfoParameters.cs" />
@@ -166,23 +193,23 @@
     <Compile Include="Models\Policy\PolicyInfoKeys.cs" />
     <Compile Include="Models\Policy\PolicyInfoParameters.cs" />
     <Compile Include="Models\Policy\PolicyInfoSentinel.cs" />
-    <Compile Include="Models\QueueGarbageCollection.cs" />
-    <Compile Include="Models\QueueGarbageCollectionKeys.cs" />
-    <Compile Include="Models\QueueGarbageCollectionParameters.cs" />
-    <Compile Include="Models\QueueGarbageCollectionSentinel.cs" />
-    <Compile Include="Models\QueueInfo.cs" />
-    <Compile Include="Models\QueueInfoKeys.cs" />
-    <Compile Include="Models\QueueInfoParameters.cs" />
-    <Compile Include="Models\QueueInfoSentinel.cs" />
+    <Compile Include="Models\Queue\QueueGarbageCollection\QueueGarbageCollection.cs" />
+    <Compile Include="Models\Queue\QueueGarbageCollection\QueueGarbageCollectionKeys.cs" />
+    <Compile Include="Models\Queue\QueueGarbageCollection\QueueGarbageCollectionParameters.cs" />
+    <Compile Include="Models\Queue\QueueGarbageCollection\QueueGarbageCollectionSentinel.cs" />
+    <Compile Include="Models\Queue\QueueInfo.cs" />
+    <Compile Include="Models\Queue\QueueInfoKeys.cs" />
+    <Compile Include="Models\Queue\QueueInfoParameters.cs" />
+    <Compile Include="Models\Queue\QueueInfoSentinel.cs" />
     <Compile Include="Models\State.cs" />
     <Compile Include="Models\User\UserInfo.cs" />
     <Compile Include="Models\User\UserInfoKeys.cs" />
     <Compile Include="Models\User\UserInfoParameters.cs" />
     <Compile Include="Models\User\UserInfoSentinel.cs" />
-    <Compile Include="Models\Vhost\QueueBackingQueueSentinel.cs" />
-    <Compile Include="Models\Vhost\QueueBackingQueueStatus.cs" />
-    <Compile Include="Models\Vhost\QueueBackingQueuestatusKeys.cs" />
-    <Compile Include="Models\Vhost\QueueBackingQueueStatusParameters.cs" />
+    <Compile Include="Models\Queue\QueueBackingQueue\QueueBackingQueueSentinel.cs" />
+    <Compile Include="Models\Queue\QueueBackingQueue\QueueBackingQueueStatus.cs" />
+    <Compile Include="Models\Queue\QueueBackingQueue\QueueBackingQueuestatusKeys.cs" />
+    <Compile Include="Models\Queue\QueueBackingQueue\QueueBackingQueueStatusParameters.cs" />
     <Compile Include="Models\Vhost\VhostInfo.cs" />
     <Compile Include="Models\Vhost\VhostInfoKeys.cs" />
     <Compile Include="Models\Vhost\VhostInfoMessageStats\VhostInfoMessageStats.cs" />
@@ -193,15 +220,12 @@
     <Compile Include="Models\Vhost\VhostInfoSentinel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\ExchangeQueues.cs" />
+    <Compile Include="Service\Helpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\NewFolder1\" />
-    <Folder Include="Models\QueueBackingQueue\" />
-    <Folder Include="Models\QueueGarbageCollection\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

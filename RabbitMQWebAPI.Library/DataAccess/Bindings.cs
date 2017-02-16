@@ -54,13 +54,6 @@ namespace RabbitMQWebAPI.Library.DataAccess
 
                         foreach (JObject bindingData in bindingsDataSet)
                         {
-                            var source = bindingData["source"].ToString();
-                            var vhost = bindingData["vhost"].ToString();
-                            var destination = bindingData["destination"].ToString();
-                            var destination_type = bindingData["destination_type"].ToString();
-                            var routing_key = bindingData["routing_key"].ToString();
-                            var properties_key = bindingData["properties_key"].ToString();
-
                             Dictionary<string, string> arguments =
                                 JsonConvert.DeserializeObject<Dictionary<string, string>>(bindingData["arguments"].ToString());
 

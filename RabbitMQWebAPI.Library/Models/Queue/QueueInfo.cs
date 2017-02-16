@@ -23,13 +23,14 @@ namespace RabbitMQWebAPI.Library.Models.Queue
         public string exclusive_consumer_tag { get; private set; }
         public int consumers { get; private set; }
         public string recoverable_slaves { get; private set; }
-        public State state { get; private set; }
+        public State.StateEnum state { get; private set; }
         public QueueGarbageCollection.QueueGarbageCollection garbage_collection { get; private set; }
         public int messages_ram { get; private set; }
         public int messages_ready_ram { get; private set; }
         public int messages_unacknowledged_ram { get; private set; }
         public int messages_persistent { get; private set; }
         public int message_bytes { get; private set; }
+        public int message_bytes_ready { get; private set; }
         public int message_bytes_unacknowledged { get; private set; }
         public int message_bytes_ram { get; private set; }
         public int message_bytes_persistent { get; private set; }

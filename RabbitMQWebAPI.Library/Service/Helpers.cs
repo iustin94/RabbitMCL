@@ -13,12 +13,7 @@ namespace RabbitMQWebAPI.Library.Service
 
         public static void DeserializeList(string json)
         {
-            JArray info = JsonConvert.DeserializeObject(json);
-
-            foreach (var li in info)
-            {
-                
-            }
+            
 
         }
     }
