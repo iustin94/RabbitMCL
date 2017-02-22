@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Configuration;
 using System.Data.Common;
+using RabbitMQWebAPI.Library.Interfaces;
 using RabbitMQWebAPI.Library.Models;
 using RabbitMQWebAPI.Library.Models.Queue;
 
@@ -28,51 +29,43 @@ namespace RabbitMQWebAPI.Library.DataAccess
         // /api/queues	
         private static async Task<IEnumerable<QueueInfo>> GetQueueInfosInternal()
         {
-            dynamic info;
-            List<QueueInfo> queues = new List<QueueInfo>();
+            string result = await RMApiProvider.GetJson("queues");
 
-            var builder = new DbConnectionStringBuilder();
-            builder.ConnectionString = ConfigurationManager.ConnectionStrings["HTTPapi"].ConnectionString;
+            var info = JsonConvert.DeserializeObject<IList<QueueInfo>>(result);
+            
+            //List<QueueInfo> queues = new List<QueueInfo>();
 
-            string baseAddress = builder["BaseAddress"].ToString();
-            string userName = builder["username"].ToString();
-            string password = builder["password"].ToString();
+            //foreach (JObject queueData in info)
+            //{
+            //    QueueInfoSentinel sentinel = new QueueInfoSentinel();
+            //    QueueInfo queue =
+            //        sentinel.CreateModel(JsonConvert.DeserializeObject<Dictionary<string, object>>(queueData.ToString()));
 
-            using (var handler = new HttpClientHandler()
+            //    queues.Add(queue);
+            //}
+
+            return info;
+        }
+
+
+        /*
+         private static List<TResultModel> QueueInfoFactory<TResultModel>(JArray info, QueueInfoSentinel queueInfoSentinel)
+             where TResultModel : new() 
+        {
+            List<TResultModel> queues = new List<TResultModel>();
+
+            foreach (JObject queueData in info)
             {
-                Credentials = new NetworkCredential(userName: userName, password: password)
-            })
-            {
-                using (var client = new HttpClient(handler) { BaseAddress = new Uri(baseAddress) })
-                {
-                    using (
-                        var response =
-                            await
-                                client.GetAsync("queues", HttpCompletionOption.ResponseContentRead)
-                                    .ConfigureAwait(false))
-                    {
-                        string result = response.Content.ReadAsStringAsync().Result;
+                ISentinel<TResultModel, QueueInfoParameters> sentinel = queueInfoSentinel;
+                TResultModel queue =
+                    sentinel.CreateModel(JsonConvert.DeserializeObject<Dictionary<string, object>>(queueData.ToString()));
 
-                        info = JsonConvert.DeserializeObject(result);
-
-                        JArray queuesDataSet = info;
-
-                        foreach (JObject queueData in queuesDataSet)
-                        {
-                            Dictionary<string, string> arguments =
-                               JsonConvert.DeserializeObject<Dictionary<string, string>>(queueData["arguments"].ToString());
-
-                            QueueInfoSentinel sentinel = new QueueInfoSentinel();
-
-                            QueueInfo binding = sentinel.CreateModel(JsonConvert.DeserializeObject<Dictionary<string, object>>(queueData.ToString()));
-                            queues.Add(info);
-                        }
-                    }
-                }
+                queues.Add(queue);
             }
-
             return queues;
         }
+         */
+
 
         /* TODO /api/queues/vhost	
          * A list of all queues in a given virtual host.

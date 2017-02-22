@@ -53,6 +53,7 @@
     <Compile Include="DataAccess\Consumers.cs" />
     <Compile Include="DataAccess\Exchanges.cs" />
     <Compile Include="DataAccess\Miscellaneous.cs" />
+    <Compile Include="DataAccess\Model.cs" />
     <Compile Include="DataAccess\Nodes.cs" />
     <Compile Include="DataAccess\Parameters.cs" />
     <Compile Include="DataAccess\Policies.cs" />
@@ -60,7 +61,9 @@
     <Compile Include="DataAccess\Users.cs" />
     <Compile Include="DataAccess\VHosts.cs" />
     <Compile Include="DictionaryMissingArgumentException.cs" />
-    <Compile Include="Interfaces\Sentinel.cs" />
+    <Compile Include="DataAccess\RMApiProvider.cs" />
+    <Compile Include="Models\ISentinel.cs" />
+    <Compile Include="Models\Sentinel.cs" />
     <Compile Include="Models\Binding\BindingInfo.cs" />
     <Compile Include="Models\Binding\BindingInfoKeys.cs" />
     <Compile Include="Models\Binding\BindingInfoParameters.cs" />
@@ -201,6 +204,7 @@
     <Compile Include="Models\Queue\QueueInfoKeys.cs" />
     <Compile Include="Models\Queue\QueueInfoParameters.cs" />
     <Compile Include="Models\Queue\QueueInfoSentinel.cs" />
+    <Compile Include="Models\SentinelFactory.cs" />
     <Compile Include="Models\State.cs" />
     <Compile Include="Models\User\UserInfo.cs" />
     <Compile Include="Models\User\UserInfoKeys.cs" />

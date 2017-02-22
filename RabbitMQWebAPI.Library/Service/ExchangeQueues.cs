@@ -27,7 +27,7 @@ namespace RabbitMQWebAPI.Library.Service
             {
                 if (binding.destination == queueName && binding.source != String.Empty)
                 {
-                    return Exchanges.GetExchangeInfo(binding.source).Result;
+                   // return Exchanges.GetExchangeInfos().Result;
                 }
             }
 

@@ -16,7 +16,8 @@ namespace RabbitMQWebAPI.Library.Models.Queue
         public override QueueInfoParameters ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary)
         {
             QueueInfoParameters parameters = new QueueInfoParameters();
-            
+            //var model = new QueueInfo();
+
             QueueBackingQueueSentinel queueBackingQueueSentinel = new QueueBackingQueueSentinel();
             QueueGarbageCollectionSentinel queueBackingQueueGarbageCollectionSentinel = new QueueGarbageCollectionSentinel();
 

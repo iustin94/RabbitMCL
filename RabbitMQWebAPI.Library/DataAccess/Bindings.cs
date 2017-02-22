@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RabbitMQWebApi.Library.Models;
 using RabbitMQWebApi.Library.Models.Binding;
+using RabbitMQWebAPI.Library.Interfaces;
 using RabbitMQWebAPI.Library.Models.Binding;
 
 namespace RabbitMQWebAPI.Library.DataAccess
@@ -18,63 +19,138 @@ namespace RabbitMQWebAPI.Library.DataAccess
     public static class Bindings
     {
 
-        public static Task<IEnumerable<BindingInfo>> GetBindingInfos()
+        /// <summary>
+        /// A list of all bindings.
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<IEnumerable<BindingInfo>> GetBindingInfos()
         {
-            return GetBindingInfosInternal();
+            return await GetBindingInfosInternal();
         }
 
-
-        // /api/bindings
-        private static async Task<IEnumerable<BindingInfo>> GetBindingInfosInternal()
+        /// <summary>
+        /// A list of all bindings in a given virtual host.
+        /// </summary>
+        /// <param name="vhost"></param>
+        /// <returns></returns>
+        public static async Task<IEnumerable<BindingInfo>> GetBindingInfosForVhost(string vhost)
         {
-            dynamic info;
+            return await GetBindingInfosForVhostInternal(vhost);
+        }
+
+        /// <summary>
+        /// A list of all bindings between an exchange and a queue. Remember, an exchange and a queue can be bound together many times! To create a new binding, POST to this URI. You will need a body looking something like this:
+        /// </summary>
+        /// <param name="exchange"></param>
+        /// <param name="queue"></param>
+        /// <param name="vhost"></param>
+        /// <returns></returns>
+        public static async Task<IEnumerable<BindingInfo>> GetBindingInfosBetweenExchangeAndQueueOnVhost(string exchange,
+            string queue, string vhost)
+        {
+            return await GetBindingInfosBetweenExchangeAndQueueOnVhostInternal(exchange, queue, vhost);
+        }
+
+        /// <summary>
+        /// A list of all bindings between two exchanges. Similar to the list of all bindings between an exchange and a queue, above.
+        /// </summary>
+        /// <param name="vhost"></param>
+        /// <param name="sourceExchange"></param>
+        /// <param name="destinationExchange"></param>
+        /// <returns></returns>
+        public static async Task<IEnumerable<BindingInfo>> GetBindingInfosBetweenTwoExchangesOnVhost(string vhost,
+            string sourceExchange, string destinationExchange)
+        {
+            return await GetBindingInfosBetweenTwoExchangesOnVhostInternal(vhost, sourceExchange, destinationExchange);
+        }
+
+        /// <summary>
+        /// A list of all bindings in which a given exchange is the source.
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<IEnumerable<BindingInfo>> GetBindingInfosForExchangeOnVhost(string vhost, string name)
+        {
+            return await GetBindingInfosForExchangeOnVhostInternal(vhost, name);
+        }
+
+        public static async Task<IEnumerable<BindingInfo>> GetBindingInfosToExchangeOnVhost(string vhost, string name)
+        {
+            return await GetBindingInfosToExchangeOnVhostInternal(vhost, name);
+        }
+
+        private static async Task<IEnumerable<BindingInfo>> GetBindingInfosToExchangeOnVhostInternal(string vhost, string name)
+        {
+            vhost = WebUtility.UrlEncode(vhost);
+            name = WebUtility.UrlEncode(name);
+
+            string result =
+                await RMApiProvider.GetJson(String.Format("exchanges/{0}/{1}/bindings/destination", vhost, name));
+            JArray info = JsonConvert.DeserializeObject<JArray>(result);
+
             List<BindingInfo> bindings = new List<BindingInfo>();
 
-            var builder = new DbConnectionStringBuilder();
-            builder.ConnectionString = ConfigurationManager.ConnectionStrings["HTTPapi"].ConnectionString;
-
-            string baseAddress = builder["BaseAddress"].ToString();
-            string userName = builder["username"].ToString();
-            string password = builder["password"].ToString();
-
-            using (var handler = new HttpClientHandler()
+            foreach (JObject bindingData in info)
             {
-                Credentials = new NetworkCredential(userName: userName, password: password)
-            })
-            {
-                using (var client = new HttpClient(handler) { BaseAddress = new Uri(baseAddress) })
-                {
-                    using (var response = await client.GetAsync("bindings", HttpCompletionOption.ResponseContentRead)
-                        .ConfigureAwait(false))
-                    {
-                        string result = await response.Content.ReadAsStringAsync();
-                        info = JsonConvert.DeserializeObject(result);
+                BindingInfoSentinel sentinel = new BindingInfoSentinel();
+                BindingInfo binding =
+                    sentinel.CreateModel(
+                        JsonConvert.DeserializeObject<Dictionary<string, object>>(bindingData.ToString()));
 
-                        JArray bindingsDataSet = info;
-
-                        foreach (JObject bindingData in bindingsDataSet)
-                        {
-                            Dictionary<string, string> arguments =
-                                JsonConvert.DeserializeObject<Dictionary<string, string>>(bindingData["arguments"].ToString());
-
-                            BindingInfoSentinel sentinel = new BindingInfoSentinel();
-
-                            BindingInfo binding = sentinel.CreateModel(JsonConvert.DeserializeObject<Dictionary<string,object>>(bindingData.ToString()));
-                            bindings.Add(info);
-                        }
-                    }
-                }
+                bindings.Add(binding);
             }
 
             return bindings;
         }
 
 
-        /* TODO /api/bindings/vhost 
+        // /api/bindings
+        private static async Task<IEnumerable<BindingInfo>> GetBindingInfosInternal()
+        {
+
+            string result = await RMApiProvider.GetJson("bindings");
+            JArray info = JsonConvert.DeserializeObject<JArray>(result);
+
+            List<BindingInfo> bindings = new List<BindingInfo>();
+
+            foreach (JObject bindingData in info)
+            {
+
+                BindingInfoSentinel sentinel = new BindingInfoSentinel();
+
+                BindingInfo binding = sentinel.CreateModel(JsonConvert.DeserializeObject<Dictionary<string, object>>(bindingData.ToString()));
+                bindings.Add(binding);
+            }
+
+            return bindings;
+        }
+
+
+        /*  /api/bindings/vhost 
          * A list of all bindings in a given virtual host.
          * */
 
-        /* TODO /api/bindings/vhost/e/exchange/q/queue
+        private static async Task<IEnumerable<BindingInfo>> GetBindingInfosForVhostInternal(string vhost)
+        {
+            vhost = WebUtility.UrlEncode(vhost);
+            string result = await RMApiProvider.GetJson(String.Format("bindings/{1}", vhost));
+
+            List<BindingInfo> bindings = new List<BindingInfo>();
+
+            JArray info = JsonConvert.DeserializeObject<JArray>(result);
+
+            foreach (JObject bindingData in info)
+            {
+                BindingInfoSentinel sentinel = new BindingInfoSentinel();
+                BindingInfo binding =
+                    sentinel.CreateModel(
+                        JsonConvert.DeserializeObject<Dictionary<string, object>>(bindingData.ToString()));
+                bindings.Add(binding);
+            }
+
+            return bindings;
+        }
+
+        /*  /api/bindings/vhost/e/exchange/q/queue
          * A list of all bindings between an exchange and a queue. Remember, an exchange and a queue can be bound together many times! 
          * To create a new binding, POST to this URI. You will need a body looking something like this:
          * 
@@ -83,17 +159,100 @@ namespace RabbitMQWebAPI.Library.DataAccess
          * All keys are optional. The response will contain a Location header telling you the URI of your new binding.
          */
 
-        /* TODO /api/bindings/vhost/e/exchange/q/queue/props	
-         * 
-         * An individual binding between an exchange and a queue. The props part of the URI is a "name" for the binding composed of its routing key and a hash of its arguments.
-         */
+        private static async Task<IEnumerable<BindingInfo>> GetBindingInfosBetweenExchangeAndQueueOnVhostInternal(
+            string exchange, string queue, string vhost)
+        {
+            vhost = WebUtility.UrlEncode(vhost);
+            exchange = WebUtility.UrlEncode(exchange);
+            queue = WebUtility.UrlEncode(queue);
 
-        /* TODO /api/bindings/vhost/e/source/e/destination	
+            string result =
+                await RMApiProvider.GetJson(String.Format("bindings/{0}/e/{1}/q/{2}", vhost, exchange, queue));
+
+            List<BindingInfo> bindings = new List<BindingInfo>();
+
+            JArray info = JsonConvert.DeserializeObject<JArray>(result);
+
+            foreach (JObject bindingData in info)
+            {
+                BindingInfoSentinel sentinel = new BindingInfoSentinel();
+                BindingInfo binding =
+                    sentinel.CreateModel(
+                        JsonConvert.DeserializeObject<Dictionary<string, object>>(bindingData.ToString()));
+
+                bindings.Add(binding);
+            }
+
+            return bindings;
+        }
+
+
+
+        /* /api/bindings/vhost/e/source/e/destination	
          * A list of all bindings between two exchanges. Similar to the list of all bindings between an exchange and a queue, above.
          */
+        private static async Task<IEnumerable<BindingInfo>> GetBindingInfosBetweenTwoExchangesOnVhostInternal(string vhost,
+            string sourceExchange, string destinationExchange)
+        {
+            vhost = WebUtility.UrlEncode(vhost);
+            sourceExchange = WebUtility.UrlEncode(sourceExchange);
+            destinationExchange = WebUtility.UrlEncode(destinationExchange);
+
+            string result =
+                await
+                    RMApiProvider.GetJson(String.Format("bindings/{0}/e/{1}/e/{2}	", vhost, sourceExchange,
+                        destinationExchange));
+
+            List<BindingInfo> bindings = new List<BindingInfo>();
+
+            JArray info = JsonConvert.DeserializeObject<JArray>(result);
+
+            foreach (JObject bindingData in info)
+            {
+                BindingInfoSentinel sentinel = new BindingInfoSentinel();
+                BindingInfo binding =
+                    sentinel.CreateModel(
+                        JsonConvert.DeserializeObject<Dictionary<string, object>>(bindingData.ToString()));
+
+                bindings.Add(binding);
+            }
+
+            return bindings;
+        }
+
+        private static async Task<IEnumerable<BindingInfo>> GetBindingInfosForExchangeOnVhostInternal(string vhost,
+            string name)
+        {
+            vhost = WebUtility.UrlEncode(vhost);
+            name = WebUtility.UrlEncode(name);
+
+            string result =
+                await RMApiProvider.GetJson(String.Format("/api/exchanges/{0}/{1}/bindings/source", vhost, name));
+
+            List<BindingInfo> bindings = new List<BindingInfo>();
+
+            JArray info = JsonConvert.DeserializeObject<JArray>(result);
+
+            foreach (JObject bindingData in info)
+            {
+                BindingInfoSentinel sentinel = new BindingInfoSentinel();
+                BindingInfo binding =
+                    sentinel.CreateModel(
+                        JsonConvert.DeserializeObject<Dictionary<string, object>>(bindingData.ToString()));
+
+                bindings.Add(binding);
+            }
+
+            return bindings;
+        }
 
         /* TODO /api/bindings/vhost/e/source/e/destination/props	
          * An individual binding between two exchanges. Similar to the individual binding between an exchange and a queue, above.
+         */
+
+        /* TODO /api/bindings/vhost/e/exchange/q/queue/props	
+         * 
+         * An individual binding between an exchange and a queue. The props part of the URI is a "name" for the binding composed of its routing key and a hash of its arguments.
          */
 
     }

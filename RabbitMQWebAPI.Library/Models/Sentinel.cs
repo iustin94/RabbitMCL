@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RabbitMQWebAPI.Library.Models;
 
-namespace RabbitMQWebAPI.Library.Interfaces
+namespace RabbitMQWebAPI.Library
 {
 
     /// <summary>
@@ -20,9 +21,9 @@ namespace RabbitMQWebAPI.Library.Interfaces
     /// arguments: Dictionary of type string, string
     /// properties_key: string
     /// </param>
-    public abstract class Sentinel<T,U> where T: new() where U: new() 
+    public abstract class Sentinel<T,U>:ISentinel<T,U> where T: new() where U: new() 
     {
-        public T CreateModel(IDictionary<String, Object> parametersDictionary)
+        public T CreateModel(IDictionary<string, object> parametersDictionary)
         {
             T toReturn ;
 
@@ -44,13 +45,13 @@ namespace RabbitMQWebAPI.Library.Interfaces
         /// </summary>
         /// <param name="parametersDictionary">
         /// </param>
-        public abstract U ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary);
+        public abstract U ParseDictionaryToParameters(IDictionary<string, object> parametersDictionary);
 
         /// <summary>
         /// Ensures the dictionary has the expected keys
         /// </summary>
         /// <param name="parametersDictionary"></param>
         /// <returns>True if all keys are present. Throws an exceptiopn with the message to indicate which key is missing</returns>
-        public abstract Boolean ValidateDictionary(IDictionary<String, Object> parametersDictionary);
+        public abstract Boolean ValidateDictionary(IDictionary<string, object> parametersDictionary);
     }
 }
