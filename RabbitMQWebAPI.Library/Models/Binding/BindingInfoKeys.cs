@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace RabbitMQWebAPI.Library.Models.Binding
 {
+    /*Obsolete*/
     public static class BindingInfoKeys
     {
         public static HashSet<string> keys = new HashSet<string>()

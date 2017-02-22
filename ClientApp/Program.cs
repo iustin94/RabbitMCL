@@ -16,6 +16,7 @@ using RabbitDataAccess = RabbitMQWebAPI.Library;
 using RabbitMQWebAPI.Library.Models;
 using RabbitMQWebAPI.Library.Models.Exchange;
 using RabbitMQWebAPI.Library.Models.Queue;
+using RabbitMQWebAPI.Library.Service;
 
 namespace ClientApp
 {
@@ -183,7 +184,8 @@ namespace ClientApp
                        try
                        {
                            queueStatuses = new Dictionary<string, State.StateEnum>();
-                           var latestQueueInfos = RabbitDataAccess.DataAccess.Queues.GetQueueInfos().Result;
+                           var queues = new RabbitDataAccess.DataAccess.Queues();
+                           var latestQueueInfos = queues.GetQueueInfos().Result;
 
                            foreach (QueueInfo q in latestQueueInfos)
                            {
@@ -205,8 +207,10 @@ namespace ClientApp
             queueInfoPoolingThread.IsBackground = true;
             queueInfoPoolingThread.Start();
 
-            ExchangeInfo ei1 = RabbitDataAccess.Service.ExchangesQueues.getExchangeForQueue("ha.queue1").Result;
-            ExchangeInfo ei2 = RabbitDataAccess.Service.ExchangesQueues.getExchangeForQueue("ha.queue1-Fallback").Result;
+            ExchangesQueues excahngesQueuesFactory = new ExchangesQueues();
+
+            ExchangeInfo ei1 = excahngesQueuesFactory.getExchangeForQueue("ha.queue1").Result;
+            ExchangeInfo ei2 = excahngesQueuesFactory.getExchangeForQueue("ha.queue1-Fallback").Result;
 
             ConsoleManager.AnnouncePublishingStarted();
 

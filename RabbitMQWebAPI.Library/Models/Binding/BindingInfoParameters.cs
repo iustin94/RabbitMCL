@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace RabbitMQWebAPI.Library.Models.Binding
 {
+    /*Obsolete*/
     public struct BindingInfoParameters
     {
         public string source;

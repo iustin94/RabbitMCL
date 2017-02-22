@@ -9,42 +9,41 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Configuration;
 using System.Data.Common;
-using RabbitMQWebAPI.Library.Interfaces;
 using RabbitMQWebAPI.Library.Models;
 using RabbitMQWebAPI.Library.Models.Queue;
 
 namespace RabbitMQWebAPI.Library.DataAccess
 {
-    public static class Queues
+    public class Queues: DataFactory
     {
         /// <summary>
         /// A list of all queues.
         /// </summary>
         /// <returns></returns>
-        public static async Task<IEnumerable<QueueInfo>> GetQueueInfos()
+        public async Task<IEnumerable<QueueInfo>> GetQueueInfos()
         {
             return await GetQueueInfosInternal();
         }
 
         // /api/queues	
-        private static async Task<IEnumerable<QueueInfo>> GetQueueInfosInternal()
+        private async Task<IEnumerable<QueueInfo>> GetQueueInfosInternal()
         {
             string result = await RMApiProvider.GetJson("queues");
 
-            var info = JsonConvert.DeserializeObject<IList<QueueInfo>>(result);
-            
-            //List<QueueInfo> queues = new List<QueueInfo>();
+            var info = JsonConvert.DeserializeObject<JArray>(result);
 
-            //foreach (JObject queueData in info)
-            //{
-            //    QueueInfoSentinel sentinel = new QueueInfoSentinel();
-            //    QueueInfo queue =
-            //        sentinel.CreateModel(JsonConvert.DeserializeObject<Dictionary<string, object>>(queueData.ToString()));
+            List<QueueInfo> queues = new List<QueueInfo>();
 
-            //    queues.Add(queue);
-            //}
+            foreach (JObject queueData in info)
+            {
+                QueueInfoSentinel sentinel = new QueueInfoSentinel();
+                QueueInfo queue =
+                    sentinel.CreateModel(JsonConvert.DeserializeObject<Dictionary<string, object>>(queueData.ToString()));
 
-            return info;
+                queues.Add(queue);
+            }
+
+            return queues;
         }
 
 

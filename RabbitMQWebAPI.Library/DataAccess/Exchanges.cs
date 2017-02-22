@@ -9,7 +9,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using RabbitMQWebAPI.Library.Interfaces;
 using RabbitMQWebAPI.Library.Models;
 using RabbitMQWebAPI.Library.Models.Exchange;
 

@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using RabbitMQWebAPI.Library.Interfaces;
 using RabbitMQWebAPI.Library.Models.Node.NodeApplication;
 using RabbitMQWebAPI.Library.Models.Node.NodeAuthMechanisms;
 using RabbitMQWebAPI.Library.Models.Node.NodeClusterLink;
 using RabbitMQWebAPI.Library.Models.Node.NodeContext;
 using RabbitMQWebAPI.Library.Models.Node.NodeExchangeType;
+using RabbitMQWebAPI.Library.Models.Sentinel;
 
 namespace RabbitMQWebAPI.Library.Models.Node
 {
@@ -200,7 +200,7 @@ namespace RabbitMQWebAPI.Library.Models.Node
                     parametersDictionary["queue_index_read_count_deta"].ToString());
 
             parameters.gc_num = Int32.Parse(parametersDictionary["gc_enum"].ToString());
-            parameters.gc_enum_details =
+            parameters.gc_num_details =
                 JsonConvert.DeserializeObject<Dictionary<string, int>>(
                     parametersDictionary["gc_enum_details"].ToString());
 

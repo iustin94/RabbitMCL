@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using RabbitMQWebApi.Library.Models.Binding;
-using RabbitMQWebAPI.Library.Interfaces;
+using RabbitMQWebAPI.Library.Models.Sentinel;
 
 namespace RabbitMQWebAPI.Library.Models.Channel.ChannelConnectionDetails
 {

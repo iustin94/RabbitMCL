@@ -1,22 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RabbitMQWebAPI.Library.Models.Definition;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
-namespace RabbitMQWebAPI.Library.Models
+namespace RabbitMQWebAPI.Library.Models.Definition
 {
     public class DefinitionInfo
     {
+        [JsonProperty(PropertyName = "rabbit_version")]
         public string rabbit_version { get; private set; }
+
+        [JsonProperty(PropertyName = "users")]
         public List<Definition.DefinitionUser.DefinitionUser> users { get; private set; }
+
+        [JsonProperty(PropertyName = "vhosts")]
         public List<Dictionary<string, string>> vhosts { get; private set; }
+
+        [JsonProperty(PropertyName = "permissions")]
         public List<Definition.DefinitionPermission.DefinitionPermission> permissions { get; private set; }
+
+        [JsonProperty(PropertyName = "parameters")]
         public List<Definition.DefinitionParameter.DefinitionParameter> parameters { get; private set; }
+
+        [JsonProperty(PropertyName = "policies")]
         public List<Definition.DefinitionPolicy.DefinitionPolicy> policies { get; private set; }
+
+        [JsonProperty(PropertyName = "queues")]
         public List<Definition.DefinitionQueue.DefinitionQueue> queues { get; private set; }
+
+        [JsonProperty(PropertyName = "exchanges")]
         public List<Definition.DefinitionExchange.DefinitionExchange> exchanges { get; private set; }
+
+        [JsonProperty(PropertyName = "bindings")]
         public List<Definition.DefinitionBinding.DefinitionBinding> bindings { get; private set; }
 
         public DefinitionInfo()

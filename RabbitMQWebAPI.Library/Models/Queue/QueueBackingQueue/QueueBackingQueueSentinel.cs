@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
-using RabbitMQWebAPI.Library.Interfaces;
+using RabbitMQWebAPI.Library.Models.Sentinel;
 
-namespace RabbitMQWebAPI.Library.Models.Queue.QueueBackingQueueStatus
+namespace RabbitMQWebAPI.Library.Models.Queue.QueueBackingQueue
 {
     public class QueueBackingQueueSentinel : Sentinel<QueueBackingQueueStatus, QueueBackingQueueStatusParameters>
     {

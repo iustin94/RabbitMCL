@@ -12,7 +12,7 @@ namespace RabbitMQWebAPI.Library.Models.Definition.DefinitionBinding
         public string vhost;
         public string type;
         public bool durable;
-        public bool auto_delate;
+        public bool auto_delete;
         public bool _internal;
         public Dictionary<string, string> arguments;
     }

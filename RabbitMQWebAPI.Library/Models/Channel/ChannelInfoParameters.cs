@@ -13,14 +13,14 @@ namespace RabbitMQWebAPI.Library.Models.Channel
         public int number;
         public string name;
         public string node;
-        public ChannelGarbageCollection.ChannelGarbageCollection garbade_collection;
+        public ChannelGarbageCollection.ChannelGarbageCollection garbage_collection;
         public int reductions;
         public State.StateEnum state;
         public int prefetch_count;
         public int acks_uncommitted;
         public int messages_uncommitted;
         public int messages_unconfirmed;
-        public int messages_unacknowledge;
+        public int messages_unacknowledged;
         public int consumer_count;
         public bool confirms;
         public bool transactional;

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using RabbitMQWebAPI.Library.Interfaces;
+using RabbitMQWebAPI.Library.Models.Sentinel;
 
 namespace RabbitMQWebAPI.Library.Models.Node.NodeExchangeType
 {

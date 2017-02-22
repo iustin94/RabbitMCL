@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
+using RabbitMQWebAPI.Library.Models.Queue.QueueBackingQueue;
 
 namespace RabbitMQWebAPI.Library.Models.Queue
 {
@@ -11,13 +12,13 @@ namespace RabbitMQWebAPI.Library.Models.Queue
     {
         public int memory;
         public int reductions;
-        public Dictionary<string, int> recutions_details;
+        public Dictionary<string, double> recutions_details;
         public int messages;
-        public Dictionary<string, int> messages_details;
+        public Dictionary<string, double> messages_details;
         public int messages_ready;
-        public Dictionary<string, int> messages_ready_details;
+        public Dictionary<string, double> messages_ready_details;
         public int messages_unacknowledged;
-        public Dictionary<string, int> messages_unacknowledged_details;
+        public Dictionary<string, double> messages_unacknowledged_details;
         public string idle_since;
         public string consumer_utilisation;
         public string policy;
@@ -38,7 +39,7 @@ namespace RabbitMQWebAPI.Library.Models.Queue
         public string head_message_timestamp;
         public int disk_reads;
         public int disk_writes;
-        public QueueBackingQueueStatus.QueueBackingQueueStatus backing_queue_status;
+        public QueueBackingQueueStatus backing_queue_status;
         public string node;
         public Dictionary<string, string> arguments;
         public bool exclusive;

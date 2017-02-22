@@ -3,16 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace RabbitMQWebAPI.Library.Models.Node.NodeClusterLink
 {
     public class NodeClusterLink
     {
+        [JsonProperty(PropertyName = "peer_addr")]
         public string peer_addr { get; private set; }
+
+        [JsonProperty(PropertyName = "peer_port")]
         public int peer_port { get; private set; }
+
+        [JsonProperty(PropertyName = "sock_addr")]
         public string sock_addr { get; private set; }
+
+        [JsonProperty(PropertyName = "sock_port")]
         public int sock_port { get; private set; }
+        
+        [JsonProperty(PropertyName = "stats")]
         public NodeClusterLinkStats.NodeClusterLinkStats stats { get; private set; }
+
+        [JsonProperty(PropertyName = "name")]
         public string name { get; private set; }
 
         public NodeClusterLink() { }

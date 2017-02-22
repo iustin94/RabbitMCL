@@ -56,7 +56,7 @@ namespace RabbitMQWebAPI.Library.Models.Node
         public int queue_index_read_count;
         public Dictionary<string, int> queue_index_read_count_details;
         public int gc_num;
-        public Dictionary<string, int> gc_enum_details;
+        public Dictionary<string, int> gc_num_details;
         public int gc_bytes_reclaimed;
         public Dictionary<string, int> gc_bytes_reclaimed_details;
         public int context_switches;

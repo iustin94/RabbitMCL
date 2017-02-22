@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using RabbitMQWebAPI.Library.DataAccess;
-using RabbitMQWebAPI.Library.Interfaces;
-using RabbitMQWebAPI.Library.Models.Queue.QueueBackingQueueStatus;
+using RabbitMQWebAPI.Library.Models.Queue.QueueBackingQueue;
 using RabbitMQWebAPI.Library.Models.Queue.QueueGarbageCollection;
+using RabbitMQWebAPI.Library.Models.Sentinel;
 
 namespace RabbitMQWebAPI.Library.Models.Queue
 {
@@ -25,23 +25,23 @@ namespace RabbitMQWebAPI.Library.Models.Queue
 
             parameters.reductions = Int32.Parse(parametersDictionary["reductions"].ToString());
             parameters.recutions_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["reductions_details"].ToString());
 
             parameters.messages = Int32.Parse(parametersDictionary["messages"].ToString());
             parameters.messages_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
-                    parametersDictionary["message_details"].ToString());
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
+                    parametersDictionary["messages_details"].ToString());
 
             parameters.messages_ready = Int32.Parse(parametersDictionary["messages_ready"].ToString());
             parameters.messages_ready_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["messages_ready_details"].ToString());
 
 
             parameters.messages_unacknowledged = Int32.Parse(parametersDictionary["messages_unacknowledged"].ToString());
             parameters.messages_unacknowledged_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["messages_unacknowledged_details"].ToString());
 
             parameters.idle_since = parametersDictionary["idle_since"].ToString();

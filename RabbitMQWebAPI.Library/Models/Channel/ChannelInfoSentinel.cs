@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using RabbitMQWebAPI.Library.Interfaces;
 using RabbitMQWebAPI.Library.Models.Channel.ChannelConnectionDetails;
 using RabbitMQWebAPI.Library.Models.Channel.ChannelGarbageCollection;
 using RabbitMQWebAPI.Library.Models.Channel.ChannelMessageStats;
+using RabbitMQWebAPI.Library.Models.Sentinel;
 
 namespace RabbitMQWebAPI.Library.Models.Channel
 {
@@ -28,7 +28,7 @@ namespace RabbitMQWebAPI.Library.Models.Channel
             parameters.name = parametersDictionary["name"].ToString();
             parameters.node = parametersDictionary["node"].ToString();
 
-            parameters.garbade_collection = garbageCollectionSentinel.CreateModel(JsonConvert.DeserializeObject<Dictionary<string, object>>(parametersDictionary["garbage_collection"].ToString()));
+            parameters.garbage_collection = garbageCollectionSentinel.CreateModel(JsonConvert.DeserializeObject<Dictionary<string, object>>(parametersDictionary["garbage_collection"].ToString()));
 
             parameters.reductions = Int32.Parse(parametersDictionary["reductions"].ToString());
             parameters.state = State.EvaluateState(parametersDictionary["state"].ToString());
@@ -37,7 +37,7 @@ namespace RabbitMQWebAPI.Library.Models.Channel
             parameters.acks_uncommitted = Int32.Parse(parametersDictionary["acks_uncommitted"].ToString());
             parameters.messages_uncommitted = Int32.Parse(parametersDictionary["messages_uncommited"].ToString());
             parameters.messages_unconfirmed = Int32.Parse(parametersDictionary["messages_unconfirmed"].ToString());
-            parameters.messages_unacknowledge = Int32.Parse(parametersDictionary["messages_unacknowledge"].ToString());
+            parameters.messages_unacknowledged = Int32.Parse(parametersDictionary["messages_unacknowledge"].ToString());
             parameters.consumer_count = Int32.Parse(parametersDictionary["consumer_count"].ToString());
             parameters.confirms = Boolean.Parse(parametersDictionary["confirms"].ToString());
             parameters.transactional = Boolean.Parse(parametersDictionary["transactional"].ToString());

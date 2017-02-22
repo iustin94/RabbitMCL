@@ -15,6 +15,6 @@ namespace RabbitMQWebAPI.Library.Models.Consumer
         public bool exclusive;
         public string consumer_tag;
         public Dictionary<string, string> queue;
-        public ConsumerChannelDetailsInfo ConsumerChannelDetails;
+        public ConsumerChannelDetailsInfo channel_details;
     }
 }

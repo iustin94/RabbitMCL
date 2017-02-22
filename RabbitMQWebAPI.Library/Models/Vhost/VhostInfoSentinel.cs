@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using RabbitMQWebAPI.Library.Interfaces;
+using RabbitMQWebAPI.Library.Models.Sentinel;
 using RabbitMQWebAPI.Library.Models.Vhost.VhostInfoMessageStats;
 
 namespace RabbitMQWebAPI.Library.Models.Vhost

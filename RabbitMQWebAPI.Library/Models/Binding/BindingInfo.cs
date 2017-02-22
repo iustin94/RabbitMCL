@@ -1,30 +1,52 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
-using RabbitMQWebAPI.Library.Interfaces;
-using RabbitMQWebAPI.Library.Models.Binding;
+using RabbitMQWebAPI.Library.Models.BaseModel;
 
-namespace RabbitMQWebApi.Library.Models.Binding
+namespace RabbitMQWebAPI.Library.Models.Binding
 {
     /// <summary>
     /// Container for information on Bindings entity retrieved from the RabbitAPI.
     /// </summary>
-    public class BindingInfo
+    public class BindingInfo : Model
     {
-        public string source { private set; get; }
-        public string vhost { private set; get; }
-        public string destination { private set; get; }
-        public string destination_type { private set; get; }
-        public string routing_key { private set; get; }
-        public IDictionary<string, string> arguments { private set; get; }
-        public string properties_key { private set; get; }
+        public override HashSet<string> Keys
+        {
+            get
+            {
+                return new HashSet<string>()
+                {
+                  "source",
+            "vhost",
+            "destination",
+            "destination_type",
+            "routing_key",
+            "arguments",
+            "properties_key" };
+            }
+            set { Keys = value; }
+        }
 
-        /// <summary>
-        /// The class constructor.
-        /// </summary>
+        [JsonProperty(PropertyName = "source")]
+        public string source { internal set; get; }
+
+        [JsonProperty(PropertyName = "vhost")]
+        public string vhost { internal set; get; }
+
+        [JsonProperty(PropertyName = "destination")]
+        public string destination { internal set; get; }
+
+        [JsonProperty(PropertyName = "destination_type")]
+        public string destination_type { internal set; get; }
+
+        [JsonProperty(PropertyName = "routing_key")]
+        public string routing_key { internal set; get; }
+
+        [JsonProperty(PropertyName = "arguments")]
+        public IDictionary<string, string> arguments { internal set; get; }
+
+        [JsonProperty(PropertyName = "properties_key")]
+        public string properties_key { internal set; get; }
+
         public BindingInfo(BindingInfoParameters parameters)
         {
             this.arguments = parameters.arguments;

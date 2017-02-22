@@ -1,11 +1,11 @@
-﻿using RabbitMQWebAPI.Library.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using RabbitMQWebAPI.Library.Models.Definition.DefinitionParameter.DefinitionParameterValue;
+using RabbitMQWebAPI.Library.Models.Sentinel;
 
 namespace RabbitMQWebAPI.Library.Models.Definition.DefinitionParameter
 {

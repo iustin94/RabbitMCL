@@ -1,26 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace RabbitMQWebAPI.Library.Models.Queue.QueueBackingQueueStatus
+namespace RabbitMQWebAPI.Library.Models.Queue.QueueBackingQueue
 {
     public class QueueBackingQueueStatus
     {
         public string mode { get; private set; }
-        public int q1 { get; private set; }
-        public int q2 { get; private set; }
+        public double q1 { get; private set; }
+        public double q2 { get; private set; }
         public List<string> delta { get; private set; }
-        public int q3 { get; private set; }
-        public int q4 { get; private set; }
-        public int len { get; private set; }
+        public double q3 { get; private set; }
+        public double q4 { get; private set; }
+        public double len { get; private set; }
         public string target_ram_count { get; private set; }
-        public int next_seq_id { get; private set; }
-        public int avg_ingress_rate { get; private set; }
-        public int avg_egress_rate { get; private set; }
-        public int avg_ack_ingress_rate { get; private set; }
-        public int avg_ack_egress_rate {get; private set; }
+        public double next_seq_id { get; private set; }
+        public double avg_ingress_rate { get; private set; }
+        public double avg_egress_rate { get; private set; }
+        public double avg_ack_ingress_rate { get; private set; }
+        public double avg_ack_egress_rate {get; private set; }
 
         public QueueBackingQueueStatus() { }
 

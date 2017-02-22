@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Runtime.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RabbitMQWebApi.Library.Models.Binding;
 using RabbitMQWebAPI.Library.Models.Binding;
 
 namespace RabbitMQWebAPI.Tests
@@ -54,9 +53,11 @@ namespace RabbitMQWebAPI.Tests
 
             //Method calling
 
+            BindingInfo model = new BindingInfo();
+
             foreach (Dictionary<string, object> dictionary in testValues)
             {
-                actualList.Add(sentinel.ValidateDictionary(dictionary));
+                actualList.Add(sentinel.ValidateDictionary(dictionary, model));
             }
 
             //Assertion
@@ -73,7 +74,7 @@ namespace RabbitMQWebAPI.Tests
             //Setup
             populateTestValues();
             List<BindingInfoParameters> expectedList = new List<BindingInfoParameters>();
-            List<BindingInfoParameters> actualList = new List<BindingInfoParameters>();
+            List<BindingInfo> actualList = new List<BindingInfo>();
             BindingInfoSentinel sentinel = new BindingInfoSentinel();
 
             BindingInfoParameters parameters1 = new BindingInfoParameters();
@@ -102,9 +103,12 @@ namespace RabbitMQWebAPI.Tests
             expectedList.Add(parameters2);
             
             //Method calling
+
+            BindingInfo model = new BindingInfo();
+
             foreach (Dictionary<string, object> dictionary in testValues)
             {
-                actualList.Add(sentinel.ParseDictionaryToParameters(dictionary));
+                actualList.Add((BindingInfo)sentinel.ParseDictionaryToParameters(dictionary, model));
             }
 
 

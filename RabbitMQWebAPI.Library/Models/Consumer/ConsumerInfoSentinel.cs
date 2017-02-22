@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using RabbitMQWebAPI.Library.Interfaces;
 using Newtonsoft.Json;
 using RabbitMQWebAPI.Library.Models.Channel;
 using RabbitMQWebAPI.Library.Models.Connection;
 using RabbitMQWebAPI.Library.Models.Consumer.ConsumerChannelDetails;
+using RabbitMQWebAPI.Library.Models.Sentinel;
 
 namespace RabbitMQWebAPI.Library.Models.Consumer
 {
@@ -27,7 +27,7 @@ namespace RabbitMQWebAPI.Library.Models.Consumer
             parameters.queue =
                 JsonConvert.DeserializeObject<Dictionary<string, string>>(parametersDictionary["queue"].ToString());
 
-            parameters.ConsumerChannelDetails = sentinel.CreateModel(
+            parameters.channel_details = sentinel.CreateModel(
                 JsonConvert.DeserializeObject<Dictionary<string, object>>(parametersDictionary["channel_details"].ToString()));
 
             return parameters;

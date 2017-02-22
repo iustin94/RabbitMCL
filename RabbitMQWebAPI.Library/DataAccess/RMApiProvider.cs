@@ -1,18 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Common;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using RabbitMQWebApi.Library.Models.Binding;
-using RabbitMQWebAPI.Library.Models.Binding;
 
-namespace RabbitMQWebAPI.Library.Interfaces
+namespace RabbitMQWebAPI.Library.DataAccess
 {
     public class RMApiProvider
     {

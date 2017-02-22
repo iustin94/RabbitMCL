@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using RabbitMQWebApi.Library.Models;
-using RabbitMQWebApi.Library.Models.Binding;
 using RabbitMQWebAPI.Library.DataAccess;
 using RabbitMQWebAPI.Library.Models;
+using RabbitMQWebAPI.Library.Models.Binding;
 using RabbitMQWebAPI.Library.Models.Exchange;
 
 namespace RabbitMQWebAPI.Library.Service
@@ -19,9 +18,11 @@ namespace RabbitMQWebAPI.Library.Service
         /// </summary>
         /// <param name="queueName"></param>
         /// <returns></returns>
-        public static async Task<ExchangeInfo> getExchangeForQueue(string queueName)
+        public async Task<ExchangeInfo> getExchangeForQueue(string queueName)
         {
-            IEnumerable<BindingInfo> bindings = await Bindings.GetBindingInfos();
+            Bindings bindingsFactory = new Bindings();
+
+            IEnumerable<BindingInfo> bindings = await bindingsFactory.GetBindingInfos();
 
             foreach (var binding in bindings)
             {

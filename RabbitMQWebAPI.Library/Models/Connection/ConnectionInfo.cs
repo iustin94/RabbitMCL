@@ -1,21 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RabbitMQWebAPI.Library.Models.Channel.Connection;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
-namespace RabbitMQWebAPI.Library.Models
+namespace RabbitMQWebAPI.Library.Models.Connection
 {
     public class ConnectionInfo
     {
+        [JsonProperty(PropertyName = "connected_at")]
         public string connected_at { get; private set; }
+
+        [JsonProperty(PropertyName = "type")]
         public string type { get; private set; }
+
+        [JsonProperty(PropertyName = "client_properties")]
         public Dictionary<string, string> client_properties { get; private set; }
+
+        [JsonProperty(PropertyName = "vhost")]
         public string vhost { get; private set; }
+
+        [JsonProperty(PropertyName = "user")]
         public string user { get; private set; }
+        
+        [JsonProperty(PropertyName = "name")]
         public string name { get; private set; }
+        
+        [JsonProperty(PropertyName = "protocol")]
         public string protocol { get; private set; }
+        
+        [JsonProperty(PropertyName = "node")]
         public string node { get; private set; }
 
         public ConnectionInfo() { }
