@@ -12,13 +12,11 @@ namespace RabbitMQWebAPI.Library.Models.Sentinel
     {
         public BaseModel.IModel CreateModel(IDictionary<String, Object> parametersDictionary, BaseModel.IModel model)
         {
-            IModel toReturn;
-
             if (ValidateDictionary(parametersDictionary, model) != true)
                 return default(IModel);
             else
             {
-                model = ParseDictionaryToParameters1(parametersDictionary, model);
+                model = ParseDictionaryToParameters(parametersDictionary, model);
             }
 
             //If we got this far then everything should be fine.
