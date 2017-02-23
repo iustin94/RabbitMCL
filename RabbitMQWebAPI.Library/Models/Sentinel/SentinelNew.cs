@@ -19,7 +19,6 @@ namespace RabbitMQWebAPI.Library.Models.Sentinel
                 model = ParseDictionaryToParameters(parametersDictionary, model);
             }
 
-            //If we got this far then everything should be fine.
             return model;
         }
 
@@ -29,13 +28,7 @@ namespace RabbitMQWebAPI.Library.Models.Sentinel
         /// <param name="parametersDictionary">
         /// </param>
         public abstract BaseModel.IModel ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary,
-            BaseModel.IModel model);
-
-        public BaseModel.IModel ParseDictionaryToParameters1(IDictionary<String, Object> parametersDictionary,
-            BaseModel.IModel model)
-        {
-            return JsonConvert.DeserializeObject<IModel>(parametersDictionary.ToString());
-        }
+            BaseModel.IModel model);    
 
         /// <summary>
         /// Ensures the dictionary has the expected keys
@@ -52,6 +45,13 @@ namespace RabbitMQWebAPI.Library.Models.Sentinel
 
             return true;
         }
+
+        // This breaks the idea of not having json in the model classes. Json should be converted by the DataAccess layer in the form of dictionary
+        //public BaseModel.IModel ParseDictionaryToParameters1(IDictionary<String, Object> parametersDictionary,
+        //    BaseModel.IModel model)
+        //{
+        //    return JsonConvert.DeserializeObject<IModel>(parametersDictionary.ToString());
+        //}
     }
 
 }

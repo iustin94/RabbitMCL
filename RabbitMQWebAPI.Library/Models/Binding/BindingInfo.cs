@@ -59,5 +59,20 @@ namespace RabbitMQWebAPI.Library.Models.Binding
         }
 
         public BindingInfo() { }
+
+        public override string ToString()
+        {
+            string str = "{" + "\n"+
+                         "source:" + source + "\n" +
+                         "vhost:" + vhost + "\n" +
+                         "destination" + destination + "\n" +
+                         "destination_type" + destination + "\n" +
+                         "routing_key"+ routing_key + "\n" +
+                         "arguments"+ arguments + "\n" +
+                         "properties_key" +properties_key+ "\n" +
+                "}" + "\n";
+
+            return str;
+        }
     }
 }

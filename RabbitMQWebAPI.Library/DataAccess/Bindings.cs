@@ -14,8 +14,18 @@ using RabbitMQWebAPI.Library.Models.Binding;
 
 namespace RabbitMQWebAPI.Library.DataAccess
 {
-    public class Bindings: DataFactory
+    public class Bindings
     {
+        private DataFactory<BindingInfo> dataFactory;
+        private BindingInfoSentinel sentinel;
+
+        public Bindings() { }
+        public Bindings(HttpClient client)
+        {
+            //TODO validate client has necessary credentials
+            dataFactory = new DataFactory<BindingInfo>(client);
+            sentinel = new BindingInfoSentinel();
+        }
 
         /// <summary>
         /// A list of all bindings.
@@ -68,49 +78,20 @@ namespace RabbitMQWebAPI.Library.DataAccess
         //    return await GetBindingInfosForExchangeOnVhostInternal(vhost, name);
         //}
 
-        private async Task<IEnumerable<BindingInfo>> GetBindingInfosToExchangeOnVhost(string vhost, string name)
+        public async Task<IEnumerable<BindingInfo>> GetBindingInfosToExchangeOnVhost(string vhost, string name)
         {
             vhost = WebUtility.UrlEncode(vhost);
             name = WebUtility.UrlEncode(name);
 
-            string result =
-                await RMApiProvider.GetJson(String.Format("exchanges/{0}/{1}/bindings/destination", vhost, name));
-
-            JArray info = JsonConvert.DeserializeObject<JArray>(result);     
-            BindingInfoSentinel sentinel = new BindingInfoSentinel();
-
-            List<BindingInfo> bindings = BuildModels<BindingInfo>(info, sentinel);
-
-            return bindings;
+          return
+                await dataFactory.BuildModels(String.Format("exchanges/{0}/{1}/bindings/destination", vhost, name), this.sentinel);
         }
-
-        private static List<TResultModel> BindingInfoFactory<TResultModel>(JArray info,
-            BindingInfoSentinel bindingInfoSentinel) where TResultModel : IModel, new()
-        {
-            List<TResultModel> bindings = new List<TResultModel>();
-
-            foreach (JObject bindingData in info)
-            {
-                BindingInfo binding = new BindingInfo();
-                binding = (BindingInfo)bindingInfoSentinel.CreateModel(
-                                JsonConvert.DeserializeObject<Dictionary<string, object>>(bindingData.ToString()), binding);
-            }
-
-            return bindings;
-        }
-
 
         // /api/bindings
         public async Task<IEnumerable<BindingInfo>> GetBindingInfos()
         {
+            List<BindingInfo> bindings = await dataFactory.BuildModels("bindings", this.sentinel);
 
-            string result = await RMApiProvider.GetJson("bindings");
-            JArray info = JsonConvert.DeserializeObject<JArray>(result);
-
-            BindingInfoSentinel sentinel = new BindingInfoSentinel();
-
-            List<BindingInfo> bindings = BuildModels<BindingInfo>(info, sentinel);
-           
             return bindings;
         }
 

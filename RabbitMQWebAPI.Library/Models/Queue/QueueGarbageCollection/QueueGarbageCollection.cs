@@ -10,23 +10,20 @@ namespace RabbitMQWebAPI.Library.Models.Queue.QueueGarbageCollection
 {
     public class QueueGarbageCollection : Model
     {
-
-
-
         [JsonProperty(PropertyName = "max_heap_size")]
-        public double max_heap_size { get; private set; }
+        public double max_heap_size { get; internal set; }
 
         [JsonProperty(PropertyName = "min_bin_heap_size")]
-        public double min_bin_vheap_size { get; private set; }
+        public double min_bin_vheap_size { get; internal set; }
 
         [JsonProperty(PropertyName = "min_heap_size")]
-        public double min_heap_size { get; private set; }
+        public double min_heap_size { get; internal set; }
 
         [JsonProperty(PropertyName = "fullsweep_after")]
-        public double fullsweep_after { get; private set; }
+        public double fullsweep_after { get; internal set; }
 
         [JsonProperty(PropertyName = "minor_gcs")]
-        public double minor_gcs { get; private set; }
+        public double minor_gcs { get; internal set; }
 
         public override HashSet<String> Keys
         {

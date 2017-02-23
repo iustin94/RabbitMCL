@@ -4,6 +4,7 @@ namespace RabbitMQWebAPI.Library.Models.Queue.QueueBackingQueue
 {
     public static class QueueBackingQueueStatusKeys
     {
+        /*Obsolete*/
         public static HashSet<string> keys = new HashSet<string>()
         {
             "mode",

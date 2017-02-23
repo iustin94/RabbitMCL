@@ -12,7 +12,7 @@ namespace RabbitMQWebAPI.Library.Models.Queue
     {
         public int memory;
         public int reductions;
-        public Dictionary<string, double> recutions_details;
+        public Dictionary<string, double> reductions_details;
         public int messages;
         public Dictionary<string, double> messages_details;
         public int messages_ready;

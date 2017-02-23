@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using RabbitMQWebAPI.Library.Models.BaseModel;
 using RabbitMQWebAPI.Library.Models.Queue.QueueBackingQueue;
 
 namespace RabbitMQWebAPI.Library.Models.Queue
 {
-    public class QueueInfo
+    public class QueueInfo: Model
     {
         [JsonProperty(PropertyName = "memory")]
         public double memory { get; internal set; }
@@ -17,7 +18,7 @@ namespace RabbitMQWebAPI.Library.Models.Queue
         public double reductions { get; internal set; }
 
         [JsonProperty(PropertyName = "reductions_details")]
-        public Dictionary<string, double> redutions_details { get; internal set; }
+        public Dictionary<string, double> reductions_details { get; internal set; }
 
         [JsonProperty(PropertyName = "messages")]
         public double messages { get; internal set; }
@@ -121,13 +122,62 @@ namespace RabbitMQWebAPI.Library.Models.Queue
         [JsonProperty(PropertyName = "name")]
         public string name { get; internal set; }
 
+        public override HashSet<String> Keys
+        {
+            get
+            {
+                return new HashSet<string>()
+        {
+            "memory",
+            "reductions",
+            "reductions_details",
+            "messages",
+            "messages_details",
+            "messages_ready",
+            "messages_ready_details",
+            "messages_unacknowledged",
+            "messages_unacknowledged_details",
+            "idle_since",
+            "consumer_utilisation",
+            "policy",
+            "exclusive_consumer_tag",
+            "consumers",
+            "recoverable_slaves",
+            "state",
+            "garbage_collection",
+            "messages_ram",
+            "messages_ready_ram",
+            "messages_unacknowledged_ram",
+            "messages_persistent",
+            "message_bytes",
+            "message_bytes_ready",
+            "message_bytes_unacknowledged",
+            "message_bytes_ram",
+            "message_bytes_persistent",
+            "head_message_timestamp",
+            "disk_reads",
+            "disk_writes",
+            "backing_queue_status",
+            "node",
+            "arguments",
+            "exclusive",
+            "auto_delete",
+            "durable",
+            "vhost",
+            "name"
+        };
+            }
+
+            set { Keys = value; }
+        }
+
         public QueueInfo() { }
 
         public QueueInfo(QueueInfoParameters parameters)
         {
             this.memory = parameters.memory;
             this.reductions = parameters.reductions;
-            this.redutions_details = parameters.recutions_details;
+            this.reductions_details = parameters.reductions_details;
             this.messages = parameters.messages;
             this.messages_details = parameters.messages_details;
             this.messages_ready = parameters.messages_ready;

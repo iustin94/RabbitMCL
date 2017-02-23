@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RabbitMQWebAPI.Library.Models.BaseModel;
 using RabbitMQWebAPI.Library.Models.Sentinel;
 
 namespace RabbitMQWebAPI.Library.Models.Queue.QueueGarbageCollection
 {
-    public class QueueGarbageCollectionSentinel : Sentinel<QueueGarbageCollection, QueueGarbageCollectionParameters>
+    public class QueueGarbageCollectionSentinel : SentinelNew<QueueGarbageCollection>
     {
-        public override QueueGarbageCollectionParameters ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary)
+        public override IModel ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary, IModel model)
         {
-            QueueGarbageCollectionParameters parameters = new QueueGarbageCollectionParameters();
+            QueueGarbageCollection parameters = new QueueGarbageCollection();
 
             parameters.max_heap_size = Int32.Parse(parametersDictionary["max_heap_size"].ToString());
             parameters.min_bin_vheap_size = Int32.Parse(parametersDictionary["min_bin_vheap_size"].ToString());
@@ -20,17 +21,6 @@ namespace RabbitMQWebAPI.Library.Models.Queue.QueueGarbageCollection
             parameters.minor_gcs = Int32.Parse(parametersDictionary["minor_gcs"].ToString());
 
             return parameters;
-        }
-
-        public override Boolean ValidateDictionary(IDictionary<String, Object> parametersDictionary)
-        {
-            foreach (string key in QueueGarbageCollectionKeys.keys)
-            {
-                if(!parametersDictionary.ContainsKey(key))
-                    throw new DictionaryMissingArgumentException(key);
-            }
-
-            return true;
         }
     }
 }

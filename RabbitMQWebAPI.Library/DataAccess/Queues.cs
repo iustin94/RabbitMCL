@@ -14,8 +14,20 @@ using RabbitMQWebAPI.Library.Models.Queue;
 
 namespace RabbitMQWebAPI.Library.DataAccess
 {
-    public class Queues: DataFactory
+    public class Queues
     {
+
+        private DataFactory<QueueInfo> dataFactory;
+        private QueueInfoSentinel sentinel;
+
+        public Queues() {}
+
+        public Queues(HttpClient client)
+        {
+            dataFactory = new DataFactory<QueueInfo>(client);
+            sentinel = new QueueInfoSentinel();
+        }
+
         /// <summary>
         /// A list of all queues.
         /// </summary>
@@ -28,22 +40,7 @@ namespace RabbitMQWebAPI.Library.DataAccess
         // /api/queues	
         private async Task<IEnumerable<QueueInfo>> GetQueueInfosInternal()
         {
-            string result = await RMApiProvider.GetJson("queues");
-
-            var info = JsonConvert.DeserializeObject<JArray>(result);
-
-            List<QueueInfo> queues = new List<QueueInfo>();
-
-            foreach (JObject queueData in info)
-            {
-                QueueInfoSentinel sentinel = new QueueInfoSentinel();
-                QueueInfo queue =
-                    sentinel.CreateModel(JsonConvert.DeserializeObject<Dictionary<string, object>>(queueData.ToString()));
-
-                queues.Add(queue);
-            }
-
-            return queues;
+            return await dataFactory.BuildModels("queues", sentinel);
         }
 
 

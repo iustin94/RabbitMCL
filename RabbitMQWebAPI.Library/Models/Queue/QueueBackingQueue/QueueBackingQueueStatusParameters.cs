@@ -4,6 +4,7 @@ namespace RabbitMQWebAPI.Library.Models.Queue.QueueBackingQueue
 {
     public struct QueueBackingQueueStatusParameters
     {
+        /*obsolete*/
         public string mode;
         public double q1;
         public double q2;

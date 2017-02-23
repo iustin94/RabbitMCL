@@ -23,7 +23,7 @@ namespace RabbitMQWebAPI.Library.DataAccess
         /// <returns></returns>
         public static async Task<IEnumerable<ExchangeInfo>> GetExchangeInfos()
         {
-            return await GetExchangeInfosInternal();
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace RabbitMQWebAPI.Library.DataAccess
         /// <returns></returns>
         public static async Task<ExchangeInfo> GetExchangeInfoOnVhost(string exchangeName, string vhost = "/")
         {
-            return await GetExchangeInfoOnVhostInternal(exchangeName, vhost);
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -45,78 +45,8 @@ namespace RabbitMQWebAPI.Library.DataAccess
         /// <returns></returns>
         public static async Task<IEnumerable<ExchangeInfo>> GetExchangeInfosOnVhost(string vhost)
         {
-            return await GetExchangeInfosForVhostInternal(vhost);
+            throw new NotImplementedException();
         }
 
-
-
-
-
-        private static async Task<IEnumerable<ExchangeInfo>> GetExchangeInfosInternal()
-        {
-
-            string result = await RMApiProvider.GetJson("exchanges");
-
-            JArray info = JsonConvert.DeserializeObject<JArray>(result);
-            List<ExchangeInfo> exchanges = new List<ExchangeInfo>();
-
-            foreach (JObject exchangeData in info)
-            {
-                ExchangeInfoSentinel sentinel = new ExchangeInfoSentinel();
-
-                ExchangeInfo exchange =
-                    sentinel.CreateModel(
-                        JsonConvert.DeserializeObject<Dictionary<string, object>>(exchangeData.ToString()));
-
-
-            }
-
-            return exchanges;
-        }
-
-        private static async Task<IEnumerable<ExchangeInfo>> GetExchangeInfosForVhostInternal(String vhost)
-        {
-
-            vhost = WebUtility.UrlEncode(vhost);
-            string result = await RMApiProvider.GetJson(String.Format("exchanges/{1}", vhost));
-
-            JArray info = JsonConvert.DeserializeObject<JArray>(result);
-            List<ExchangeInfo> exchanges = new List<ExchangeInfo>();
-
-            foreach (JObject exchangeData in info)
-            {
-                ExchangeInfoSentinel sentinel = new ExchangeInfoSentinel();
-
-                ExchangeInfo exchange =
-                    sentinel.CreateModel(JsonConvert.DeserializeObject<
-                                         Dictionary<string, object>>(exchangeData.ToString()));
-                exchanges.Add(exchange);
-            }
-
-            return exchanges;
-        }
-
-
-
-        /* /api/exchanges/vhost/name	
-         */
-        private static async Task<ExchangeInfo> GetExchangeInfoOnVhostInternal(string exchangeName, string vhost)
-        {
-            exchangeName = WebUtility.UrlEncode(exchangeName);
-            vhost = WebUtility.UrlEncode(vhost);
-
-            string result = await RMApiProvider.GetJson(String.Format("exchanges/{0}/{1}", vhost, exchangeName));
-
-            JObject info = JsonConvert.DeserializeObject<JObject>(result);
-
-            
-                ExchangeInfoSentinel sentinel = new ExchangeInfoSentinel();
-                ExchangeInfo exchange =
-                    sentinel.CreateModel(
-                        JsonConvert.DeserializeObject<Dictionary<string, object>>(info.ToString()));
-                
-            
-            return exchange;
-        }
     }
 }

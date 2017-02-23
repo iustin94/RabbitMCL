@@ -51,9 +51,9 @@
     <Compile Include="DataAccess\Channels.cs" />
     <Compile Include="DataAccess\Connections.cs" />
     <Compile Include="DataAccess\Consumers.cs" />
-    <Compile Include="DataAccess\DataFactory.cs" />
+    <Compile Include="DataAccess\DataFactory\DataFactory.cs" />
     <Compile Include="DataAccess\Exchanges.cs" />
-    <Compile Include="DataAccess\IDataFactory.cs" />
+    <Compile Include="DataAccess\DataFactory\IDataFactory.cs" />
     <Compile Include="DataAccess\Miscellaneous.cs" />
     <Compile Include="DataAccess\Nodes.cs" />
     <Compile Include="DataAccess\Parameters.cs" />
@@ -62,7 +62,6 @@
     <Compile Include="DataAccess\Users.cs" />
     <Compile Include="DataAccess\VHosts.cs" />
     <Compile Include="DictionaryMissingArgumentException.cs" />
-    <Compile Include="DataAccess\RMApiProvider.cs" />
     <Compile Include="Models\BaseModel\IModel.cs" />
     <Compile Include="Models\BaseModel\Model.cs" />
     <Compile Include="Models\Sentinel\ISentinel.cs" />
@@ -208,7 +207,6 @@
     <Compile Include="Models\Queue\QueueInfoKeys.cs" />
     <Compile Include="Models\Queue\QueueInfoParameters.cs" />
     <Compile Include="Models\Queue\QueueInfoSentinel.cs" />
-    <Compile Include="Models\SentinelFactory.cs" />
     <Compile Include="Models\Sentinel\SentinelNew.cs" />
     <Compile Include="Models\State.cs" />
     <Compile Include="Models\User\UserInfo.cs" />
@@ -228,8 +226,6 @@
     <Compile Include="Models\Vhost\VhostInfoParameters.cs" />
     <Compile Include="Models\Vhost\VhostInfoSentinel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service\ExchangeQueues.cs" />
-    <Compile Include="Service\Helpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Net.Mime;
 using System.Text;
 using System.Threading;
@@ -12,11 +14,12 @@ using ClientApp.Service;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using CommandLine;
+using RabbitMQWebAPI.Library.DataAccess;
 using RabbitDataAccess = RabbitMQWebAPI.Library;
 using RabbitMQWebAPI.Library.Models;
+using RabbitMQWebAPI.Library.Models.Binding;
 using RabbitMQWebAPI.Library.Models.Exchange;
 using RabbitMQWebAPI.Library.Models.Queue;
-using RabbitMQWebAPI.Library.Service;
 
 namespace ClientApp
 {
@@ -168,11 +171,24 @@ namespace ClientApp
             return props;
         }
 
-        private static void PublishUntilStop(IModel channel, IBasicProperties props, List<string> messages, PublishSubOptions options)
-            {
+        private static async void PublishUntilStop(IModel channel, IBasicProperties props, List<string> messages, PublishSubOptions options)
+        {
             IEnumerable<RabbitMQWebAPI.Library.Models.Queue.QueueInfo> latestQueueInfo = new List<QueueInfo>();
 
             IDictionary<string, State.StateEnum> queueStatuses = new Dictionary<string, State.StateEnum>();
+
+
+            var handler = new HttpClientHandler();
+
+            handler.Credentials = new NetworkCredential("jssau4rmq", "iaohmf");
+
+            HttpClient client = new HttpClient(handler);
+
+            client.BaseAddress = new Uri("http://nc-mso-test01:15671/api");
+
+
+
+            var queues = new Queues(client);
 
 
             Thread queueInfoPoolingThread = new Thread(() =>
@@ -184,12 +200,13 @@ namespace ClientApp
                        try
                        {
                            queueStatuses = new Dictionary<string, State.StateEnum>();
-                           var queues = new RabbitDataAccess.DataAccess.Queues();
+
+
                            var latestQueueInfos = queues.GetQueueInfos().Result;
 
                            foreach (QueueInfo q in latestQueueInfos)
                            {
-                              //??
+                               //??
                            }
 
                        }
@@ -207,10 +224,26 @@ namespace ClientApp
             queueInfoPoolingThread.IsBackground = true;
             queueInfoPoolingThread.Start();
 
-            ExchangesQueues excahngesQueuesFactory = new ExchangesQueues();
 
-            ExchangeInfo ei1 = excahngesQueuesFactory.getExchangeForQueue("ha.queue1").Result;
-            ExchangeInfo ei2 = excahngesQueuesFactory.getExchangeForQueue("ha.queue1-Fallback").Result;
+            ExchangeInfo ei1 = new ExchangeInfo();
+            ExchangeInfo ei2 = new ExchangeInfo();
+
+            Bindings bindingsFactory = new Bindings(client);
+
+            IEnumerable<BindingInfo> bindings = await bindingsFactory.GetBindingInfos();
+
+            foreach (var binding in bindings)
+            {
+                if (binding.destination == "ha.queue1" && binding.source != String.Empty)
+                {
+                    ei1 = Exchanges.GetExchangeInfoOnVhost(binding.source, "/").Result;
+                    // return Exchanges.GetExchangeInfos().Result;
+                }
+                else if (binding.destination == "ha.queue1-FallBack" && binding.source != String.Empty)
+                {
+                    ei2 = Exchanges.GetExchangeInfoOnVhost(binding.source, "/").Result;
+                }
+            }
 
             ConsoleManager.AnnouncePublishingStarted();
 
@@ -222,7 +255,7 @@ namespace ClientApp
 
                     try
                     {
-                        
+
 
                         if (queueStatuses.ContainsKey("ha.queue1") &&
                             queueStatuses["ha.queue1"] != State.StateEnum.Syncing)
