@@ -4,26 +4,45 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using RabbitMQWebAPI.Library.Models.BaseModel;
 
 namespace RabbitMQWebAPI.Library.Models.Definition.DefinitionPolicy
 {
-    public class DefinitionPolicy
+    public class DefinitionPolicy:Model
     {
 
         [JsonProperty(PropertyName = "vhost")]
-        public string vhost { get; private set; }
+        public string vhost { get; internal set; }
 
         [JsonProperty(PropertyName = "name")]
-        public string name { get; private set; }
+        public string name { get; internal set; }
 
         [JsonProperty(PropertyName = "pattern")]
-        public string pattern { get; private set; }
+        public string pattern { get; internal set; }
 
         [JsonProperty(PropertyName = "apply_to")]
-        public string apply_to { get; private set; }
+        public string apply_to { get; internal set; }
 
         [JsonProperty(PropertyName = "definition")]
-        public DefinitionPolicyDefinition.DefinitionPolicyDefinition definition { get; private set; }
+        public DefinitionPolicyDefinition.DefinitionPolicyDefinition definition { get; internal set; }
+
+        public override HashSet<String> Keys
+        {
+            get
+            {
+               return new HashSet<string>()
+        {
+            "vhost",
+            "name",
+            "pattern",
+            "apply-to",
+            "definition",
+            "priority"
+        };
+            }
+
+            set { Keys = value; }
+        }
 
         public int priority;
 

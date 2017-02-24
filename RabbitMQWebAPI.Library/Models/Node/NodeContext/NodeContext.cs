@@ -4,27 +4,36 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using RabbitMQWebAPI.Library.Models.BaseModel;
 
 namespace RabbitMQWebAPI.Library.Models.Node.NodeContext
 {
-    public class NodeContext
+    public class NodeContext: Model
     {
         [JsonProperty(PropertyName ="description")]
-        public string description { get; private set; }
+        public string description { get; internal set; }
 
         [JsonProperty(PropertyName = "path")]
-        public string path { get; private set; }
+        public string path { get; internal set; }
 
         [JsonProperty(PropertyName = "port")]
-        public string port { get; private set; }
+        public string port { get; internal set; }
+
+        public override HashSet<String> Keys
+        {
+            get
+            {
+               return new HashSet<string>()
+        {
+            "description",
+            "path",
+            "port"
+        };
+            }
+
+            set { Keys = value; }
+        }
 
         public NodeContext() { }
-
-        public NodeContext(NodeContextParameters parameters)
-        {
-            this.description = parameters.description;
-            this.path = parameters.path;
-            this.port = parameters.port;
-        }
     }
 }

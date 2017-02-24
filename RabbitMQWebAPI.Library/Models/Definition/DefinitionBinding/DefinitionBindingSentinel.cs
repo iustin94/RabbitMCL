@@ -4,15 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using RabbitMQWebAPI.Library.Models.BaseModel;
 using RabbitMQWebAPI.Library.Models.Sentinel;
 
 namespace RabbitMQWebAPI.Library.Models.Definition.DefinitionBinding
 {
-    public class DefinitionBindingSentinel : Sentinel<DefinitionBinding, DefinitionBindingParameters>
+    public class DefinitionBindingSentinel : Sentinel<DefinitionBinding>
     {
-        public override DefinitionBindingParameters ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary)
+        public override IModel ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary)
         {
-            DefinitionBindingParameters parameters = new DefinitionBindingParameters();;
+            DefinitionBinding parameters = new DefinitionBinding();;
             parameters.name = parametersDictionary["name"].ToString();
             parameters.vhost = parametersDictionary["vhost"].ToString();
             parameters.type = parametersDictionary["type"].ToString();
@@ -25,15 +26,5 @@ namespace RabbitMQWebAPI.Library.Models.Definition.DefinitionBinding
             return parameters;
         }
 
-        public override Boolean ValidateDictionary(IDictionary<String, Object> parametersDictionary)
-        {
-            foreach (string key in DefinitionBindingKeys.keys)
-            {
-                if(!parametersDictionary.ContainsKey(key))
-                    throw new DictionaryMissingArgumentException(key);
-            }
-
-            return true;
-        }
     }
 }

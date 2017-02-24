@@ -4,39 +4,51 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using RabbitMQWebAPI.Library.Models.BaseModel;
 
 namespace RabbitMQWebAPI.Library.Models.Node.NodeClusterLink
 {
-    public class NodeClusterLink
+    public class NodeClusterLink: Model
     {
         [JsonProperty(PropertyName = "peer_addr")]
-        public string peer_addr { get; private set; }
+        public string peer_addr { get; internal set; }
 
         [JsonProperty(PropertyName = "peer_port")]
-        public int peer_port { get; private set; }
+        public int peer_port { get; internal set; }
 
         [JsonProperty(PropertyName = "sock_addr")]
-        public string sock_addr { get; private set; }
+        public string sock_addr { get; internal set; }
 
         [JsonProperty(PropertyName = "sock_port")]
-        public int sock_port { get; private set; }
+        public int sock_port { get; internal set; }
         
         [JsonProperty(PropertyName = "stats")]
-        public NodeClusterLinkStats.NodeClusterLinkStats stats { get; private set; }
+        public NodeClusterLinkStats.NodeClusterLinkStats stats { get; internal set; }
 
         [JsonProperty(PropertyName = "name")]
-        public string name { get; private set; }
+        public string name { get; internal set; }
+
+        public override HashSet<String> Keys
+        {
+            get
+            {
+               return new HashSet<string>()
+        {
+            "peer_addr",
+            "peer_port",
+            "sock_addr",
+            "sock_port",
+            "stats",
+            "name"
+
+        };
+            }
+
+            set { Keys = value; }
+        }
 
         public NodeClusterLink() { }
 
-        public NodeClusterLink(NodeClusterLinkParameters parameters)
-        {
-            this.peer_addr = parameters.peer_addr;
-            this.peer_port = parameters.peer_port;
-            this.sock_addr = parameters.sock_addr;
-            this.sock_port = parameters.sock_port;
-            this.stats = parameters.stats;
-            this.name = parameters.name;
-        }
+        
     }
 }

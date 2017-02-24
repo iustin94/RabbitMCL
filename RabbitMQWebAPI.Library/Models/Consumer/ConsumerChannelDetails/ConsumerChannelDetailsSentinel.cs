@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RabbitMQWebAPI.Library.Models.BaseModel;
 using RabbitMQWebAPI.Library.Models.Sentinel;
 
 namespace RabbitMQWebAPI.Library.Models.Consumer.ConsumerChannelDetails
 {
-    class ConsumerChannelDetailsSentinel : Sentinel<ConsumerChannelDetailsInfo, ConsumerChannelDetailsParameters>
+    class ConsumerChannelDetailsSentinel : Sentinel<ConsumerChannelDetails>
     {
       
-        public override ConsumerChannelDetailsParameters ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary)
+        public override IModel ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary)
         {
-            ConsumerChannelDetailsParameters parameters = new ConsumerChannelDetailsParameters();
+            ConsumerChannelDetails parameters = new ConsumerChannelDetails();
             parameters.name = parametersDictionary["name"].ToString();
             parameters.number = parametersDictionary["number"].ToString();
             parameters.user = parametersDictionary["user"].ToString();
@@ -23,15 +24,6 @@ namespace RabbitMQWebAPI.Library.Models.Consumer.ConsumerChannelDetails
             return parameters;
         }
 
-        public override Boolean ValidateDictionary(IDictionary<String, Object> parametersDictionary)
-        {
-            foreach (string key in ConsumerChannelDetailsKeys.keys)
-            {
-                if(!parametersDictionary.ContainsKey(key))
-                    throw new DictionaryMissingArgumentException(key);
-            }
-
-            return true;
-        }
+       
     }
 }

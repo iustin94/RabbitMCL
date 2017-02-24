@@ -4,16 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using RabbitMQWebAPI.Library.Models.BaseModel;
 using RabbitMQWebAPI.Library.Models.Channel.ChannelMessageStats;
 using RabbitMQWebAPI.Library.Models.Sentinel;
 
 namespace RabbitMQWebAPI.Library.Models.Exchange.ExchangeMessageStats
 {
-    class ExchangeMessageStatsSentinel : Sentinel<ExchangeMessageStats, ExchangeMessageStatsParameters>
+    class ExchangeMessageStatsSentinel : Sentinel<ExchangeMessageStats>
     {
-        public override ExchangeMessageStatsParameters ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary)
+        public override IModel ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary)
         {
-           ExchangeMessageStatsParameters parameters = new ExchangeMessageStatsParameters();
+           ExchangeMessageStats parameters = new ExchangeMessageStats();
             parameters.publish_in = Int32.Parse(parametersDictionary["publish_int"].ToString());
             parameters.publish_in_details =
                 JsonConvert.DeserializeObject<Dictionary<string, int>>(
@@ -51,17 +52,6 @@ namespace RabbitMQWebAPI.Library.Models.Exchange.ExchangeMessageStats
                     parametersDictionary["redeliver_details"].ToString());
 
             return parameters;
-        }
-
-        public override Boolean ValidateDictionary(IDictionary<String, Object> parametersDictionary)
-        {
-            foreach (string key in ChannelMessageStatsKeys.keys)
-            {
-                if (!parametersDictionary.ContainsKey(key))
-                    throw new DictionaryMissingArgumentException(key);
-            }
-            return true;
-
         }
     }
 }

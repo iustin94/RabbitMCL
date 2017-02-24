@@ -12,7 +12,7 @@ using RabbitMQWebAPI.Library.Models.Sentinel;
 
 namespace RabbitMQWebAPI.Library.Models.Channel
 {
-    public class ChannelInfoSentinel : Sentinel<ChannelInfo>
+    public class ChannelSentinel : Sentinel<Channel>
     {
       
         public override IModel ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary)
@@ -21,7 +21,7 @@ namespace RabbitMQWebAPI.Library.Models.Channel
             ChannelGarbageCollectionSentinel garbageCollectionSentinel = new ChannelGarbageCollectionSentinel();
             ChannelMessageStatsSentinel channelMessageStatsSentinel = new ChannelMessageStatsSentinel();
 
-            ChannelInfo model = new ChannelInfo();
+            Channel model = new Channel();
 
             model.vhost = parametersDictionary["vhost"].ToString();
             model.user = parametersDictionary["user"].ToString();

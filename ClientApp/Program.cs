@@ -225,12 +225,12 @@ namespace ClientApp
             queueInfoPoolingThread.Start();
 
 
-            ExchangeInfo ei1 = new ExchangeInfo();
-            ExchangeInfo ei2 = new ExchangeInfo();
+            Exchange ei1 = new Exchange();
+            Exchange ei2 = new Exchange();
 
             Bindings bindingsFactory = new Bindings(client);
 
-            IEnumerable<BindingInfo> bindings = await bindingsFactory.GetBindingInfos();
+            IEnumerable<Binding> bindings = await bindingsFactory.GetBindingInfos();
 
             foreach (var binding in bindings)
             {

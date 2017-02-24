@@ -21,7 +21,7 @@ namespace RabbitMQWebAPI.Library.DataAccess
         /// A list of all exchanges.
         /// </summary>
         /// <returns></returns>
-        public static async Task<IEnumerable<ExchangeInfo>> GetExchangeInfos()
+        public static async Task<IEnumerable<Exchange>> GetExchangeInfos()
         {
             throw new NotImplementedException();
         }
@@ -32,7 +32,7 @@ namespace RabbitMQWebAPI.Library.DataAccess
         /// <param name="exchangeName"></param>
         /// <param name="vhost"></param>
         /// <returns></returns>
-        public static async Task<ExchangeInfo> GetExchangeInfoOnVhost(string exchangeName, string vhost = "/")
+        public static async Task<Exchange> GetExchangeInfoOnVhost(string exchangeName, string vhost = "/")
         {
             throw new NotImplementedException();
         }
@@ -43,7 +43,7 @@ namespace RabbitMQWebAPI.Library.DataAccess
         /// <param name="exchangeName"></param>
         /// <param name="vhost"></param>
         /// <returns></returns>
-        public static async Task<IEnumerable<ExchangeInfo>> GetExchangeInfosOnVhost(string vhost)
+        public static async Task<IEnumerable<Exchange>> GetExchangeInfosOnVhost(string vhost)
         {
             throw new NotImplementedException();
         }

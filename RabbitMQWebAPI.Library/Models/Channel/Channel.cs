@@ -7,7 +7,7 @@ using RabbitMQWebAPI.Library.Models.BaseModel;
 
 namespace RabbitMQWebAPI.Library.Models.Channel
 {
-    public class ChannelInfo: Model
+    public class Channel: Model
     {
         [JsonProperty(PropertyName = "vhost")]   
         public string vhost { internal set; get; }
@@ -105,7 +105,7 @@ namespace RabbitMQWebAPI.Library.Models.Channel
             set { Keys = value; }
         }
 
-        public ChannelInfo() { }
+        public Channel() { }
        
     }
 }

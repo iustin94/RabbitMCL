@@ -4,28 +4,39 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using RabbitMQWebAPI.Library.Models.BaseModel;
 using RabbitMQWebAPI.Library.Models.Node.NodeApplication;
 
 namespace RabbitMQWebAPI.Library.Models.Node.NodeApplication
 {
-    public class NodeApplication
+    public class NodeApplication: Model
     {
         [JsonProperty(PropertyName = "name")]
-        public string name { get; private set; }
+        public string name { get; internal set; }
 
         [JsonProperty(PropertyName = "description")]
-        public string description { get; private set; }
+        public string description { get; internal set; }
 
         [JsonProperty(PropertyName = "version")]
-        public string version { get; private set; }
+        public string version { get; internal set; }
+
+        public override HashSet<String> Keys
+        {
+            get
+            {
+                return new HashSet<string>()
+        {
+            "name",
+            "description",
+            "version"
+        };
+            }
+
+            set { Keys = value; }
+        }
 
         public NodeApplication() { }
 
-        public NodeApplication(NodeApplicationParameters parameters)
-        {
-            this.name = parameters.name;
-            this.description = parameters.description;
-            this.version = parameters.version;
-        }
+      
     }
 }

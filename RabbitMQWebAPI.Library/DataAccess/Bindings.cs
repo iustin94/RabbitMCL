@@ -17,15 +17,15 @@ namespace RabbitMQWebAPI.Library.DataAccess
 {
     public class Bindings
     {
-        private DataFactory<BindingInfo> dataFactory;
-        private BindingInfoSentinel sentinel;
+        private DataFactory<Binding> dataFactory;
+        private BindingSentinel sentinel;
 
         public Bindings() { }
         public Bindings(HttpClient client)
         {
             //TODO validate client has necessary credentials
-            dataFactory = new DataFactory<BindingInfo>(client);
-            sentinel = new BindingInfoSentinel();
+            dataFactory = new DataFactory<Binding>(client);
+            sentinel = new BindingSentinel();
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace RabbitMQWebAPI.Library.DataAccess
         //    return await GetBindingInfosForExchangeOnVhostInternal(vhost, name);
         //}
 
-        public async Task<IEnumerable<BindingInfo>> GetBindingInfosToExchangeOnVhost(string vhost, string name)
+        public async Task<IEnumerable<Binding>> GetBindingInfosToExchangeOnVhost(string vhost, string name)
         {
             vhost = WebUtility.UrlEncode(vhost);
             name = WebUtility.UrlEncode(name);
@@ -89,9 +89,9 @@ namespace RabbitMQWebAPI.Library.DataAccess
         }
 
         // /api/bindings
-        public async Task<IEnumerable<BindingInfo>> GetBindingInfos()
+        public async Task<IEnumerable<Binding>> GetBindingInfos()
         {
-            List<BindingInfo> bindings = await dataFactory.BuildModels("api/bindings", this.sentinel);
+            List<Binding> bindings = await dataFactory.BuildModels("api/bindings", this.sentinel);
 
             return bindings;
         }

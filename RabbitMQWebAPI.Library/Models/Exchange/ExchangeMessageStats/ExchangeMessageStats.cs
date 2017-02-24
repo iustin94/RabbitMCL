@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using RabbitMQWebAPI.Library.Models.BaseModel;
 
 namespace RabbitMQWebAPI.Library.Models.Exchange.ExchangeMessageStats
 {
-    public class ExchangeMessageStats
+    public class ExchangeMessageStats: Model
     {
         [JsonProperty(PropertyName = "publish")]
         public int publish;
@@ -57,26 +58,34 @@ namespace RabbitMQWebAPI.Library.Models.Exchange.ExchangeMessageStats
         [JsonProperty(PropertyName = "redeliver_details")]
         public IDictionary<string, int> redeliver_details;
 
-        public ExchangeMessageStats() { }
-
-        public ExchangeMessageStats(ExchangeMessageStatsParameters parameters)
+        public override HashSet<String> Keys
         {
-            this.publish = parameters.publish;
-            this.publish_details = parameters.publish_details;
-            this.publish_in = parameters.publish_in;
-            this.publish_in_details = parameters.publish_in_details;
-            this.publish_out = parameters.publish_out;
-            this.publish_out_details = parameters.publish_out_details;
-            this.ack = parameters.ack;
-            this.ack_details = parameters.ack_details;
-            this.deliver_get = parameters.deliver_get;
-            this.deliver_get_details = parameters.deliver_get_details;
-            this.confirm = parameters.confirm;
-            this.confirm_details = parameters.confirm_details;
-            this.return_unroutable = parameters.return_unroutable;
-            this.return_unroutable_details = parameters.return_unroutable_details;
-            this.redeliver = parameters.redeliver;
-            this.redeliver_details = parameters.redeliver_details;
+            get
+            {
+               return new HashSet<string>()
+        {
+            "publish",
+            "publish_details",
+            "publish_in",
+            "publish_in_details",
+            "publish_out",
+            "publish_out_details",
+            "ack",
+            "ack_details",
+            "deliver_get",
+            "deliver_get_details",
+            "confirm",
+            "confirm_details",
+            "return_unroutable",
+            "return_unroutable_details",
+            "redeliver",
+            "redeliver_details"
+        };
+            }
+
+            set { Keys = value; }
         }
+
+        public ExchangeMessageStats() { }
     }
 }

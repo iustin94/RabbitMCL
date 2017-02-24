@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RabbitMQWebAPI.Library.Models.BaseModel;
 using RabbitMQWebAPI.Library.Models.Sentinel;
 
 namespace RabbitMQWebAPI.Library.Models.Definition.DefinitionParameter.DefinitionParameterValue
 {
-    public class DefinitionParameterValueSentinel : Sentinel<DefinitionParameterValue, DefinitionParameterValueParameters>
+    public class DefinitionParameterValueSentinel : Sentinel<DefinitionParameterValue>
     {
-        public override DefinitionParameterValueParameters ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary)
+        public override IModel ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary)
         {
-            DefinitionParameterValueParameters parameters = new DefinitionParameterValueParameters();
+            DefinitionParameterValue parameters = new DefinitionParameterValue();
             parameters.src_uri = parametersDictionary["src-uri"].ToString();
             parameters.src_queue = parametersDictionary["src-queue"].ToString();
             parameters.dest_uri = parametersDictionary["dest-uri"].ToString();
@@ -23,17 +24,6 @@ namespace RabbitMQWebAPI.Library.Models.Definition.DefinitionParameter.Definitio
             parameters.delete_after = parametersDictionary["delete-after"].ToString();
 
             return parameters;
-        }
-
-        public override Boolean ValidateDictionary(IDictionary<String, Object> parametersDictionary)
-        {
-            foreach (string key in DefinitionParameterValueKeys.keys)
-            {
-                if(!parametersDictionary.ContainsKey(key))
-                    throw new DictionaryMissingArgumentException(key);
-            }
-
-            return true;
         }
     }
 }

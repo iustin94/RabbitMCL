@@ -49,11 +49,11 @@ namespace RabbitMQWebAPI.Tests
             expectedList.Add(true);
             expectedList.Add(true);
 
-            BindingInfoSentinel sentinel = new BindingInfoSentinel();
+            BindingSentinel sentinel = new BindingSentinel();
 
             //Method calling
 
-            BindingInfo model = new BindingInfo();
+            Binding model = new Binding();
 
             foreach (Dictionary<string, object> dictionary in testValues)
             {
@@ -74,8 +74,8 @@ namespace RabbitMQWebAPI.Tests
             //Setup
             populateTestValues();
             List<BindingInfoParameters> expectedList = new List<BindingInfoParameters>();
-            List<BindingInfo> actualList = new List<BindingInfo>();
-            BindingInfoSentinel sentinel = new BindingInfoSentinel();
+            List<Binding> actualList = new List<Binding>();
+            BindingSentinel sentinel = new BindingSentinel();
 
             BindingInfoParameters parameters1 = new BindingInfoParameters();
 
@@ -104,11 +104,11 @@ namespace RabbitMQWebAPI.Tests
             
             //Method calling
 
-            BindingInfo model = new BindingInfo();
+            Binding model = new Binding();
 
             foreach (Dictionary<string, object> dictionary in testValues)
             {
-                actualList.Add((BindingInfo)sentinel.ParseDictionaryToParameters(dictionary, model));
+                actualList.Add((Binding)sentinel.ParseDictionaryToParameters(dictionary, model));
             }
 
 

@@ -3,30 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RabbitMQWebAPI.Library.Models.BaseModel;
 using RabbitMQWebAPI.Library.Models.Exchange;
 using RabbitMQWebAPI.Library.Models.Sentinel;
 
 namespace RabbitMQWebAPI.Library.Models.Extention
 {
-    public class ExtentionInfoSentinel : Sentinel<ExtentionInfo, ExtentionInfoParameters>
+    public class ExtentionInfoSentinel : Sentinel<ExtentionInfo>
     {
-        public override ExtentionInfoParameters ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary)
+        public override IModel ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary)
         {
-            ExtentionInfoParameters parameters = new ExtentionInfoParameters();
+            ExtentionInfo parameters = new ExtentionInfo();
             parameters.javascript = parametersDictionary["javascript"].ToString();
 
             return parameters;
-        }
-
-        public override Boolean ValidateDictionary(IDictionary<String, Object> parametersDictionary)
-        {
-            foreach (string key in ExtentionInfoKeys.keys)
-            {
-                if (!parametersDictionary.ContainsKey(key))
-                    throw new DictionaryMissingArgumentException(key);
-            }
-
-            return true;
         }
     }
 }

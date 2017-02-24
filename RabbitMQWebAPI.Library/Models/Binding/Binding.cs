@@ -7,7 +7,7 @@ namespace RabbitMQWebAPI.Library.Models.Binding
     /// <summary>
     /// Container for information on Bindings entity retrieved from the RabbitAPI.
     /// </summary>
-    public class BindingInfo : Model
+    public class Binding : Model
     {
         public override HashSet<string> Keys
         {
@@ -47,7 +47,7 @@ namespace RabbitMQWebAPI.Library.Models.Binding
         [JsonProperty(PropertyName = "properties_key")]
         public string properties_key { internal set; get; }
 
-        public BindingInfo() { }
+        public Binding() { }
 
         public override string ToString()
         {

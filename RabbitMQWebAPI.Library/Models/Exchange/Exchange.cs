@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using RabbitMQWebAPI.Library.Models.BaseModel;
 
-namespace RabbitMQWebAPI.Library.Models.Definition.DefinitionBinding
+namespace RabbitMQWebAPI.Library.Models.Exchange
 {
-    public class DefinitionBinding: Model
+    public class Exchange: Model
     {
+        [JsonProperty(PropertyName = "message_stats")]
+        public ExchangeMessageStats.ExchangeMessageStats message_stats { get; internal set; }
+
         [JsonProperty(PropertyName = "name")]
         public string name { get; internal set; }
 
@@ -28,7 +31,7 @@ namespace RabbitMQWebAPI.Library.Models.Definition.DefinitionBinding
         [JsonProperty(PropertyName = "internal")]
         public bool _internal { get; internal set; }
 
-        [JsonProperty("arguments")]
+        [JsonProperty(PropertyName = "arguments")]
         public Dictionary<string, string> arguments { get; internal set; }
 
         public override HashSet<String> Keys
@@ -36,30 +39,22 @@ namespace RabbitMQWebAPI.Library.Models.Definition.DefinitionBinding
             get
             {
                 return new HashSet<string>()
-        {
-            "source",
-            "vhost",
-            "destination",
-            "destination_type",
-            "routing_key",
-            "arguments"
-        };
+                {
+                    "message_stats",
+                    "name",
+                    "vhost",
+                    "type",
+                    "durable",
+                    "auto_delete",
+                    "internal",
+                    "arguments"
+                };
             }
 
             set { Keys = value; }
         }
 
-        public DefinitionBinding() { }
+        public Exchange() { }
 
-        public DefinitionBinding(DefinitionBindingParameters parameters)
-        {
-            this.name = parameters.name;
-            this.vhost = parameters.vhost;
-            this.type = parameters.type;
-            this.durable = parameters.durable;
-            this.auto_delete = parameters.auto_delete;
-            this._internal = parameters._internal;
-            this.arguments = parameters.arguments;
-        }
     }
 }

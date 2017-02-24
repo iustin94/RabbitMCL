@@ -12,11 +12,11 @@ namespace RabbitMQWebAPI.Library.Models.Binding
     /// <summary>
     /// Class that inspects parameters before creating a BindingInfo. This prevents creation of invalid objects. Use this to create the BindingInfo object then store that object.
     /// </summary>
-    public class BindingInfoSentinel: Sentinel<BindingInfo>
+    public class BindingSentinel: Sentinel<Binding>
     {
         public override BaseModel.IModel ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary)
         {
-            BindingInfo parameters = new BindingInfo();
+            Binding parameters = new Binding();
             parameters.source = parametersDictionary["source"].ToString();
             parameters.vhost = parametersDictionary["vhost"].ToString();
             parameters.arguments = JsonConvert.DeserializeObject<
