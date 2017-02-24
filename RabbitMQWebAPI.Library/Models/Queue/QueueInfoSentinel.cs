@@ -13,7 +13,7 @@ using RabbitMQWebAPI.Library.Models.Sentinel;
 
 namespace RabbitMQWebAPI.Library.Models.Queue
 {
-    public class QueueInfoSentinel : SentinelNew<QueueInfo>
+    public class QueueInfoSentinel : Sentinel<QueueInfo>
     {
         public override IModel ParseDictionaryToParameters(IDictionary<string, object> parametersDictionary, IModel model)
         {
@@ -57,7 +57,7 @@ namespace RabbitMQWebAPI.Library.Models.Queue
             parameters.garbage_collection =
                 (QueueGarbageCollection.QueueGarbageCollection)queueBackingQueueGarbageCollectionSentinel.CreateModel(
                     JsonConvert.DeserializeObject<Dictionary<string, object>>(
-                        parametersDictionary["garbage_collection"].ToString()), new QueueInfo());
+                        parametersDictionary["garbage_collection"].ToString()), new QueueGarbageCollection.QueueGarbageCollection());
 
             parameters.messages_ram = long.Parse(parametersDictionary["messages_ram"].ToString());
             parameters.messages_ready_ram = long.Parse(parametersDictionary["messages_ready_ram"].ToString());

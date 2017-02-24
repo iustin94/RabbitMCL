@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json;
+using RabbitMQWebAPI.Library.Models.BaseModel;
 
 namespace RabbitMQWebAPI.Library.Models.Channel.ChannelMessageStats
 {
-    public class ChannelMessageStats
+    public class ChannelMessageStats: Model
     {
 
         [JsonProperty(PropertyName = "publish")]
@@ -71,33 +72,42 @@ namespace RabbitMQWebAPI.Library.Models.Channel.ChannelMessageStats
         [JsonProperty(PropertyName = "get_no_ack_details")]
         public IDictionary<string, int> get_no_ack_details;
 
-        public ChannelMessageStats() { }
-        public ChannelMessageStats(ChannelMessageStatsParameters parameters)
+        public override HashSet<String> Keys
         {
-            this.publish = parameters.publish;
-            this.publish_details = parameters.publish_details;
-            this.publish_in = parameters.publish_in;
-            this.publish_in_details = parameters.publish_in_details;
-            this.publish_out = parameters.publish_out;
-            this.publish_out_details = parameters.publish_out_details;
-            this.ack = parameters.ack;
-            this.ack_details = parameters.ack_details;
-            this.deliver_get = parameters.deliver_get;
-            this.deliver_get_details = parameters.deliver_get_details;
-            this.confirm = parameters.confirm;
-            this.confirm_details = parameters.confirm_details;
-            this.return_unroutable = parameters.return_unroutable;
-            this.return_unroutable_details = parameters.return_unroutable_details;
-            this.redeliver = parameters.redeliver;
-            this.redeliver_details = parameters.redeliver_details;
-            this.deliver = parameters.deliver;
-            this.deliver_details = parameters.deliver_details;
-            this.deliver_no_ack = parameters.deliver_no_ack;
-            this.deliver_no_ack_details = parameters.deliver_no_ack_details;
-            this.get = parameters.get;
-            this.get_details = parameters.get_details;
-            this.get_no_ack = parameters.get_no_ack;
-            this.get_no_ack_details = parameters.get_no_ack_details;
+            get
+            {
+               return new HashSet<string>()
+        {
+            "publish",
+            "publish_details",
+            "publish_in",
+            "publish_in_details",
+            "publish_out",
+            "publish_out_details",
+            "ack",
+            "ack_details",
+            "deliver_get",
+            "deliver_get_details",
+            "confirm",
+            "confirm_details",
+            "return_unroutable",
+            "return_unroutable_details",
+            "redeliver",
+            "redeliver_details",
+            "deliver",
+            "deliver_details",
+            "deliver_no_ack",
+            "deliver_no_ack_details",
+            "get",
+            "get_details",
+            "get_no_ack",
+            "get_no_ack_details",
+        };
+            }
+
+            set { Keys = value; }
         }
+
+        public ChannelMessageStats() { }
     }
 }

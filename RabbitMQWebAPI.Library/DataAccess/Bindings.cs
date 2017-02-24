@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using RabbitMQWebAPI.Library.DataAccess.DataFactory;
 using RabbitMQWebAPI.Library.Models.BaseModel;
 using RabbitMQWebAPI.Library.Models.Binding;
 
@@ -84,13 +85,13 @@ namespace RabbitMQWebAPI.Library.DataAccess
             name = WebUtility.UrlEncode(name);
 
           return
-                await dataFactory.BuildModels(String.Format("exchanges/{0}/{1}/bindings/destination", vhost, name), this.sentinel);
+                await dataFactory.BuildModels(String.Format("api/exchanges/{0}/{1}/bindings/destination", vhost, name), this.sentinel);
         }
 
         // /api/bindings
         public async Task<IEnumerable<BindingInfo>> GetBindingInfos()
         {
-            List<BindingInfo> bindings = await dataFactory.BuildModels("bindings", this.sentinel);
+            List<BindingInfo> bindings = await dataFactory.BuildModels("api/bindings", this.sentinel);
 
             return bindings;
         }

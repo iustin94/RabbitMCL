@@ -47,17 +47,6 @@ namespace RabbitMQWebAPI.Library.Models.Binding
         [JsonProperty(PropertyName = "properties_key")]
         public string properties_key { internal set; get; }
 
-        public BindingInfo(BindingInfoParameters parameters)
-        {
-            this.arguments = parameters.arguments;
-            this.destination = parameters.destination;
-            this.destination_type = parameters.destination_type;
-            this.properties_key = parameters.properties_key;
-            this.routing_key = parameters.routing_key;
-            this.source = parameters.source;
-            this.vhost = parameters.vhost;
-        }
-
         public BindingInfo() { }
 
         public override string ToString()

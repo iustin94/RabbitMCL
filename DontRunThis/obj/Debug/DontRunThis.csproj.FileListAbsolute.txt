@@ -1,0 +1,5 @@
+C:\Users\jol\documents\visual studio 2015\Projects\FileTransferQueue\DontRunThis\bin\Debug\DontRunThis.exe.config
+C:\Users\jol\documents\visual studio 2015\Projects\FileTransferQueue\DontRunThis\bin\Debug\DontRunThis.exe
+C:\Users\jol\documents\visual studio 2015\Projects\FileTransferQueue\DontRunThis\bin\Debug\DontRunThis.pdb
+C:\Users\jol\documents\visual studio 2015\Projects\FileTransferQueue\DontRunThis\obj\Debug\DontRunThis.exe
+C:\Users\jol\documents\visual studio 2015\Projects\FileTransferQueue\DontRunThis\obj\Debug\DontRunThis.pdb

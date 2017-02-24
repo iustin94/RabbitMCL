@@ -3,11 +3,10 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using RabbitMQWebAPI.Library.Models.Sentinel;
 using RabbitMQWebAPI.Library.Models.BaseModel;
-using RabbitMQWebAPI.Library.DataAccess;
+using RabbitMQWebAPI.Library.Models.Sentinel;
 
-namespace RabbitMQWebAPI.Library.DataAccess
+namespace RabbitMQWebAPI.Library.DataAccess.DataFactory
 {
     public class DataFactory<TResultModel>: IDataFactory<TResultModel> where TResultModel: IModel, new()
     { 
@@ -21,7 +20,7 @@ namespace RabbitMQWebAPI.Library.DataAccess
         public DataFactory() { }
 
 
-        public async Task<List<TResultModel>> BuildModels(string path, ISentinelNew sentinel)
+        public async Task<List<TResultModel>> BuildModels(string path, ISentinel sentinel)
         {
             var result = await GetJsonString(path);
 
@@ -40,7 +39,7 @@ namespace RabbitMQWebAPI.Library.DataAccess
             return models;
         }
 
-        public List<TResultModel> BuildModels(JArray info, ISentinelNew sentinel) 
+        public List<TResultModel> BuildModels(JArray info, ISentinel sentinel) 
         {
 
             List<TResultModel> models = new List<TResultModel>();

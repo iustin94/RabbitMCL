@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Configuration;
 using System.Data.Common;
+using RabbitMQWebAPI.Library.DataAccess.DataFactory;
 using RabbitMQWebAPI.Library.Models;
 using RabbitMQWebAPI.Library.Models.Queue;
 
@@ -40,7 +41,7 @@ namespace RabbitMQWebAPI.Library.DataAccess
         // /api/queues	
         private async Task<IEnumerable<QueueInfo>> GetQueueInfosInternal()
         {
-            return await dataFactory.BuildModels("queues", sentinel);
+            return await dataFactory.BuildModels("api/queues", sentinel);
         }
 
 

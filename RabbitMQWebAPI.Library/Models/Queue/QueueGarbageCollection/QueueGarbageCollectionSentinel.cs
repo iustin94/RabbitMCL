@@ -8,7 +8,7 @@ using RabbitMQWebAPI.Library.Models.Sentinel;
 
 namespace RabbitMQWebAPI.Library.Models.Queue.QueueGarbageCollection
 {
-    public class QueueGarbageCollectionSentinel : SentinelNew<QueueGarbageCollection>
+    public class QueueGarbageCollectionSentinel : Sentinel<QueueGarbageCollection>
     {
         public override IModel ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary, IModel model)
         {

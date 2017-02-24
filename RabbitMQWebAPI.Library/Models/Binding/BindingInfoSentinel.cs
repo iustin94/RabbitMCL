@@ -12,21 +12,21 @@ namespace RabbitMQWebAPI.Library.Models.Binding
     /// <summary>
     /// Class that inspects parameters before creating a BindingInfo. This prevents creation of invalid objects. Use this to create the BindingInfo object then store that object.
     /// </summary>
-    public class BindingInfoSentinel: SentinelNew<BindingInfo>
+    public class BindingInfoSentinel: Sentinel<BindingInfo>
     {
-        public override BaseModel.IModel ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary, BaseModel.IModel model)
+        public override BaseModel.IModel ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary)
         {
-            BindingInfo binding = new BindingInfo();
-            binding.source = parametersDictionary["source"].ToString();
-            binding.vhost = parametersDictionary["vhost"].ToString();
-            binding.arguments = JsonConvert.DeserializeObject<
+            BindingInfo parameters = new BindingInfo();
+            parameters.source = parametersDictionary["source"].ToString();
+            parameters.vhost = parametersDictionary["vhost"].ToString();
+            parameters.arguments = JsonConvert.DeserializeObject<
                                    Dictionary<string, string>>(parametersDictionary["arguments"].ToString());
-            binding.destination = parametersDictionary["destination"].ToString();
-            binding.destination_type = parametersDictionary["destination_type"].ToString();
-            binding.properties_key = parametersDictionary["properties_key"].ToString();
-            binding.routing_key = parametersDictionary["routing_key"].ToString();
+            parameters.destination = parametersDictionary["destination"].ToString();
+            parameters.destination_type = parametersDictionary["destination_type"].ToString();
+            parameters.properties_key = parametersDictionary["properties_key"].ToString();
+            parameters.routing_key = parametersDictionary["routing_key"].ToString();
 
-            return binding;
+            return parameters;
         }
     }
 }

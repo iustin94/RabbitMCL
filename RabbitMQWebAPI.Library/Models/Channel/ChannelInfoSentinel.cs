@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using RabbitMQWebAPI.Library.Models.BaseModel;
 using RabbitMQWebAPI.Library.Models.Channel.ChannelConnectionDetails;
 using RabbitMQWebAPI.Library.Models.Channel.ChannelGarbageCollection;
 using RabbitMQWebAPI.Library.Models.Channel.ChannelMessageStats;
@@ -11,65 +12,55 @@ using RabbitMQWebAPI.Library.Models.Sentinel;
 
 namespace RabbitMQWebAPI.Library.Models.Channel
 {
-    public class ChannelInfoSentinel : Sentinel<ChannelInfo, ChannelInfoParameters>
+    public class ChannelInfoSentinel : Sentinel<ChannelInfo>
     {
       
-        public override ChannelInfoParameters ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary)
+        public override IModel ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary)
         {
             ChannelConnectionDetailsSentinel channelConnectionDetailsSentinel = new ChannelConnectionDetailsSentinel();
             ChannelGarbageCollectionSentinel garbageCollectionSentinel = new ChannelGarbageCollectionSentinel();
             ChannelMessageStatsSentinel channelMessageStatsSentinel = new ChannelMessageStatsSentinel();
 
-            ChannelInfoParameters parameters = new ChannelInfoParameters();
+            ChannelInfo model = new ChannelInfo();
 
-            parameters.vhost = parametersDictionary["vhost"].ToString();
-            parameters.user = parametersDictionary["user"].ToString();
-            parameters.number = Int32.Parse(parametersDictionary["number"].ToString());
-            parameters.name = parametersDictionary["name"].ToString();
-            parameters.node = parametersDictionary["node"].ToString();
+            model.vhost = parametersDictionary["vhost"].ToString();
+            model.user = parametersDictionary["user"].ToString();
+            model.number = Int32.Parse(parametersDictionary["number"].ToString());
+            model.name = parametersDictionary["name"].ToString();
+            model.node = parametersDictionary["node"].ToString();
 
-            parameters.garbage_collection = garbageCollectionSentinel.CreateModel(JsonConvert.DeserializeObject<Dictionary<string, object>>(parametersDictionary["garbage_collection"].ToString()));
+            model.garbage_collection =(ChannelGarbageCollection.ChannelGarbageCollection)garbageCollectionSentinel.CreateModel(JsonConvert.DeserializeObject<Dictionary<string, object>>(parametersDictionary["garbage_collection"].ToString()), new ChannelGarbageCollection.ChannelGarbageCollection());
 
-            parameters.reductions = Int32.Parse(parametersDictionary["reductions"].ToString());
-            parameters.state = State.EvaluateState(parametersDictionary["state"].ToString());
-            parameters.global_prefetch_count = Int32.Parse(parametersDictionary["global_prefetch_count"].ToString());
-            parameters.prefetch_count = Int32.Parse(parametersDictionary["prefetch_count"].ToString());
-            parameters.acks_uncommitted = Int32.Parse(parametersDictionary["acks_uncommitted"].ToString());
-            parameters.messages_uncommitted = Int32.Parse(parametersDictionary["messages_uncommited"].ToString());
-            parameters.messages_unconfirmed = Int32.Parse(parametersDictionary["messages_unconfirmed"].ToString());
-            parameters.messages_unacknowledged = Int32.Parse(parametersDictionary["messages_unacknowledge"].ToString());
-            parameters.consumer_count = Int32.Parse(parametersDictionary["consumer_count"].ToString());
-            parameters.confirms = Boolean.Parse(parametersDictionary["confirms"].ToString());
-            parameters.transactional = Boolean.Parse(parametersDictionary["transactional"].ToString());
-            parameters.idle_since = parametersDictionary["idle_since"].ToString();
+            model.reductions = Int32.Parse(parametersDictionary["reductions"].ToString());
+            model.state = State.EvaluateState(parametersDictionary["state"].ToString());
+            model.global_prefetch_count = Int32.Parse(parametersDictionary["global_prefetch_count"].ToString());
+            model.prefetch_count = Int32.Parse(parametersDictionary["prefetch_count"].ToString());
+            model.acks_uncommitted = Int32.Parse(parametersDictionary["acks_uncommitted"].ToString());
+            model.messages_uncommitted = Int32.Parse(parametersDictionary["messages_uncommited"].ToString());
+            model.messages_unconfirmed = Int32.Parse(parametersDictionary["messages_unconfirmed"].ToString());
+            model.messages_unacknowledged = Int32.Parse(parametersDictionary["messages_unacknowledge"].ToString());
+            model.consumer_count = Int32.Parse(parametersDictionary["consumer_count"].ToString());
+            model.confirms = Boolean.Parse(parametersDictionary["confirms"].ToString());
+            model.transactional = Boolean.Parse(parametersDictionary["transactional"].ToString());
+            model.idle_since = parametersDictionary["idle_since"].ToString();
 
-            parameters.reduction_details =
+            model.reduction_details =
                 JsonConvert.DeserializeObject<Dictionary<string, int>>(
                     parametersDictionary["reduction_details"].ToString());
 
-            parameters.ChannelMessageStats =
+            model.channel_message_stats =(ChannelMessageStats.ChannelMessageStats)
                 channelMessageStatsSentinel.CreateModel(
                     JsonConvert.DeserializeObject<Dictionary<string, object>>(
-                        parametersDictionary["ChannelMessageStats"].ToString()));
+                        parametersDictionary["ChannelMessageStats"].ToString()), new ChannelMessageStats.ChannelMessageStats());
 
-            parameters.ChannelConnectionDetails =
+            model.channel_connection_details =
+                (ChannelConnectionDetails.ChannelConnectionDetails)
                 channelConnectionDetailsSentinel.CreateModel(
                     JsonConvert.DeserializeObject<Dictionary<string, object>>(
-                        parametersDictionary["connection_details"].ToString()));
+                        parametersDictionary["connection_details"].ToString( )), new ChannelGarbageCollection.ChannelGarbageCollection());
 
-            return parameters;
+            return model;
 
-        }
-
-        public override Boolean ValidateDictionary(IDictionary<String, Object> parametersDictionary)
-        {
-            foreach (string key in ChannelInfoKeys.keys)
-            {
-                if(!parametersDictionary.ContainsKey(key))
-                    throw new DictionaryMissingArgumentException(key);
-            }
-
-            return true;
         }
 
     }

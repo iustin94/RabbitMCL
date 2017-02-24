@@ -6,7 +6,7 @@ using RabbitMQWebAPI.Library.Models.Sentinel;
 
 namespace RabbitMQWebAPI.Library.Models.Queue.QueueBackingQueue
 {
-    public class QueueBackingQueueSentinel : SentinelNew<QueueBackingQueueStatus>
+    public class QueueBackingQueueSentinel : Sentinel<QueueBackingQueueStatus>
     {
         public override IModel ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary, IModel model)
         {

@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using RabbitMQWebAPI.Library.Models.BaseModel;
 
 namespace RabbitMQWebAPI.Library.Models.Sentinel
 {
-    public interface ISentinel<T,U>
+    public interface ISentinel 
     {
-        T CreateModel(IDictionary<string, object> parametersDictionary);
+        IModel CreateModel(IDictionary<string, object> parametersDictionary, IModel model);
 
-        U ParseDictionaryToParameters(IDictionary<string, object> parametersDictionary);
+        IModel ParseDictionaryToParameters(IDictionary<string, object> parametersDictionary);
 
-        Boolean ValidateDictionary(IDictionary<string, object> parametersDictionary);
+        Boolean ValidateDictionary(IDictionary<string, object> parametersDictionary, IModel model);
     }
 }

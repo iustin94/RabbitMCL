@@ -1,99 +1,111 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
+using RabbitMQWebAPI.Library.Models.BaseModel;
 
 //I call this the franken class
 
 namespace RabbitMQWebAPI.Library.Models.Channel
 {
-    public class ChannelInfo
+    public class ChannelInfo: Model
     {
         [JsonProperty(PropertyName = "vhost")]   
-        public string vhost { private set; get; }
+        public string vhost { internal set; get; }
 
         [JsonProperty(PropertyName = "user")]
-        public string user { private set; get; }
+        public string user { internal set; get; }
 
         [JsonProperty(PropertyName = "number")]
-        public int number { private set; get; }
+        public int number { internal set; get; }
 
         [JsonProperty(PropertyName = "name")]
-        public string name { private set; get; }
+        public string name { internal set; get; }
         
         [JsonProperty(PropertyName = "node")]
-        public string node { private set; get; }
+        public string node { internal set; get; }
         
         [JsonProperty(PropertyName = "garbage_collection")]
-        public ChannelGarbageCollection.ChannelGarbageCollection garbage_collection { private set; get; }
+        public ChannelGarbageCollection.ChannelGarbageCollection garbage_collection { internal set; get; }
 
         [JsonProperty(PropertyName = "reductions")]
-        public int reductions { private set; get; }
+        public int reductions { internal set; get; }
 
         [JsonProperty(PropertyName = "state")]
-        public State.StateEnum state { private set; get; }
+        public State.StateEnum state { internal set; get; }
 
         [JsonProperty(PropertyName = "prefetch_count")]
-        public int prefetch_count { private set; get; }
+        public int prefetch_count { internal set; get; }
 
         [JsonProperty(PropertyName = "acks_uncommitted")]
-        public int acks_uncommitted { private set; get; }
+        public int acks_uncommitted { internal set; get; }
 
         [JsonProperty(PropertyName = "messages_uncommitted")]
-        public int messages_uncommitted { private set; get; }
+        public int messages_uncommitted { internal set; get; }
         
         [JsonProperty(PropertyName = "messages_unconfirmed")]
-        public int messages_unconfirmed { private set; get; }
+        public int messages_unconfirmed { internal set; get; }
 
         [JsonProperty(PropertyName = "messages_unacknowledge")]
-        public int messages_unacknowledged { private set; get; }
+        public int messages_unacknowledged { internal set; get; }
 
         [JsonProperty(PropertyName = "consumer_count")]
-        public int consumer_count { private set; get; }
+        public int consumer_count { internal set; get; }
 
         [JsonProperty(PropertyName = "confirms")]
-        public bool confirms { private set; get; }
+        public bool confirms { internal set; get; }
 
         [JsonProperty(PropertyName = "transactional")]
-        public bool transactional { private set; get; }
+        public bool transactional { internal set; get; }
 
         [JsonProperty(PropertyName = "idle_since")]
-        public string idle_since { private set; get; }
+        public string idle_since { internal set; get; }
 
         [JsonProperty(PropertyName = "reduction_details")]
-        public IDictionary<string, int> reduction_details { private set; get; }
+        public IDictionary<string, int> reduction_details { internal set; get; }
 
         [JsonProperty(PropertyName = "channel_message_stats")]
-        public ChannelMessageStats.ChannelMessageStats channel_message_stats { private set; get; }
+        public ChannelMessageStats.ChannelMessageStats channel_message_stats { internal set; get; }
 
         [JsonProperty(PropertyName = "channel_connection_details")]
-        public ChannelConnectionDetails.ChannelConnectionDetails channel_connection_details { private set; get; }
+        public ChannelConnectionDetails.ChannelConnectionDetails channel_connection_details { internal set; get; }
 
         [JsonProperty(PropertyName = "global_prefetch_count")]
-        public int global_prefetch_count { private set; get; }
+        public int global_prefetch_count { internal set; get; }
+
+        public override HashSet<String> Keys
+        {
+            get
+            {
+               return new HashSet<string>()
+        {
+            "vhost",
+            "user",
+            "number",
+            "name",
+            "node",
+            "garbage_collection",
+            "reductions",
+            "state",
+            "global_prefetch_count",
+            "prefetch_count",
+            "acks_uncommitted",
+            "messages_uncommitted",
+            "messages_unconfirmed",
+            "messages_unacknowledged",
+            "consumer_count",
+            "confirm",
+            "transactional",
+            "idle_since",
+            "reductions_details",
+            "message_stats",
+            "connection_details"
+        };
+            }
+
+            set { Keys = value; }
+        }
 
         public ChannelInfo() { }
-        public ChannelInfo(ChannelInfoParameters parameters)
-        {
-            this.vhost = parameters.vhost;
-            this.user = parameters.user;
-            this.number = parameters.number;
-            this.name = parameters.name;
-            this.node = parameters.node;
-            this.garbage_collection = parameters.garbage_collection;
-            this.reductions = parameters.reductions;
-            this.state = parameters.state;
-            this.prefetch_count = parameters.prefetch_count;
-            this.acks_uncommitted = parameters.acks_uncommitted;
-            this.messages_uncommitted = parameters.messages_uncommitted;
-            this.messages_unconfirmed = parameters.messages_unconfirmed;
-            this.messages_unacknowledged = parameters.messages_unacknowledged;
-            this.consumer_count = parameters.consumer_count;
-            this.confirms = parameters.confirms;
-            this.transactional = parameters.transactional;
-            this.idle_since = parameters.idle_since;
-            this.reduction_details = parameters.reduction_details;
-            this.channel_message_stats = parameters.ChannelMessageStats;
-            this.channel_connection_details = parameters.ChannelConnectionDetails;
-            this.global_prefetch_count = parameters.global_prefetch_count;
-        }
+       
     }
 }
