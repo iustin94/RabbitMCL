@@ -25,21 +25,21 @@ namespace RabbitMQWebAPI.Library.Models.Channel
 
             model.vhost = parametersDictionary["vhost"].ToString();
             model.user = parametersDictionary["user"].ToString();
-            model.number = Int32.Parse(parametersDictionary["number"].ToString());
+            model.number = double.Parse(parametersDictionary["number"].ToString());
             model.name = parametersDictionary["name"].ToString();
             model.node = parametersDictionary["node"].ToString();
 
             model.garbage_collection =(ChannelGarbageCollection.ChannelGarbageCollection)garbageCollectionSentinel.CreateModel(JsonConvert.DeserializeObject<Dictionary<string, object>>(parametersDictionary["garbage_collection"].ToString()), new ChannelGarbageCollection.ChannelGarbageCollection());
 
-            model.reductions = Int32.Parse(parametersDictionary["reductions"].ToString());
+            model.reductions = double.Parse(parametersDictionary["reductions"].ToString());
             model.state = State.EvaluateState(parametersDictionary["state"].ToString());
-            model.global_prefetch_count = Int32.Parse(parametersDictionary["global_prefetch_count"].ToString());
-            model.prefetch_count = Int32.Parse(parametersDictionary["prefetch_count"].ToString());
-            model.acks_uncommitted = Int32.Parse(parametersDictionary["acks_uncommitted"].ToString());
-            model.messages_uncommitted = Int32.Parse(parametersDictionary["messages_uncommitted"].ToString());
-            model.messages_unconfirmed = Int32.Parse(parametersDictionary["messages_unconfirmed"].ToString());
-            model.messages_unacknowledged = Int32.Parse(parametersDictionary["messages_unacknowledged"].ToString());
-            model.consumer_count = Int32.Parse(parametersDictionary["consumer_count"].ToString());
+            model.global_prefetch_count = double.Parse(parametersDictionary["global_prefetch_count"].ToString());
+            model.prefetch_count = double.Parse(parametersDictionary["prefetch_count"].ToString());
+            model.acks_uncommitted = double.Parse(parametersDictionary["acks_uncommitted"].ToString());
+            model.messages_uncommitted = double.Parse(parametersDictionary["messages_uncommitted"].ToString());
+            model.messages_unconfirmed = double.Parse(parametersDictionary["messages_unconfirmed"].ToString());
+            model.messages_unacknowledged = double.Parse(parametersDictionary["messages_unacknowledged"].ToString());
+            model.consumer_count = double.Parse(parametersDictionary["consumer_count"].ToString());
             model.confirm = Boolean.Parse(parametersDictionary["confirm"].ToString());
             model.transactional = Boolean.Parse(parametersDictionary["transactional"].ToString());
             model.idle_since = parametersDictionary["idle_since"].ToString();

@@ -14,11 +14,11 @@ namespace RabbitMQWebAPI.Library.Models.Queue.QueueGarbageCollection
         {
             QueueGarbageCollection parameters = new QueueGarbageCollection();
 
-            parameters.max_heap_size = Int32.Parse(parametersDictionary["max_heap_size"].ToString());
-            parameters.min_bin_vheap_size = Int32.Parse(parametersDictionary["min_bin_vheap_size"].ToString());
-            parameters.min_heap_size = Int32.Parse(parametersDictionary["min_heap_size"].ToString());
-            parameters.fullsweep_after = Int32.Parse(parametersDictionary["fullsweep_after"].ToString());
-            parameters.minor_gcs = Int32.Parse(parametersDictionary["minor_gcs"].ToString());
+            parameters.max_heap_size = double.Parse(parametersDictionary["max_heap_size"].ToString());
+            parameters.min_bin_vheap_size = double.Parse(parametersDictionary["min_bin_vheap_size"].ToString());
+            parameters.min_heap_size = double.Parse(parametersDictionary["min_heap_size"].ToString());
+            parameters.fullsweep_after = double.Parse(parametersDictionary["fullsweep_after"].ToString());
+            parameters.minor_gcs = double.Parse(parametersDictionary["minor_gcs"].ToString());
 
             return parameters;
         }

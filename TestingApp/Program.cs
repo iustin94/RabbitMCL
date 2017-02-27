@@ -24,7 +24,7 @@ namespace TestingApp
 
             Bindings bindings = new Bindings(client);
             Channels channels = new Channels(client);
-          
+
             //var tmp1 = bindings.GetBindingInfos().Result;
             //var tmp2 = bindings.GetBindingInfosBetweenExchangeAndQueueOnVhost("ha-exchange-MainExchange", "ha.queue1", "/"); // Should return 1 binding
             //var tmp3 = bindings.GetBindingInfosForExchangeOnVhost("/", "ha.exchange-alternativeExchange");
@@ -32,12 +32,12 @@ namespace TestingApp
             //var tmp5 = bindings.GetBindingInfosToExchangeOnVhost("ha.exchange-alternativeExchange", "/").Result;
 
 
-            var tmp1 = channels.GetChannels().Result;
+            var tmp1 = channels.GetChannel("<rabbit@nc-mso-test01.2.15874.0> (1)").Result;
 
-            foreach (var idk in tmp1)
-            {
-                Console.WriteLine(idk.ToString());
-            }
+            //foreach (var idk in tmp1)
+            //{
+            //    Console.WriteLine(idk.ToString());
+            //}
 
             //Queues queues = new Queues(client);
 

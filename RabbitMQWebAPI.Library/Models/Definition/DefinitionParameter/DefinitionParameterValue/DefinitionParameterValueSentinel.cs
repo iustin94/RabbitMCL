@@ -17,8 +17,8 @@ namespace RabbitMQWebAPI.Library.Models.Definition.DefinitionParameter.Definitio
             parameters.src_queue = parametersDictionary["src-queue"].ToString();
             parameters.dest_uri = parametersDictionary["dest-uri"].ToString();
             parameters.dest_queue = parametersDictionary["dest-queue"].ToString();
-            parameters.prefetch_count = Int32.Parse(parametersDictionary["prefetch-count"].ToString());
-            parameters.reconnect_delay = Int32.Parse(parametersDictionary["reconnect-delay"].ToString());
+            parameters.prefetch_count = double.Parse(parametersDictionary["prefetch-count"].ToString());
+            parameters.reconnect_delay = double.Parse(parametersDictionary["reconnect-delay"].ToString());
             parameters.add_forward_headers = Boolean.Parse(parametersDictionary["add-forward-headers"].ToString());
             parameters.ack_mode = parametersDictionary["ack-mode"].ToString();
             parameters.delete_after = parametersDictionary["delete-after"].ToString();

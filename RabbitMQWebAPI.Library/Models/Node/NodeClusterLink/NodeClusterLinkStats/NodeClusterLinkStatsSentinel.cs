@@ -14,8 +14,8 @@ namespace RabbitMQWebAPI.Library.Models.Node.NodeClusterLink.NodeClusterLinkStat
         public override IModel ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary)
         {
             NodeClusterLinkStats parameters = new NodeClusterLinkStats();
-            parameters.send_bytes = Int32.Parse(parametersDictionary["send_bytes"].ToString());
-            parameters.send_bytes_details = JsonConvert.DeserializeObject<Dictionary<string, int>>(parametersDictionary["send_bytes_details"].ToString());
+            parameters.send_bytes = double.Parse(parametersDictionary["send_bytes"].ToString());
+            parameters.send_bytes_details = JsonConvert.DeserializeObject<Dictionary<string, double>>(parametersDictionary["send_bytes_details"].ToString());
 
             return parameters;
         }

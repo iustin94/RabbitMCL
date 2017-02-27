@@ -11,10 +11,10 @@ namespace RabbitMQWebAPI.Library.Models.Node.NodeClusterLink.NodeClusterLinkStat
     public class NodeClusterLinkStats: Model
     {
         [JsonProperty(PropertyName = "send_bytes")]
-        public int send_bytes { get; internal set; }
+        public double send_bytes { get; internal set; }
 
         [JsonProperty(PropertyName = "send_bytes_details")]
-        public Dictionary<string,int> send_bytes_details { get; internal set; }
+        public Dictionary<string, double> send_bytes_details { get; internal set; }
 
         public override HashSet<String> Keys
         {

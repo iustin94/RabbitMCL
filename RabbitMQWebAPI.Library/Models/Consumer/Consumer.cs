@@ -16,7 +16,7 @@ namespace RabbitMQWebAPI.Library.Models.Consumer
         public Dictionary<string, string> arguments { get; internal set; }
 
         [JsonProperty(PropertyName = "prefetch_count")]
-        public int prefetch_count { get; internal set; }
+        public double prefetch_count { get; internal set; }
 
         [JsonProperty(PropertyName = "ack_required")]
         public bool ack_required { get; internal set; }

@@ -14,7 +14,7 @@ namespace RabbitMQWebAPI.Library.Models.Policy
         public string pattern { get; internal set; }
         public string apply_to { get; internal set; }
         public PolicyDefinition.PolicyDefinition definition { get; internal set; }
-        public int priority { get; internal set; }
+        public double priority { get; internal set; }
 
         public override HashSet<String> Keys
         {

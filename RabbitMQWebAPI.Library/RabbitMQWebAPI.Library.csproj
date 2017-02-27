@@ -139,7 +139,7 @@
     <Compile Include="Models\State.cs" />
     <Compile Include="Models\User\User.cs" />
     <Compile Include="Models\User\UserSentinel.cs" />
-    <Compile Include="Models\Queue\QueueBackingQueue\QueueBackingQueueSentinel.cs" />
+    <Compile Include="Models\Queue\QueueBackingQueue\QueueBackingQueueStatusSentinel.cs" />
     <Compile Include="Models\Queue\QueueBackingQueue\QueueBackingQueueStatus.cs" />
     <Compile Include="Models\Vhost\Vhost.cs" />
     <Compile Include="Models\Vhost\VhostInfoMessageStats\VhostInfoMessageStats.cs" />

@@ -18,7 +18,7 @@ namespace RabbitMQWebAPI.Library.Models.Definition.DefinitionPolicy.DefinitionPo
         public string ha_sync_mode { get; internal set; }
 
         [JsonProperty(PropertyName = "ha-sync-batch-size")]
-        public int ha_sync_batch_size { get; internal set; }
+        public double ha_sync_batch_size { get; internal set; }
 
         public override HashSet<String> Keys
         {

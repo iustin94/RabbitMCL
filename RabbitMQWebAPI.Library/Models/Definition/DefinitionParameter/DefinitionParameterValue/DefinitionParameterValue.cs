@@ -23,10 +23,10 @@ namespace RabbitMQWebAPI.Library.Models.Definition.DefinitionParameter.Definitio
         public string dest_queue { get; internal set; }
 
         [JsonProperty(PropertyName = "prefetch-count")]
-        public int prefetch_count { get; internal set; }
+        public double prefetch_count { get; internal set; }
 
         [JsonProperty(PropertyName = "reconnect-delay")]
-        public int reconnect_delay { get; internal set; }
+        public double reconnect_delay { get; internal set; }
 
         [JsonProperty(PropertyName = "add-forward-headers")]
         public bool add_forward_headers { get; internal set; }
