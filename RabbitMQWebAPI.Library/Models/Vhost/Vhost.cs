@@ -35,7 +35,7 @@ namespace RabbitMQWebAPI.Library.Models.Vhost
             {
                 return new HashSet<string>()
         {
-            "message_stats",
+            //"message_stats",
             "send_oct",
             "send_oct_details",
             "recv_oct",
