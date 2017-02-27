@@ -3,34 +3,43 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RabbitMQWebAPI.Library.Models.BaseModel;
 
 namespace RabbitMQWebAPI.Library.Models.Parameter.ParameterValue
 {
-    public class ParameterValue
+    public class ParameterValue: Model
     {
-        public string src_uri { get; private set; }
-        public string src_queue { get; private set; }
-        public string dest_uri { get; private set; }
-        public string dest_queue { get; private set; }
-        public int prefetch_count { get; private set; }
-        public int reconnect_delay { get; private set; }
-        public bool add_forward_headers { get; private set; }
-        public string ack_mode { get; private set; }
-        public string delete_after { get; private set; }
+        public string src_uri { get; internal set; }
+        public string src_queue { get; internal set; }
+        public string dest_uri { get; internal set; }
+        public string dest_queue { get; internal set; }
+        public double prefetch_count { get; internal set; }
+        public double reconnect_delay { get; internal set; }
+        public bool add_forward_headers { get; internal set; }
+        public string ack_mode { get; internal set; }
+        public string delete_after { get; internal set; }
+
+        public override HashSet<String> Keys
+        {
+            get
+            {
+               return new HashSet<string>()
+        {
+            "src_uri",
+            "src_queue",
+            "dest_uri",
+            "dest_queue",
+            "prefetch_count",
+            "reconnect_delay",
+            "add_forward_headers",
+            "ack-mode",
+            "delete_after"
+        };
+            }
+
+            set { Keys = value; }
+        }
 
         public ParameterValue() { }
-
-        public ParameterValue(ParameterValueParameters parameters)
-        {
-            this.src_uri = parameters.src_uri;
-            this.src_queue = parameters.src_queue;
-            this.dest_uri = parameters.dest_uri;
-            this.dest_queue = parameters.dest_queue;
-            this.prefetch_count = parameters.prefetch_count;
-            this.reconnect_delay = parameters.reconnect_delay;
-            this.add_forward_headers = parameters.add_forward_headers;
-            this.ack_mode = parameters.ack_mode;
-            this.delete_after = parameters.delete_after;
-        }
     }
 }

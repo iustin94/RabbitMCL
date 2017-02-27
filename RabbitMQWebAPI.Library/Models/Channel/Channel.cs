@@ -16,7 +16,7 @@ namespace RabbitMQWebAPI.Library.Models.Channel
         public string user { internal set; get; }
 
         [JsonProperty(PropertyName = "number")]
-        public int number { internal set; get; }
+        public double number { internal set; get; }
 
         [JsonProperty(PropertyName = "name")]
         public string name { internal set; get; }
@@ -28,31 +28,31 @@ namespace RabbitMQWebAPI.Library.Models.Channel
         public ChannelGarbageCollection.ChannelGarbageCollection garbage_collection { internal set; get; }
 
         [JsonProperty(PropertyName = "reductions")]
-        public int reductions { internal set; get; }
+        public double reductions { internal set; get; }
 
         [JsonProperty(PropertyName = "state")]
         public State.StateEnum state { internal set; get; }
 
         [JsonProperty(PropertyName = "prefetch_count")]
-        public int prefetch_count { internal set; get; }
+        public double prefetch_count { internal set; get; }
 
         [JsonProperty(PropertyName = "acks_uncommitted")]
-        public int acks_uncommitted { internal set; get; }
+        public double acks_uncommitted { internal set; get; }
 
         [JsonProperty(PropertyName = "messages_uncommitted")]
-        public int messages_uncommitted { internal set; get; }
+        public double messages_uncommitted { internal set; get; }
         
         [JsonProperty(PropertyName = "messages_unconfirmed")]
-        public int messages_unconfirmed { internal set; get; }
+        public double messages_unconfirmed { internal set; get; }
 
         [JsonProperty(PropertyName = "messages_unacknowledge")]
-        public int messages_unacknowledged { internal set; get; }
+        public double messages_unacknowledged { internal set; get; }
 
         [JsonProperty(PropertyName = "consumer_count")]
-        public int consumer_count { internal set; get; }
+        public double consumer_count { internal set; get; }
 
-        [JsonProperty(PropertyName = "confirms")]
-        public bool confirms { internal set; get; }
+        [JsonProperty(PropertyName = "confirm")]
+        public bool confirm { internal set; get; }
 
         [JsonProperty(PropertyName = "transactional")]
         public bool transactional { internal set; get; }
@@ -61,16 +61,16 @@ namespace RabbitMQWebAPI.Library.Models.Channel
         public string idle_since { internal set; get; }
 
         [JsonProperty(PropertyName = "reduction_details")]
-        public IDictionary<string, int> reduction_details { internal set; get; }
+        public IDictionary<string, double> reduction_details { internal set; get; }
 
-        [JsonProperty(PropertyName = "channel_message_stats")]
-        public ChannelMessageStats.ChannelMessageStats channel_message_stats { internal set; get; }
+        [JsonProperty(PropertyName = "message_stats")]
+        public ChannelMessageStats.ChannelMessageStats message_stats { internal set; get; }
 
-        [JsonProperty(PropertyName = "channel_connection_details")]
-        public ChannelConnectionDetails.ChannelConnectionDetails channel_connection_details { internal set; get; }
+        [JsonProperty(PropertyName = "connection_details")]
+        public ChannelConnectionDetails.ChannelConnectionDetails connection_details { internal set; get; }
 
         [JsonProperty(PropertyName = "global_prefetch_count")]
-        public int global_prefetch_count { internal set; get; }
+        public double global_prefetch_count { internal set; get; }
 
         public override HashSet<String> Keys
         {
@@ -97,7 +97,7 @@ namespace RabbitMQWebAPI.Library.Models.Channel
             "transactional",
             "idle_since",
             "reductions_details",
-            "message_stats",
+            //"message_stats", don't check for message stats since this key can actually miss from rabbitmq
             "connection_details"
         };
             }

@@ -39,20 +39,17 @@ namespace RabbitMQWebAPI.Library.DataAccess.DataFactory
             return models;
         }
 
-        public List<TResultModel> BuildModels(JArray info, ISentinel sentinel) 
+        public async Task<TResultModel> BuildModel(string path, ISentinel sentinel)
         {
+            var result = await GetJsonString(path);
 
-            List<TResultModel> models = new List<TResultModel>();
+            JObject obj = JsonConvert.DeserializeObject<JObject>(result);
 
-            foreach (JObject data in info)
-            {
-                TResultModel model = new TResultModel();
-                model = (TResultModel)sentinel.CreateModel(JsonConvert.DeserializeObject<Dictionary<string, object>>(data.ToString()), model);
+            TResultModel model =
+                (TResultModel)
+                sentinel.CreateModel(JsonConvert.DeserializeObject<Dictionary<string, object>>(obj.ToString()), new TResultModel());
 
-                models.Add(model);
-            }
-
-            return models;
+            return model;
         }
 
         public async Task<string> GetJsonString(string path)

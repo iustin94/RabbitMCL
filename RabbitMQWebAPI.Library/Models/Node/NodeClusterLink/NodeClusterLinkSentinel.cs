@@ -19,9 +19,9 @@ namespace RabbitMQWebAPI.Library.Models.Node.NodeClusterLink
             NodeClusterLink parameters = new NodeClusterLink();
             parameters.name = parametersDictionary["name"].ToString();
             parameters.peer_addr = parametersDictionary["peer_addr"].ToString();
-            parameters.peer_port = Int32.Parse(parametersDictionary["peer_port"].ToString());
+            parameters.peer_port = double.Parse(parametersDictionary["peer_port"].ToString());
             parameters.sock_addr = parametersDictionary["sock_addr"].ToString();
-            parameters.sock_port = Int32.Parse(parametersDictionary["sock_port"].ToString());
+            parameters.sock_port = double.Parse(parametersDictionary["sock_port"].ToString());
             parameters.stats =
                 (NodeClusterLinkStats.NodeClusterLinkStats)
                 statsSentinel.CreateModel(

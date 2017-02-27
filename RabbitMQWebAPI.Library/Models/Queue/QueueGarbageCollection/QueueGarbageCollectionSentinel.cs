@@ -10,7 +10,7 @@ namespace RabbitMQWebAPI.Library.Models.Queue.QueueGarbageCollection
 {
     public class QueueGarbageCollectionSentinel : Sentinel<QueueGarbageCollection>
     {
-        public override IModel ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary, IModel model)
+        public override IModel ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary)
         {
             QueueGarbageCollection parameters = new QueueGarbageCollection();
 

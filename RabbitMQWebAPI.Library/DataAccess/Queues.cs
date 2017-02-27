@@ -18,63 +18,53 @@ namespace RabbitMQWebAPI.Library.DataAccess
     public class Queues
     {
 
-        private DataFactory<QueueInfo> dataFactory;
-        private QueueInfoSentinel sentinel;
-
-        public Queues() {}
+        private DataFactory<Queue> dataFactory;
+        private QueueSentinel sentinel;
 
         public Queues(HttpClient client)
         {
-            dataFactory = new DataFactory<QueueInfo>(client);
-            sentinel = new QueueInfoSentinel();
+            dataFactory = new DataFactory<Queue>(client);
+            sentinel = new QueueSentinel();
         }
-
+      
         /// <summary>
-        /// A list of all queues.
+        /// Returns a IEnumerable&lt;Queue&gt; object with all the queues.
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<QueueInfo>> GetQueueInfos()
+        public async Task<IEnumerable<Queue>> GetQueues()
         {
-            return await GetQueueInfosInternal();
-        }
+            // /api/queues	
 
-        // /api/queues	
-        private async Task<IEnumerable<QueueInfo>> GetQueueInfosInternal()
-        {
             return await dataFactory.BuildModels("api/queues", sentinel);
         }
 
-
-        /*
-         private static List<TResultModel> QueueInfoFactory<TResultModel>(JArray info, QueueInfoSentinel queueInfoSentinel)
-             where TResultModel : new() 
+        /// <summary>
+        /// Returns a IEnumerable &lt;Queue&gt; object on the given vhost.
+        /// </summary>
+        /// <param name="vhost"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<Queue>> GetQueuesOnVhost(string vhost)
         {
-            List<TResultModel> queues = new List<TResultModel>();
+            vhost = WebUtility.UrlEncode(vhost);
 
-            foreach (JObject queueData in info)
-            {
-                ISentinel<TResultModel, QueueInfoParameters> sentinel = queueInfoSentinel;
-                TResultModel queue =
-                    sentinel.CreateModel(JsonConvert.DeserializeObject<Dictionary<string, object>>(queueData.ToString()));
-
-                queues.Add(queue);
-            }
-            return queues;
+            return await dataFactory.BuildModels(String.Format("api/queues/{0}", vhost), sentinel);
         }
-         */
+         /// <summary>
+         /// Returns a &lt;Queue&gt; object on the specified vhost
+         /// </summary>
+         /// <param name="vhost"></param>
+         /// <param name="name"></param>
+         /// <returns></returns>
 
+        public async Task<Queue> GetQueueOnVhost(string vhost, string queueName)
+        {
+            vhost = WebUtility.UrlEncode(vhost);
+            queueName = WebUtility.UrlEncode(queueName);
 
-        /* TODO /api/queues/vhost	
-         * A list of all queues in a given virtual host.
-         */
+            return await dataFactory.BuildModel(String.Format("api/queues/{0}/{1}", vhost, queueName), sentinel);
+        }
 
-        /* TODO /api/queues/vhost/name	
-         * An individual queue. 
-         */
-
-        /* TODO /api/queues/vhost/name/bindings	
-         * A list of all bindings on a given queue.
-         */
+       
 
     }
 }

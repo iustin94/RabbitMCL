@@ -14,13 +14,13 @@ namespace RabbitMQWebAPI.Library.Models.Node.NodeClusterLink
         public string peer_addr { get; internal set; }
 
         [JsonProperty(PropertyName = "peer_port")]
-        public int peer_port { get; internal set; }
+        public double peer_port { get; internal set; }
 
         [JsonProperty(PropertyName = "sock_addr")]
         public string sock_addr { get; internal set; }
 
         [JsonProperty(PropertyName = "sock_port")]
-        public int sock_port { get; internal set; }
+        public double sock_port { get; internal set; }
         
         [JsonProperty(PropertyName = "stats")]
         public NodeClusterLinkStats.NodeClusterLinkStats stats { get; internal set; }

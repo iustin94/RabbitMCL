@@ -12,7 +12,7 @@ namespace RabbitMQWebAPI.Library.Models.Sentinel
         IModel CreateModel(IDictionary<string, object> parametersDictionary, IModel model);
 
         IModel ParseDictionaryToParameters(IDictionary<string, object> parametersDictionary);
-
+        BaseModel.IModel GetModelFromDictionary<IModel>(IDictionary<string, object> dictionary);
         Boolean ValidateDictionary(IDictionary<string, object> parametersDictionary, IModel model);
     }
 }

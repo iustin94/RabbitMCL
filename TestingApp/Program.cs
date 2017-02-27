@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using RabbitMQWebAPI.Library.Models.Channel;
 
 namespace TestingApp
 {
@@ -22,23 +23,25 @@ namespace TestingApp
             client.BaseAddress = new Uri("http://nc-mso-test01:15672/");
 
             Bindings bindings = new Bindings(client);
+            Channels channels = new Channels(client);
+          
+            //var tmp1 = bindings.GetBindingInfos().Result;
+            //var tmp2 = bindings.GetBindingInfosBetweenExchangeAndQueueOnVhost("ha-exchange-MainExchange", "ha.queue1", "/"); // Should return 1 binding
+            //var tmp3 = bindings.GetBindingInfosForExchangeOnVhost("/", "ha.exchange-alternativeExchange");
+            //var tmp4 = bindings.GetBindingInfosForVhost("/");
+            //var tmp5 = bindings.GetBindingInfosToExchangeOnVhost("ha.exchange-alternativeExchange", "/").Result;
 
-            //var tmp = bindings.GetBindingInfosToExchangeOnVhost("ha.exchange-alternativeExchange", "/").Result;
 
-            //foreach (var idk in tmp)
-            //{
-            //    Console.WriteLine(idk.ToString());
-            //}
+            var tmp1 = channels.GetChannels().Result;
 
-            Queues queues = new Queues(client);
-
-            var tmp = queues.GetQueueInfos().Result;
-
-            foreach (var x in tmp)
+            foreach (var idk in tmp1)
             {
-                Console.WriteLine(JsonConvert.SerializeObject(x));
+                Console.WriteLine(idk.ToString());
             }
 
+            //Queues queues = new Queues(client);
+
+            //var tmp = queues.GetQueueInfos().Result;
 
             Console.ReadLine();
         }

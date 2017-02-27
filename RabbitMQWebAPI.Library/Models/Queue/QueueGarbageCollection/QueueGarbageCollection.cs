@@ -42,14 +42,5 @@ namespace RabbitMQWebAPI.Library.Models.Queue.QueueGarbageCollection
         }
 
         public QueueGarbageCollection() { }
-
-        public QueueGarbageCollection(QueueGarbageCollectionParameters parameters)
-        {
-            this.max_heap_size = parameters.max_heap_size;
-            this.min_bin_vheap_size = parameters.min_bin_vheap_size;
-            this.max_heap_size = parameters.min_heap_size;
-            this.fullsweep_after = parameters.fullsweep_after;
-            this.minor_gcs = parameters.minor_gcs;
-        }
     }
 }

@@ -36,28 +36,28 @@ namespace RabbitMQWebAPI.Library.Models.Channel
             model.global_prefetch_count = Int32.Parse(parametersDictionary["global_prefetch_count"].ToString());
             model.prefetch_count = Int32.Parse(parametersDictionary["prefetch_count"].ToString());
             model.acks_uncommitted = Int32.Parse(parametersDictionary["acks_uncommitted"].ToString());
-            model.messages_uncommitted = Int32.Parse(parametersDictionary["messages_uncommited"].ToString());
+            model.messages_uncommitted = Int32.Parse(parametersDictionary["messages_uncommitted"].ToString());
             model.messages_unconfirmed = Int32.Parse(parametersDictionary["messages_unconfirmed"].ToString());
-            model.messages_unacknowledged = Int32.Parse(parametersDictionary["messages_unacknowledge"].ToString());
+            model.messages_unacknowledged = Int32.Parse(parametersDictionary["messages_unacknowledged"].ToString());
             model.consumer_count = Int32.Parse(parametersDictionary["consumer_count"].ToString());
-            model.confirms = Boolean.Parse(parametersDictionary["confirms"].ToString());
+            model.confirm = Boolean.Parse(parametersDictionary["confirm"].ToString());
             model.transactional = Boolean.Parse(parametersDictionary["transactional"].ToString());
             model.idle_since = parametersDictionary["idle_since"].ToString();
 
             model.reduction_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
-                    parametersDictionary["reduction_details"].ToString());
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
+                    parametersDictionary["reductions_details"].ToString());
 
-            model.channel_message_stats =(ChannelMessageStats.ChannelMessageStats)
+            model.message_stats = parametersDictionary.ContainsKey("message_stats")? (ChannelMessageStats.ChannelMessageStats)
                 channelMessageStatsSentinel.CreateModel(
                     JsonConvert.DeserializeObject<Dictionary<string, object>>(
-                        parametersDictionary["ChannelMessageStats"].ToString()), new ChannelMessageStats.ChannelMessageStats());
+                        parametersDictionary["message_stats"].ToString()), new ChannelMessageStats.ChannelMessageStats()): null;
 
-            model.channel_connection_details =
+            model.connection_details =
                 (ChannelConnectionDetails.ChannelConnectionDetails)
                 channelConnectionDetailsSentinel.CreateModel(
                     JsonConvert.DeserializeObject<Dictionary<string, object>>(
-                        parametersDictionary["connection_details"].ToString( )), new ChannelGarbageCollection.ChannelGarbageCollection());
+                        parametersDictionary["connection_details"].ToString( )), new ChannelConnectionDetails.ChannelConnectionDetails());
 
             return model;
 

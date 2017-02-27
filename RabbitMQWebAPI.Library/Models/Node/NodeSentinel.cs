@@ -79,168 +79,168 @@ namespace RabbitMQWebAPI.Library.Models.Node
             model.exchange_types = exchangeTypes;
 
 
-            model.context_switches = Int32.Parse(parametersDictionary["context_switches"].ToString());
+            model.context_switches = double.Parse(parametersDictionary["context_switches"].ToString());
             model.context_switches_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["context_switches_details"].ToString());
 
-            model.io_read_avg_time = Int32.Parse(parametersDictionary["io_read_avg_time"].ToString());
+            model.io_read_avg_time = double.Parse(parametersDictionary["io_read_avg_time"].ToString());
             model.log_file = parametersDictionary["log_file"].ToString();
             model.config_files =
                 JsonConvert.DeserializeObject<List<string>>(parametersDictionary["config_files"].ToString());
 
-            model.mem_used = Int32.Parse(parametersDictionary["mem_used"].ToString());
+            model.mem_used = double.Parse(parametersDictionary["mem_used"].ToString());
             model.mem_used_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["mem_used_details"].ToString());
 
-            model.fd_used = Int32.Parse(parametersDictionary["fd_used"].ToString());
+            model.fd_used = double.Parse(parametersDictionary["fd_used"].ToString());
             model.fd_used_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["fd_used_details"].ToString());
 
-            model.sockets_used = Int32.Parse(parametersDictionary["sockets_used"].ToString());
+            model.sockets_used = double.Parse(parametersDictionary["sockets_used"].ToString());
             model.sockets_used_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["sockets_used_details"].ToString());
 
-            model.proc_used = Int32.Parse(parametersDictionary["proc_used"].ToString());
+            model.proc_used = double.Parse(parametersDictionary["proc_used"].ToString());
             model.proc_used_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["proc_used_details"].ToString());
 
-            model.disk_free = Int32.Parse(parametersDictionary["disk_free"].ToString());
+            model.disk_free = double.Parse(parametersDictionary["disk_free"].ToString());
             model.proc_used_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["proc_used_details"].ToString());
 
-            model.io_read_count = Int32.Parse(parametersDictionary["io_read_count"].ToString());
+            model.io_read_count = double.Parse(parametersDictionary["io_read_count"].ToString());
             model.io_read_count_details = 
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["io_read_count_details"].ToString());
 
-            model.io_read_bytes = Int32.Parse(parametersDictionary["io_read_byte"].ToString());
+            model.io_read_bytes = double.Parse(parametersDictionary["io_read_byte"].ToString());
             model.io_read_count_details = 
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["io_read_count_details"].ToString());
 
-            model.io_read_avg_time = Int32.Parse(parametersDictionary["io_read_avg_time"].ToString());
+            model.io_read_avg_time = double.Parse(parametersDictionary["io_read_avg_time"].ToString());
             model.io_read_avg_time_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["io_read_avg_time_details"].ToString());
 
-            model.io_write_count = Int32.Parse(parametersDictionary["io_write_count"].ToString());
+            model.io_write_count = double.Parse(parametersDictionary["io_write_count"].ToString());
             model.io_write_count_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["io_write_count_details"].ToString());
 
-            model.io_write_bytes = Int32.Parse(parametersDictionary["io_write_bytes"].ToString());
+            model.io_write_bytes = double.Parse(parametersDictionary["io_write_bytes"].ToString());
             model.io_write_bytes_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["io_write_bytes_details"].ToString());
 
-            model.io_write_avg_time = Int32.Parse(parametersDictionary["io_write_avg_time"].ToString());
+            model.io_write_avg_time = double.Parse(parametersDictionary["io_write_avg_time"].ToString());
             model.io_write_avg_time_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["io_write_avg_time"].ToString());
 
-            model.io_sync_count = Int32.Parse(parametersDictionary["io_sync_count"].ToString());
+            model.io_sync_count = double.Parse(parametersDictionary["io_sync_count"].ToString());
             model.io_sync_count_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["io_sync_count"].ToString());
 
-            model.io_sync_avg_time = Int32.Parse(parametersDictionary["io_sync_avg_time"].ToString());
+            model.io_sync_avg_time = double.Parse(parametersDictionary["io_sync_avg_time"].ToString());
             model.io_sync_avg_time_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["io_sync_avg_time_details"].ToString());
 
-            model.io_seek_count = Int32.Parse(parametersDictionary["io_seek_count"].ToString());
+            model.io_seek_count = double.Parse(parametersDictionary["io_seek_count"].ToString());
             model.io_seek_count_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["io_seek_count_details"].ToString());
 
-            model.io_reopen_count = Int32.Parse(parametersDictionary["io_reopen_count"].ToString());
+            model.io_reopen_count = double.Parse(parametersDictionary["io_reopen_count"].ToString());
             model.io_reopen_count_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["io_reopen_count_details"].ToString());
 
-            model.mnesia_ram_tx_count = Int32.Parse(parametersDictionary["mnesia_ram_tx_count"].ToString());
+            model.mnesia_ram_tx_count = double.Parse(parametersDictionary["mnesia_ram_tx_count"].ToString());
             model.mnesia_ram_tx_count_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["mnesia_ram_tx_count_details"].ToString());
 
-            model.mnesia_disk_tx_count = Int32.Parse(parametersDictionary["mnesia_disk_tx_count"].ToString());
+            model.mnesia_disk_tx_count = double.Parse(parametersDictionary["mnesia_disk_tx_count"].ToString());
             model.mnesia_ram_tx_count_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["mnesia_ram_tx_count_details"].ToString());
 
-            model.msg_store_read_count = Int32.Parse(parametersDictionary["msg_store_read_count"].ToString());
+            model.msg_store_read_count = double.Parse(parametersDictionary["msg_store_read_count"].ToString());
             model.msg_store_read_count_details = 
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["msg_store_read_count_details"].ToString());
 
-            model.msg_store_write_count = Int32.Parse(parametersDictionary["msg_store_write_count"].ToString());
+            model.msg_store_write_count = double.Parse(parametersDictionary["msg_store_write_count"].ToString());
             model.msg_store_write_count_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["msg_store_write_count_details"].ToString());
 
             model.queue_index_journal_write_count =
-                Int32.Parse(parametersDictionary["queue_index_journal_write_count"].ToString());
+                double.Parse(parametersDictionary["queue_index_journal_write_count"].ToString());
             model.queue_index_journal_write_count_details = 
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["queue_index_journal_write_count_details"].ToString());
 
-            model.queue_index_write_count = Int32.Parse(parametersDictionary["queue_index_write_count"].ToString());
+            model.queue_index_write_count = double.Parse(parametersDictionary["queue_index_write_count"].ToString());
             model.queue_index_write_count_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["queue_index_write_count_details"].ToString());
 
-            model.queue_index_read_count = Int32.Parse(parametersDictionary["queue_index_read_count"].ToString());
+            model.queue_index_read_count = double.Parse(parametersDictionary["queue_index_read_count"].ToString());
             model.queue_index_read_count_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["queue_index_read_count_deta"].ToString());
 
-            model.gc_num = Int32.Parse(parametersDictionary["gc_enum"].ToString());
+            model.gc_num = double.Parse(parametersDictionary["gc_enum"].ToString());
             model.gc_num_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["gc_enum_details"].ToString());
 
-            model.gc_bytes_reclaimed = Int32.Parse(parametersDictionary["gc_bytes_reclaimed"].ToString());
+            model.gc_bytes_reclaimed = double.Parse(parametersDictionary["gc_bytes_reclaimed"].ToString());
             model.gc_bytes_reclaimed_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["gc_bytes_reclaimed_details"].ToString());
 
-            model.context_switches = Int32.Parse(parametersDictionary["context_switches"].ToString());
+            model.context_switches = double.Parse(parametersDictionary["context_switches"].ToString());
             model.context_switches_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["context_switches_details"].ToString());
 
             model.io_file_handle_open_attempt_count =
-                Int32.Parse(parametersDictionary["io_file_handle_open_attempt_count"].ToString());
+                double.Parse(parametersDictionary["io_file_handle_open_attempt_count"].ToString());
             model.io_file_handle_open_attempt_count_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["io_file_handle_open_attempt_count_details"].ToString());
 
             model.io_file_handle_open_attempt_avg_time =
-                Int32.Parse(parametersDictionary["io_file_handle_open_attempt_avg_time"].ToString());
+                double.Parse(parametersDictionary["io_file_handle_open_attempt_avg_time"].ToString());
             model.io_file_handle_open_attempt_avg_time_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["io_file_handle_open_attempt_avg_time_details"].ToString());
 
 
             model.partitions =JsonConvert.DeserializeObject<List<string>>(parametersDictionary["partitions"].ToString());
             model.os_pid = parametersDictionary["os_pid"].ToString();
-            model.fd_total = Int32.Parse(parametersDictionary["fd_total"].ToString());
-            model.sockets_total = Int32.Parse(parametersDictionary["sockets_total"].ToString());
-            model.mem_limit = Int32.Parse(parametersDictionary["mem_limit"].ToString());
+            model.fd_total = double.Parse(parametersDictionary["fd_total"].ToString());
+            model.sockets_total = double.Parse(parametersDictionary["sockets_total"].ToString());
+            model.mem_limit = double.Parse(parametersDictionary["mem_limit"].ToString());
             model.mem_alarm = Boolean.Parse(parametersDictionary["mem_alarm"].ToString());
-            model.disk_free_limit = Int32.Parse(parametersDictionary["disk_free_limit"].ToString());
+            model.disk_free_limit = double.Parse(parametersDictionary["disk_free_limit"].ToString());
             model.disk_free_alarm = Boolean.Parse(parametersDictionary["disk_free_alarm"].ToString());
-            model.proc_total = Int32.Parse(parametersDictionary["proc_total"].ToString());
+            model.proc_total = double.Parse(parametersDictionary["proc_total"].ToString());
             model.rates_mode = parametersDictionary["rates_mode"].ToString();
-            model.uptime = Int32.Parse(parametersDictionary["uptime"].ToString());
-            model.run_queue = Int32.Parse(parametersDictionary["run_queue"].ToString());
-            model.processors = Int32.Parse(parametersDictionary["processors"].ToString());
+            model.uptime = double.Parse(parametersDictionary["uptime"].ToString());
+            model.run_queue = double.Parse(parametersDictionary["run_queue"].ToString());
+            model.processors = double.Parse(parametersDictionary["processors"].ToString());
 
             model.log_file = parametersDictionary["log_file"].ToString();
             model.sasl_log_file = parametersDictionary["sasl_log_file"].ToString();

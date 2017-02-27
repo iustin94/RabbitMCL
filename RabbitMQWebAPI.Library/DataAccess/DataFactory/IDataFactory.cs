@@ -6,8 +6,10 @@ using RabbitMQWebAPI.Library.Models.Sentinel;
 namespace RabbitMQWebAPI.Library.DataAccess.DataFactory
 {
     public interface IDataFactory<TResultModel>
-   {
-        List<TResultModel> BuildModels(JArray info, ISentinel sentinel);
+    {
+        Task<List<TResultModel>> BuildModels(string path, ISentinel sentinel);
+
+        Task<TResultModel> BuildModel(string path, ISentinel sentinel);
 
         Task<string> GetJsonString(string path);
     }

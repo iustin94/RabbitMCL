@@ -11,19 +11,19 @@ namespace RabbitMQWebAPI.Library.Models.Channel.ChannelGarbageCollection
     public class ChannelGarbageCollection: Model
     {
         [JsonProperty(PropertyName = "max_heap_size")]
-        public int max_heap_size { get; internal set; }
+        public double max_heap_size { get; internal set; }
 
         [JsonProperty(PropertyName = "min_bin_vheap_size")]
-        public int min_bin_vheap_size { get; internal set; }
+        public double min_bin_vheap_size { get; internal set; }
 
         [JsonProperty(PropertyName = "min_heap_size")]
-        public int min_heap_size { get; internal set; }
+        public double min_heap_size { get; internal set; }
 
         [JsonProperty(PropertyName = "fullsweep_after")]
-        public int fullsweep_after { get; internal set;}
+        public double fullsweep_after { get; internal set;}
 
         [JsonProperty(PropertyName = "minor_gcs")]
-        public int minor_gcs { get; internal set; }
+        public double minor_gcs { get; internal set; }
 
         public override HashSet<String> Keys
         {

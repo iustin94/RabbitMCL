@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -10,7 +11,7 @@ namespace RabbitMQWebAPI.Library.Models.Sentinel
 {
     public abstract class Sentinel<IModel> : ISentinel where IModel : Model
     {
-        public BaseModel.IModel CreateModel(IDictionary<String, Object> parametersDictionary, BaseModel.IModel model)
+        public BaseModel.IModel CreateModel(IDictionary<string, object> parametersDictionary, BaseModel.IModel model)
         {
             if (ValidateDictionary(parametersDictionary, model) != true)
                 return default(IModel);
@@ -27,7 +28,31 @@ namespace RabbitMQWebAPI.Library.Models.Sentinel
         /// </summary>
         /// <param name="parametersDictionary">
         /// </param>
-        public abstract BaseModel.IModel ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary);    
+        public abstract BaseModel.IModel ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary);
+
+        public BaseModel.IModel GetModelFromDictionary<IModel>(IDictionary<string, object> dictionary)
+        {
+            Type type = typeof(IModel);
+
+            var obj = Activator.CreateInstance(type);
+
+            foreach (var kv in dictionary)
+            {
+                Type propertyType = type.GetProperty(kv.Key).GetType();
+
+                if (propertyType != typeof(System.Reflection.PropertyInfo)) //Not getting this.
+                {
+                    var obj2 = Activator.CreateInstance(propertyType, new object[] {kv.Value});
+                    type.GetProperty(kv.Key).SetValue(obj, obj2);
+                }
+                else
+                {
+                    type.GetProperty(kv.Key).SetValue(obj, kv.Value);
+                }
+            }
+
+            return (BaseModel.IModel)obj;
+        }
 
         /// <summary>
         /// Ensures the dictionary has the expected keys
@@ -44,6 +69,8 @@ namespace RabbitMQWebAPI.Library.Models.Sentinel
 
             return true;
         }
+
+        
 
     }
 

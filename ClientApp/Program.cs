@@ -173,7 +173,7 @@ namespace ClientApp
 
         private static async void PublishUntilStop(IModel channel, IBasicProperties props, List<string> messages, PublishSubOptions options)
         {
-            IEnumerable<RabbitMQWebAPI.Library.Models.Queue.QueueInfo> latestQueueInfo = new List<QueueInfo>();
+            IEnumerable<RabbitMQWebAPI.Library.Models.Queue.Queue> latestQueueInfo = new List<Queue>();
 
             IDictionary<string, State.StateEnum> queueStatuses = new Dictionary<string, State.StateEnum>();
 
@@ -204,7 +204,7 @@ namespace ClientApp
 
                            var latestQueueInfos = queues.GetQueueInfos().Result;
 
-                           foreach (QueueInfo q in latestQueueInfos)
+                           foreach (Queue q in latestQueueInfos)
                            {
                                //??
                            }

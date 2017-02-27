@@ -51,15 +51,6 @@ namespace RabbitMQWebAPI.Library.Models.Definition.DefinitionBinding
 
         public DefinitionBinding() { }
 
-        public DefinitionBinding(DefinitionBindingParameters parameters)
-        {
-            this.name = parameters.name;
-            this.vhost = parameters.vhost;
-            this.type = parameters.type;
-            this.durable = parameters.durable;
-            this.auto_delete = parameters.auto_delete;
-            this._internal = parameters._internal;
-            this.arguments = parameters.arguments;
-        }
+        
     }
 }

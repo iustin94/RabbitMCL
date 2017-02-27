@@ -16,58 +16,41 @@ namespace RabbitMQWebAPI.Library.Models.Channel.ChannelMessageStats
         {
             ChannelMessageStats model = new ChannelMessageStats();
 
-            model.publish_in = Int32.Parse(parametersDictionary["publish_int"].ToString());
+            model.publish_in = double.Parse(parametersDictionary["publish_in"].ToString());
             model.publish_in_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["publish_in_details"].ToString());
 
-            model.publish = Int32.Parse(parametersDictionary["publish"].ToString());
+            model.publish = double.Parse(parametersDictionary["publish"].ToString());
             model.publish_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["publish_details"].ToString());
 
-            model.publish_out = Int32.Parse(parametersDictionary["publish_out"].ToString());
+            model.publish_out = double.Parse(parametersDictionary["publish_out"].ToString());
             model.publish_out_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(parametersDictionary["publish_out_datails"].ToString());
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(parametersDictionary["publish_out_details"].ToString());
 
-            model.ack = Int32.Parse(parametersDictionary["ack"].ToString());
+            model.ack = double.Parse(parametersDictionary["ack"].ToString());
             model.ack_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(parametersDictionary["ack_details"].ToString());
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(parametersDictionary["ack_details"].ToString());
 
-            model.deliver_get = Int32.Parse(parametersDictionary["deliver_get"].ToString());
-            model.deliver_get_details = JsonConvert.DeserializeObject<Dictionary<string, int>>(parametersDictionary["deliver_get_details"].ToString());
+            model.deliver_get = double.Parse(parametersDictionary["deliver_get"].ToString());
+            model.deliver_get_details = JsonConvert.DeserializeObject<Dictionary<string, double>>(parametersDictionary["deliver_get_details"].ToString());
 
-            model.confirm = Int32.Parse(parametersDictionary["confirm"].ToString());
+            model.confirm = double.Parse(parametersDictionary["confirm"].ToString());
             model.confirm_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["confirm_details"].ToString());
 
-            model.return_unroutable = Int32.Parse(parametersDictionary["return_unroutable"].ToString());
+            model.return_unroutable = double.Parse(parametersDictionary["return_unroutable"].ToString());
             model.return_unroutable_details = JsonConvert.DeserializeObject<
-                                                   Dictionary<string, int>>(
+                                                   Dictionary<string, double>>(
                                                        parametersDictionary["return_unroutable_details"].ToString());
 
-            model.redeliver = Int32.Parse(parametersDictionary["redeliver"].ToString());
+            model.redeliver = double.Parse(parametersDictionary["redeliver"].ToString());
             model.redeliver_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["redeliver_details"].ToString());
-
-            model.deliver = Int32.Parse(parametersDictionary["deliver"].ToString());
-            model.deliver_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
-                    parametersDictionary["deliver_details"].ToString());
-
-
-            model.deliver_no_ack = Int32.Parse(parametersDictionary["deliver_no_ack"].ToString());
-            model.deliver_no_ack_details =
-                JsonConvert.DeserializeObject<Dictionary<string, int>>(
-                    parametersDictionary["deliver_no_ack_details"].ToString());
-
-            model.get = Int32.Parse(parametersDictionary["get"].ToString());
-            model.get_details = JsonConvert.DeserializeObject<Dictionary<string, int>>(parametersDictionary["get_details"].ToString());
-
-            model.get_no_ack = Int32.Parse(parametersDictionary["get_no_ack"].ToString());
-            model.get_no_ack_details = JsonConvert.DeserializeObject<Dictionary<string, int>>(parametersDictionary["get_no_ack_details"].ToString());
 
             return model;
         }   

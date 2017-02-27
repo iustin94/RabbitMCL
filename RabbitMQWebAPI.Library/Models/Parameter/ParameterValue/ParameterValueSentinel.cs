@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RabbitMQWebAPI.Library.Models.BaseModel;
 using RabbitMQWebAPI.Library.Models.Sentinel;
 
 namespace RabbitMQWebAPI.Library.Models.Parameter.ParameterValue
 {
-    public class ParameterValueSentinel : Sentinel<ParameterValue, ParameterValueParameters>
+    public class ParameterValueSentinel : Sentinel<ParameterValue>
     {
-        public override ParameterValueParameters ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary)
+        public override IModel ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary)
         {
-            ParameterValueParameters parameters = new ParameterValueParameters();
+            ParameterValue parameters = new ParameterValue();
             parameters.src_queue = parametersDictionary["src-queue"].ToString();
             parameters.src_uri = parametersDictionary["src-uri"].ToString();
             parameters.dest_uri = parametersDictionary["dest-uri"].ToString();
@@ -23,17 +24,6 @@ namespace RabbitMQWebAPI.Library.Models.Parameter.ParameterValue
             parameters.delete_after = parametersDictionary["delete-after"].ToString();
 
             return parameters;
-        }
-
-        public override Boolean ValidateDictionary(IDictionary<String, Object> parametersDictionary)
-        {
-            foreach (string key in ParameterValueKeys.keys)
-            {
-                if(!parametersDictionary.ContainsKey(key))
-                    throw new DictionaryMissingArgumentException(key);
-            }
-
-            return true;
         }
     }
 }

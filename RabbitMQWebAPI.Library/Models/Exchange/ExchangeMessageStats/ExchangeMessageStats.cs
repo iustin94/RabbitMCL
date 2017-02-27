@@ -11,52 +11,52 @@ namespace RabbitMQWebAPI.Library.Models.Exchange.ExchangeMessageStats
     public class ExchangeMessageStats: Model
     {
         [JsonProperty(PropertyName = "publish")]
-        public int publish;
+        public double publish;
 
         [JsonProperty(PropertyName = "publish_details")]
-        public IDictionary<string, int> publish_details;
+        public IDictionary<string, double> publish_details;
 
         [JsonProperty(PropertyName = "publish_in")]
-        public int publish_in;
+        public double publish_in;
 
         [JsonProperty(PropertyName = "publish_in_details")]
-        public IDictionary<string, int> publish_in_details;
+        public IDictionary<string, double> publish_in_details;
 
         [JsonProperty(PropertyName = "publish_out")]
-        public int publish_out;
+        public double publish_out;
 
         [JsonProperty(PropertyName = "publish_out_details")]
-        public IDictionary<string, int> publish_out_details;
+        public IDictionary<string, double> publish_out_details;
 
         [JsonProperty(PropertyName = "ack")]
-        public int ack;
+        public double ack;
 
         [JsonProperty(PropertyName = "ack_details")]
-        public IDictionary<string, int> ack_details;
+        public IDictionary<string, double> ack_details;
 
         [JsonProperty(PropertyName = "deliver_get")]
-        public int deliver_get;
+        public double deliver_get;
 
         [JsonProperty(PropertyName = "deliver_get_details")]
-        public IDictionary<string, int> deliver_get_details;
+        public IDictionary<string, double> deliver_get_details;
 
         [JsonProperty(PropertyName = "confirm")]
-        public int confirm;
+        public double confirm;
         
         [JsonProperty(PropertyName = "confirm_details")]
-        public IDictionary<string, int> confirm_details;
+        public IDictionary<string, double> confirm_details;
 
         [JsonProperty(PropertyName = "return_unroutable")]
-        public int return_unroutable;
+        public double return_unroutable;
 
         [JsonProperty(PropertyName = "return_unroutable_details")]
-        public IDictionary<string, int> return_unroutable_details;
+        public IDictionary<string, double> return_unroutable_details;
 
         [JsonProperty(PropertyName = "redeliver")]
-        public int redeliver;
+        public double redeliver;
 
         [JsonProperty(PropertyName = "redeliver_details")]
-        public IDictionary<string, int> redeliver_details;
+        public IDictionary<string, double> redeliver_details;
 
         public override HashSet<String> Keys
         {

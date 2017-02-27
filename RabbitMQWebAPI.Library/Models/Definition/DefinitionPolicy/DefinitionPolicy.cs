@@ -48,14 +48,6 @@ namespace RabbitMQWebAPI.Library.Models.Definition.DefinitionPolicy
 
         public DefinitionPolicy() { }
 
-        public DefinitionPolicy(DefinitionPolicyParameters parameters)
-        {
-            this.vhost = parameters.vhost;
-            this.name = parameters.name;
-            this.pattern = parameters.pattern;
-            this.apply_to = parameters.apply_to;
-            this.definition = parameters.definition;
-            this.priority = parameters.priority;
-        }
+    
     }
 }

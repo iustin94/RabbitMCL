@@ -21,7 +21,7 @@ namespace RabbitMQWebAPI.Library.Models.Consumer
 
             Consumer model = new Consumer();
             model.arguments = JsonConvert.DeserializeObject<Dictionary<string, string>>(parametersDictionary["arguments"].ToString());
-            model.prefetch_count = Int32.Parse(parametersDictionary["prefetch_count"].ToString());
+            model.prefetch_count = double.Parse(parametersDictionary["prefetch_count"].ToString());
             model.ack_required = Boolean.Parse(parametersDictionary["ack_required"].ToString());
             model.exclusive = Boolean.Parse(parametersDictionary["exclusive"].ToString());
             model.consumer_tag = parametersDictionary["consumer_tag"].ToString();

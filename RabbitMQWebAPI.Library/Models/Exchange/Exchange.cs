@@ -40,7 +40,7 @@ namespace RabbitMQWebAPI.Library.Models.Exchange
             {
                 return new HashSet<string>()
                 {
-                    "message_stats",
+                    //"message_stats", don't check for this because it can be missing
                     "name",
                     "vhost",
                     "type",

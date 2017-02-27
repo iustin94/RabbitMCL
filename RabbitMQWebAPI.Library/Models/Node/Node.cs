@@ -14,173 +14,173 @@ namespace RabbitMQWebAPI.Library.Models.Node
         public List<NodeClusterLink.NodeClusterLink> cluster_links { get; internal set; }
 
         [JsonProperty(PropertyName = "mem_used")]
-        public int mem_used { get; internal set; }
+        public double mem_used { get; internal set; }
 
         [JsonProperty(PropertyName = "mem_used_details")]
-        public Dictionary<string, int> mem_used_details { get; internal set; }
+        public Dictionary<string, double> mem_used_details { get; internal set; }
 
         [JsonProperty(PropertyName = "fd_used")]
-        public int fd_used { get; internal set; }
+        public double fd_used { get; internal set; }
 
         [JsonProperty(PropertyName = "fd_used_details")]
-        public Dictionary<string, int> fd_used_details { get; internal set; }
+        public Dictionary<string, double> fd_used_details { get; internal set; }
 
         [JsonProperty(PropertyName = "sockets_used")]
-        public int sockets_used { get; internal set; }
+        public double sockets_used { get; internal set; }
 
         [JsonProperty(PropertyName = "sockets_used_details")]
-        public Dictionary<string, int> sockets_used_details { get; internal set; }
+        public Dictionary<string, double> sockets_used_details { get; internal set; }
 
         [JsonProperty(PropertyName = "proc_used")]
-        public int proc_used { get; internal set; }
+        public double proc_used { get; internal set; }
 
         [JsonProperty(PropertyName = "proc_used_details")]
-        public Dictionary<string, int> proc_used_details { get; internal set; }
+        public Dictionary<string, double> proc_used_details { get; internal set; }
 
         [JsonProperty(PropertyName = "disk_free")]
-        public int disk_free { get; internal set; }
+        public double disk_free { get; internal set; }
 
         [JsonProperty(PropertyName = "disk_free_details")]
-        public Dictionary<string, int> disk_free_details { get; internal set; }
+        public Dictionary<string, double> disk_free_details { get; internal set; }
 
         [JsonProperty(PropertyName = "io_read_count")]
-        public int io_read_count { get; internal set; }
+        public double io_read_count { get; internal set; }
 
         [JsonProperty(PropertyName = "io_read_count_details")]
-        public Dictionary<string, int> io_read_count_details { get; internal set; }
+        public Dictionary<string, double> io_read_count_details { get; internal set; }
 
         [JsonProperty(PropertyName = "io_read_bytes")]
-        public int io_read_bytes { get; internal set; }
+        public double io_read_bytes { get; internal set; }
 
         [JsonProperty(PropertyName = "io_read_bytes_details")]
-        public Dictionary<string, int> io_read_bytes_details { get; internal set; }
+        public Dictionary<string, double> io_read_bytes_details { get; internal set; }
 
         [JsonProperty(PropertyName = "io_read_avg_time")]
-        public int io_read_avg_time { get; internal set; }
+        public double io_read_avg_time { get; internal set; }
 
         [JsonProperty(PropertyName = "io_read_avg_time_details")]
-        public Dictionary<string, int> io_read_avg_time_details { get; internal set; }
+        public Dictionary<string, double> io_read_avg_time_details { get; internal set; }
 
         [JsonProperty(PropertyName = "io_write_count")]
-        public int io_write_count { get; internal set; }
+        public double io_write_count { get; internal set; }
 
         [JsonProperty(PropertyName = "io_write_count_details")]
-        public Dictionary<string, int> io_write_count_details { get; internal set; }
+        public Dictionary<string, double> io_write_count_details { get; internal set; }
 
         [JsonProperty(PropertyName = "io_write_bytes")]
-        public int io_write_bytes { get; internal set; }
+        public double io_write_bytes { get; internal set; }
 
         [JsonProperty(PropertyName = "io_write_bytes_details")]
-        public Dictionary<string, int> io_write_bytes_details { get; internal set; }
+        public Dictionary<string, double> io_write_bytes_details { get; internal set; }
 
         [JsonProperty(PropertyName = "io_write_avg_time")]
-        public int io_write_avg_time { get; internal set; }
+        public double io_write_avg_time { get; internal set; }
 
         [JsonProperty(PropertyName = "io_write_avg_time_details")]
-        public Dictionary<string, int> io_write_avg_time_details { get; internal set; }
+        public Dictionary<string, double> io_write_avg_time_details { get; internal set; }
 
         [JsonProperty(PropertyName = "io_sync_count")]
-        public int io_sync_count { get; internal set; }
+        public double io_sync_count { get; internal set; }
 
         [JsonProperty(PropertyName = "io_sync_details")]
-        public Dictionary<string, int> io_sync_count_details { get; internal set; }
+        public Dictionary<string, double> io_sync_count_details { get; internal set; }
 
         [JsonProperty(PropertyName = "io_sync_avg_time")]
-        public int io_sync_avg_time { get; internal set; }
+        public double io_sync_avg_time { get; internal set; }
 
         [JsonProperty(PropertyName = "io_sync_avg_time_details")]
-        public Dictionary<string, int> io_sync_avg_time_details { get; internal set; }
+        public Dictionary<string, double> io_sync_avg_time_details { get; internal set; }
 
         [JsonProperty(PropertyName = "io_seek_count")]
-        public int io_seek_count { get; internal set; }
+        public double io_seek_count { get; internal set; }
 
         [JsonProperty(PropertyName = "io_seek_count_details")]
-        public Dictionary<string, int> io_seek_count_details { get; internal set; }
+        public Dictionary<string, double> io_seek_count_details { get; internal set; }
 
         [JsonProperty(PropertyName = "io_seek_avg_time")]
-        public int io_seek_avg_time { get; internal set; }
+        public double io_seek_avg_time { get; internal set; }
 
         [JsonProperty(PropertyName = "io_seek_avg_time_details")]
-        public Dictionary<string, int> io_seek_avg_time_details { get; internal set; }
+        public Dictionary<string, double> io_seek_avg_time_details { get; internal set; }
 
         [JsonProperty(PropertyName = "io_reopen_count")]
-        public int io_reopen_count { get; internal set; }
+        public double io_reopen_count { get; internal set; }
 
         [JsonProperty(PropertyName = "io_reopen_count_details")]
-        public Dictionary<string, int> io_reopen_count_details { get; internal set; }
+        public Dictionary<string, double> io_reopen_count_details { get; internal set; }
 
         [JsonProperty(PropertyName = "mnesia_ram_tx_count")]
-        public int mnesia_ram_tx_count { get; internal set; }
+        public double mnesia_ram_tx_count { get; internal set; }
 
         [JsonProperty(PropertyName = "mnesia_ram_tx_count_details")]
-        public Dictionary<string, int> mnesia_ram_tx_count_details { get; internal set; }
+        public Dictionary<string, double> mnesia_ram_tx_count_details { get; internal set; }
 
         [JsonProperty(PropertyName = "mnesia_disk_tx_count")]
-        public int mnesia_disk_tx_count { get; internal set; }
+        public double mnesia_disk_tx_count { get; internal set; }
 
         [JsonProperty(PropertyName = "mnesia_disk_tx_count_details")]
-        public Dictionary<string, int> mnesia_disk_tx_count_details { get; internal set; }
+        public Dictionary<string, double> mnesia_disk_tx_count_details { get; internal set; }
 
         [JsonProperty(PropertyName = "msg_store_read_count")]
-        public int msg_store_read_count { get; internal set; }
+        public double msg_store_read_count { get; internal set; }
 
         [JsonProperty(PropertyName = "msg_store_read_count_details")]
-        public Dictionary<string, int> msg_store_read_count_details { get; internal set; }
+        public Dictionary<string, double> msg_store_read_count_details { get; internal set; }
 
         [JsonProperty(PropertyName = "msg_store_write_count")]
-        public int msg_store_write_count { get; internal set; }
+        public double msg_store_write_count { get; internal set; }
 
         [JsonProperty(PropertyName = "msg_store_write_count_details")]
-        public Dictionary<string, int> msg_store_write_count_details { get; internal set; }
+        public Dictionary<string, double> msg_store_write_count_details { get; internal set; }
 
         [JsonProperty(PropertyName = "queue_index_journal_write_count")]
-        public int queue_index_journal_write_count { get; internal set; }
+        public double queue_index_journal_write_count { get; internal set; }
 
         [JsonProperty(PropertyName = "queue_index_journal_write_count_details")]
-        public Dictionary<string, int> queue_index_journal_write_count_details { get; internal set; }
+        public Dictionary<string, double> queue_index_journal_write_count_details { get; internal set; }
 
         [JsonProperty(PropertyName = "queue_index_write_count")]
-        public int queue_index_write_count { get; internal set; }
+        public double queue_index_write_count { get; internal set; }
 
         [JsonProperty(PropertyName = "queue_index_write_count_details")]
-        public Dictionary<string, int> queue_index_write_count_details { get; internal set; }
+        public Dictionary<string, double> queue_index_write_count_details { get; internal set; }
 
         [JsonProperty(PropertyName = "queue_index_read_count")]
-        public int queue_index_read_count { get; internal set; }
+        public double queue_index_read_count { get; internal set; }
 
         [JsonProperty(PropertyName = "queue_index_read_count_details")]
-        public Dictionary<string, int> queue_index_read_count_details { get; internal set; }
+        public Dictionary<string, double> queue_index_read_count_details { get; internal set; }
 
         [JsonProperty(PropertyName = "gc_num")]
-        public int gc_num { get; internal set; }
+        public double gc_num { get; internal set; }
 
         [JsonProperty(PropertyName = "gc_enum_details")]
-        public Dictionary<string, int> gc_num_details { get; internal set; }
+        public Dictionary<string, double> gc_num_details { get; internal set; }
 
 
         [JsonProperty(PropertyName = "gc_bytes_reclaimed")]
-        public int gc_bytes_reclaimed { get; internal set; }
+        public double gc_bytes_reclaimed { get; internal set; }
 
         [JsonProperty(PropertyName = "gc_bytes_reclaimed_details")]
-        public Dictionary<string, int> gc_bytes_reclaimed_details { get; internal set; }
+        public Dictionary<string, double> gc_bytes_reclaimed_details { get; internal set; }
 
         [JsonProperty(PropertyName = "context_switches")]
-        public int context_switches { get; internal set; }
+        public double context_switches { get; internal set; }
 
         [JsonProperty(PropertyName = "context_switches_details")]
-        public Dictionary<string, int> context_switches_details { get; internal set; }
+        public Dictionary<string, double> context_switches_details { get; internal set; }
 
         [JsonProperty(PropertyName = "io_file_handle_open_attempt_count")]
-        public int io_file_handle_open_attempt_count { get; internal set; }
+        public double io_file_handle_open_attempt_count { get; internal set; }
 
         [JsonProperty(PropertyName = "io_file_handle_open_attempt_count_details")]
-        public Dictionary<string, int> io_file_handle_open_attempt_count_details { get; internal set; }
+        public Dictionary<string, double> io_file_handle_open_attempt_count_details { get; internal set; }
 
         [JsonProperty(PropertyName = "io_file_handle_open_attempt_avg_time")]
-        public int io_file_handle_open_attempt_avg_time { get; internal set; }
+        public double io_file_handle_open_attempt_avg_time { get; internal set; }
 
         [JsonProperty(PropertyName = "io_file_Handle_open_attempt_avg_time_details")]
-        public Dictionary<string, int> io_file_handle_open_attempt_avg_time_details { get; internal set; }
+        public Dictionary<string, double> io_file_handle_open_attempt_avg_time_details { get; internal set; }
 
         [JsonProperty(PropertyName = "partitions")]
         public List<string> partitions { get; internal set; }
@@ -189,37 +189,37 @@ namespace RabbitMQWebAPI.Library.Models.Node
         public string os_pid { get; internal set; }
 
         [JsonProperty(PropertyName = "fd_total")]
-        public int fd_total { get; internal set; }
+        public double fd_total { get; internal set; }
 
         [JsonProperty(PropertyName = "sockets_total")]
-        public int sockets_total { get; internal set; }
+        public double sockets_total { get; internal set; }
 
         [JsonProperty(PropertyName = "mem_limit")]
-        public int mem_limit { get; internal set; }
+        public double mem_limit { get; internal set; }
 
         [JsonProperty(PropertyName = "mem_alarm")]
         public bool mem_alarm { get; internal set; }
 
         [JsonProperty(PropertyName = "disk_free_limit")]
-        public int disk_free_limit { get; internal set; }
+        public double disk_free_limit { get; internal set; }
 
         [JsonProperty(PropertyName = "disk_free_alarm")]
         public bool disk_free_alarm { get; internal set; }
 
         [JsonProperty(PropertyName = "proc_total")]
-        public int proc_total { get; internal set; }
+        public double proc_total { get; internal set; }
 
         [JsonProperty(PropertyName = "rates_mode")]
         public string rates_mode { get; internal set; }
 
         [JsonProperty(PropertyName = "uptime")]
-        public long uptime { get; internal set; }
+        public double uptime { get; internal set; }
 
         [JsonProperty(PropertyName = "run_queue")]
-        public int run_queue { get; internal set; }
+        public double run_queue { get; internal set; }
 
         [JsonProperty(PropertyName = "processors")]
-        public int processors { get; internal set; }
+        public double processors { get; internal set; }
 
 
         [JsonProperty(PropertyName = "exchange_types")]

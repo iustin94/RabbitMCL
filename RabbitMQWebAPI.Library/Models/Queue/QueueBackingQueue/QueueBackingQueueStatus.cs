@@ -47,21 +47,6 @@ namespace RabbitMQWebAPI.Library.Models.Queue.QueueBackingQueue
 
         public QueueBackingQueueStatus() { }
 
-        public QueueBackingQueueStatus(QueueBackingQueueStatusParameters parameters)
-        {
-            this.mode = parameters.mode;
-            this.q1 = parameters.q1;
-            this.q2 = parameters.q2;
-            this.q3 = parameters.q3;
-            this.q4 = parameters.q4;
-            this.delta = parameters.delta;
-            this.len = parameters.len;
-            this.target_ram_count = parameters.target_ram_count;
-            this.next_seq_id = parameters.next_seq_id;
-            this.avg_ingress_rate = parameters.avg_ingress_rate;
-            this.avg_egress_rate = parameters.avg_egress_rate;
-            this.avg_ack_egress_rate = parameters.avg_ack_egress_rate;
-            this.avg_ack_ingress_rate = parameters.avg_ingress_rate;
-        }
+       
     }
 }

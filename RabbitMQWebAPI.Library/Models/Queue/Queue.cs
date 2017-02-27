@@ -9,7 +9,7 @@ using RabbitMQWebAPI.Library.Models.Queue.QueueBackingQueue;
 
 namespace RabbitMQWebAPI.Library.Models.Queue
 {
-    public class QueueInfo: Model
+    public class Queue: Model
     {
         [JsonProperty(PropertyName = "memory")]
         public double memory { get; internal set; }
@@ -171,47 +171,9 @@ namespace RabbitMQWebAPI.Library.Models.Queue
             set { Keys = value; }
         }
 
-        public QueueInfo() { }
+        public Queue() { }
 
-        public QueueInfo(QueueInfoParameters parameters)
-        {
-            this.memory = parameters.memory;
-            this.reductions = parameters.reductions;
-            this.reductions_details = parameters.reductions_details;
-            this.messages = parameters.messages;
-            this.messages_details = parameters.messages_details;
-            this.messages_ready = parameters.messages_ready;
-            this.messages_ready_details = parameters.messages_ready_details;
-            this.messages_unacknowledged = parameters.messages_unacknowledged;
-            this.messages_unacknowledged_details = parameters.messages_unacknowledged_details;
-            this.idle_since = parameters.idle_since;
-            this.consumer_utilisation = parameters.consumer_utilisation;
-            this.policy = parameters.policy;
-            this.exclusive_consumer_tag = parameters.exclusive_consumer_tag;
-            this.consumers = parameters.consumers;
-            this.recoverable_slaves = parameters.recoverable_slaves;
-            this.state = parameters.state;
-            this.garbage_collection = parameters.garbage_collection;
-            this.messages_ram = parameters.messages_ram;
-            this.messages_ready_ram = parameters.messages_ready_ram;
-            this.messages_unacknowledged_ram = parameters.messages_unacknowledged_ram;
-            this.messages_persistent = parameters.messages_persistent;
-            this.message_bytes = parameters.message_bytes;
-            this.message_bytes_unacknowledged = parameters.message_bytes_unacknowledged;
-            this.message_bytes_ram = parameters.message_bytes_ram;
-            this.message_bytes_persistent = parameters.message_bytes_persistent;
-            this.head_message_timestamp = parameters.head_message_timestamp;
-            this.disk_reads = parameters.disk_reads;
-            this.disk_writes = parameters.disk_writes;
-            this.backing_queue_status = parameters.backing_queue_status;
-            this.node = parameters.node;
-            this.arguments = parameters.arguments;
-            this.exclusive = parameters.exclusive;
-            this.auto_delete = parameters.auto_delete;
-            this.durable = parameters.durable;
-            this.vhost = parameters.vhost;
-            this.name = parameters.name;
-        }
+      
 
     }
 }
