@@ -11,30 +11,42 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RabbitMQWebAPI.Library.Models;
 using RabbitMQWebAPI.Library.Models.Exchange;
+using RabbitMQWebAPI.Library.Models.Exchange.ExchangeMessageStats;
+using RabbitMQWebAPI.Library.DataAccess.DataFactory;
 
 namespace RabbitMQWebAPI.Library.DataAccess
 {
     public class Exchanges
     {
+        private ExchangeSentinel sentinel = new ExchangeSentinel();
+        private DataFactory<Exchange> dataFactory;
 
-        /// <summary>
-        /// A list of all exchanges.
-        /// </summary>
-        /// <returns></returns>
-        public static async Task<IEnumerable<Exchange>> GetExchangeInfos()
+        public Exchanges(HttpClient client)
         {
-            throw new NotImplementedException();
+            dataFactory = new DataFactory<Exchange>(client);
         }
 
         /// <summary>
-        /// An individual exchance
+        /// Returns a IEnumerable&lt;Echange&gt; of all exchanges.
+        /// </summary>
+        /// <returns></returns>
+        public  async Task<IEnumerable<Exchange>> GetExchanges()
+        {
+            return await dataFactory.BuildModels("/api/exchanges", sentinel);
+        }
+
+        /// <summary>
+        ///  Returns an individual Exchange
         /// </summary>
         /// <param name="exchangeName"></param>
         /// <param name="vhost"></param>
         /// <returns></returns>
-        public static async Task<Exchange> GetExchangeInfoOnVhost(string exchangeName, string vhost = "/")
+        public async Task<Exchange> GetExchangeInfoOnVhost(string exchangeName, string vhost)
         {
-            throw new NotImplementedException();
+            exchangeName = WebUtility.UrlEncode(exchangeName);
+            vhost = WebUtility.UrlEncode("vhost");
+
+            return await dataFactory.BuildModel(String.Format("/api/exchanges/{0}/{1}", vhost, exchangeName), sentinel);
         }
 
         /// <summary>
@@ -43,9 +55,11 @@ namespace RabbitMQWebAPI.Library.DataAccess
         /// <param name="exchangeName"></param>
         /// <param name="vhost"></param>
         /// <returns></returns>
-        public static async Task<IEnumerable<Exchange>> GetExchangeInfosOnVhost(string vhost)
+        public  async Task<IEnumerable<Exchange>> GetExchangeInfosOnVhost(string vhost)
         {
-            throw new NotImplementedException();
+            vhost = WebUtility.UrlEncode(vhost);
+
+            return await dataFactory.BuildModels(String.Format("/api/exchanges/{0}", vhost), sentinel);
         }
 
     }

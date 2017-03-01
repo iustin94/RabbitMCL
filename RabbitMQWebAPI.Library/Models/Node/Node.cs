@@ -251,7 +251,7 @@ namespace RabbitMQWebAPI.Library.Models.Node
                 return new HashSet<string>()
         {
             "cluster_links",
-            "mem_userd",
+            "mem_used",
             "mem_used_details",
             "fd_used",
             "fd_used_details",
@@ -296,7 +296,7 @@ namespace RabbitMQWebAPI.Library.Models.Node
             "queue_index_read_count",
             "queue_index_read_count_details",
             "gc_num",
-            "gc_num_detail",
+            "gc_num_details",
             "gc_bytes_reclaimed",
             "gc_bytes_reclaimed_details",
             "context_switches",

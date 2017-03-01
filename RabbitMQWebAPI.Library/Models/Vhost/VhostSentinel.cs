@@ -36,7 +36,7 @@ namespace RabbitMQWebAPI.Library.Models.Vhost
             model.messages = double.Parse(parametersDictionary["messages"].ToString());
             model.messages_details =
                 JsonConvert.DeserializeObject<Dictionary<string, double>>(
-                    parametersDictionary["message_details"].ToString());
+                    parametersDictionary["messages_details"].ToString());
 
             model.messages_ready = double.Parse(parametersDictionary["messages_ready"].ToString());
             model.messages_ready_details =

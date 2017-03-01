@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RabbitMQWebAPI.Library.DataAccess.DataFactory;
 using RabbitMQWebAPI.Library.Models.Channel;
+using RabbitMQWebAPI.Library.Models.Connection;
 
 namespace RabbitMQWebAPI.Library.DataAccess
 {
@@ -55,6 +56,18 @@ namespace RabbitMQWebAPI.Library.DataAccess
             channelName = WebUtility.UrlEncode(channelName);
 
             return await dataFactory.BuildModel(String.Format("/api/channels/{0}", channelName), sentinel);
+        }
+
+        /// <summary>
+        /// Returns IEnumerable&lt;Connection&gt; of all channels for a given connection.
+        /// </summary>
+        /// <param name="connectionName"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<Channel>> GetChannelsForConnection(string connectionName)
+        {
+            connectionName = WebUtility.UrlEncode(connectionName);
+
+            return await dataFactory.BuildModels(String.Format("/api/connections/{0}/channels", connectionName), sentinel);
         }
     }
 }

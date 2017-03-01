@@ -25,7 +25,7 @@ namespace RabbitMQWebAPI.Library.Models.Policy
                     "vhost",
                     "name",
                     "pattern",
-                    "apply_to",
+                    "apply-to",
                     "definition",
                     "priority"
                 };

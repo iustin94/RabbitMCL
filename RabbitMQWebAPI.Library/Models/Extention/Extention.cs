@@ -8,7 +8,7 @@ using RabbitMQWebAPI.Library.Models.BaseModel;
 
 namespace RabbitMQWebAPI.Library.Models.Extention
 {
-    public class ExtentionInfo: Model
+    public class Extention: Model
     {
         [JsonProperty(PropertyName = "javascript")]
         public string javascript { get; internal set; }
@@ -26,7 +26,7 @@ namespace RabbitMQWebAPI.Library.Models.Extention
             set { Keys = value; }
         }
 
-        public ExtentionInfo() { }
+        public Extention() { }
 
        
     }

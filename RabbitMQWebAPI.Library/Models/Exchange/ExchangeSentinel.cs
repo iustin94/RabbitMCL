@@ -11,7 +11,7 @@ using RabbitMQWebAPI.Library.Models.Sentinel;
 
 namespace RabbitMQWebAPI.Library.Models.Exchange
 {
-    public class ExchangeInfoSentinel : Sentinel<Exchange>
+    public class ExchangeSentinel : Sentinel<Exchange>
     {
         public override IModel ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary)
         {

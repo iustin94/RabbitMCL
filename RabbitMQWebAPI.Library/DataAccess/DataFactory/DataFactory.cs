@@ -17,8 +17,7 @@ namespace RabbitMQWebAPI.Library.DataAccess.DataFactory
             this._client = client;
         }
 
-        public DataFactory() { }
-
+      
 
         public async Task<List<TResultModel>> BuildModels(string path, ISentinel sentinel)
         {

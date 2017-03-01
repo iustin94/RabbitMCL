@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQWebAPI.Library", "R
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingApp", "TestingApp\TestingApp.csproj", "{B6FC3F11-20C4-4B95-84E6-48310C8DA051}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DontRunThis", "DontRunThis\DontRunThis.csproj", "{737B0DF0-70D7-4654-BCF9-4F33453DDD5D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{B6FC3F11-20C4-4B95-84E6-48310C8DA051}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6FC3F11-20C4-4B95-84E6-48310C8DA051}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B6FC3F11-20C4-4B95-84E6-48310C8DA051}.Release|Any CPU.Build.0 = Release|Any CPU
-		{737B0DF0-70D7-4654-BCF9-4F33453DDD5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{737B0DF0-70D7-4654-BCF9-4F33453DDD5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{737B0DF0-70D7-4654-BCF9-4F33453DDD5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{737B0DF0-70D7-4654-BCF9-4F33453DDD5D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

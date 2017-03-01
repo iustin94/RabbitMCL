@@ -25,15 +25,15 @@ namespace RabbitMQWebAPI.Library.Models.Parameter.ParameterValue
             {
                return new HashSet<string>()
         {
-            "src_uri",
-            "src_queue",
-            "dest_uri",
-            "dest_queue",
-            "prefetch_count",
-            "reconnect_delay",
-            "add_forward_headers",
+            "src-uri",
+            "src-queue",
+            "dest-uri",
+            "dest-queue",
+            "prefetch-count",
+            "reconnect-delay",
+            "add-forward-headers",
             "ack-mode",
-            "delete_after"
+            "delete-after"
         };
             }
 

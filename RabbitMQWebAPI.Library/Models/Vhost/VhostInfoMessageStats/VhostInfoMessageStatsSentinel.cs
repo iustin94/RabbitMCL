@@ -16,7 +16,7 @@ namespace RabbitMQWebAPI.Library.Models.Vhost.VhostInfoMessageStats
         {
             VhostInfoMessageStats model = new VhostInfoMessageStats();
 
-            model.publish_in = double.Parse(parametersDictionary["publish_int"].ToString());
+            model.publish_in = double.Parse(parametersDictionary["publish_in"].ToString());
             model.publish_in_details =
                 JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["publish_in_details"].ToString());
@@ -28,7 +28,7 @@ namespace RabbitMQWebAPI.Library.Models.Vhost.VhostInfoMessageStats
 
             model.publish_out = double.Parse(parametersDictionary["publish_out"].ToString());
             model.publish_out_details =
-                JsonConvert.DeserializeObject<Dictionary<string, double>>(parametersDictionary["publish_out_datails"].ToString());
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(parametersDictionary["publish_out_details"].ToString());
 
             model.ack = double.Parse(parametersDictionary["ack"].ToString());
             model.ack_details =

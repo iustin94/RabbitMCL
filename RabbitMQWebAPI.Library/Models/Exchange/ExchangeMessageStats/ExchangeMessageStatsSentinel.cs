@@ -15,7 +15,7 @@ namespace RabbitMQWebAPI.Library.Models.Exchange.ExchangeMessageStats
         public override IModel ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary)
         {
            ExchangeMessageStats parameters = new ExchangeMessageStats();
-            parameters.publish_in = double.Parse(parametersDictionary["publish_int"].ToString());
+            parameters.publish_in = double.Parse(parametersDictionary["publish_in"].ToString());
             parameters.publish_in_details =
                 JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["publish_in_details"].ToString());
@@ -27,7 +27,7 @@ namespace RabbitMQWebAPI.Library.Models.Exchange.ExchangeMessageStats
 
             parameters.publish_out = double.Parse(parametersDictionary["publish_out"].ToString());
             parameters.publish_out_details =
-                JsonConvert.DeserializeObject<Dictionary<string, double>>(parametersDictionary["publish_out_datails"].ToString());
+                JsonConvert.DeserializeObject<Dictionary<string, double>>(parametersDictionary["publish_out_details"].ToString());
 
             parameters.ack = double.Parse(parametersDictionary["ack"].ToString());
             parameters.ack_details =

@@ -9,11 +9,11 @@ using RabbitMQWebAPI.Library.Models.Sentinel;
 
 namespace RabbitMQWebAPI.Library.Models.Extention
 {
-    public class ExtentionInfoSentinel : Sentinel<ExtentionInfo>
+    public class ExtentionSentinel : Sentinel<Extention>
     {
         public override IModel ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary)
         {
-            ExtentionInfo parameters = new ExtentionInfo();
+            Extention parameters = new Extention();
             parameters.javascript = parametersDictionary["javascript"].ToString();
 
             return parameters;

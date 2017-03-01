@@ -20,7 +20,7 @@ namespace RabbitMQWebAPI.Library.Models.Parameter
             {
                return new HashSet<string>()
         {
-            "values",
+            "value",
             "vhost",
             "component",
             "name"

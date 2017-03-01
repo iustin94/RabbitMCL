@@ -9,13 +9,13 @@ using RabbitMQWebAPI.Library.Models.Sentinel;
 
 namespace RabbitMQWebAPI.Library.Models.Definition.DefinitionUser
 {
-    class UserSentinel : Sentinel<DefinitionUser>
+    class DefinitionUserSentinel : Sentinel<DefinitionUser>
     {
         public override IModel ParseDictionaryToParameters(IDictionary<String, Object> parametersDictionary)
         {
             DefinitionUser parameters = new DefinitionUser();
             parameters.name = parametersDictionary["name"].ToString();
-            parameters.hashing_algorithm = parametersDictionary["hashin_algorithm"].ToString();
+            parameters.hashing_algorithm = parametersDictionary["hashing_algorithm"].ToString();
             parameters.password_hash = parametersDictionary["password_hash"].ToString();
             parameters.tags = parametersDictionary["tags"].ToString();
 

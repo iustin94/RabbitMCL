@@ -1,26 +1,58 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using RabbitMQWebAPI.Library.DataAccess.DataFactory;
+using RabbitMQWebAPI.Library.Models.Connection;
 
 namespace RabbitMQWebAPI.Library.DataAccess
 {
-    class Connections
+    public class Connections
     {
-        /*TODO /api/connections
-         * A list of all open connections.
-         */
+        private ConnectionSentinel sentinel = new ConnectionSentinel();
+        private DataFactory<Connection> dataFactory;
 
-        /*TODO /api/vhosts/vhost/connections	
-         * A list of all open connections in a specific vhost.
-         */
+        public Connections(HttpClient client)
+        {
+            dataFactory = new DataFactory<Connection>(client);
+        }
 
-        /*TODO /api/connections/name	
-         * An individual connection. DELETEing it will close the connection. Optionally set the "X-Reason" header when DELETEing to provide a reason.
-         */
+        /// <summary>
+        /// Returns a IEnumerable&lt;Connection&gt; of all open connections.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IEnumerable<Connection>>  GetConnections()
+        {
+            return await dataFactory.BuildModels("/api/connections", sentinel);
+        }
 
-        /*TODO /api/connections/name/channels 
-         */
+        /// <summary>
+        /// Returns a IEnumerable&lt;Connection&gt; of all open connections in a specific vhost.
+        /// </summary>
+        /// <param name="vhost"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<Connection>> GetConnectionsOnVhost(string vhost)
+        {
+            vhost = WebUtility.UrlEncode(vhost);
+
+            return await dataFactory.BuildModels(String.Format("/api/vhosts/{0}/connections", vhost), sentinel);
+        }
+
+        /// <summary>
+        /// Returns an individual Connection by name.
+        /// </summary>
+        /// <param name="vhost"></param>
+        /// <returns></returns>
+        public async Task<Connection> GetConnectionByName(string name)
+        {
+            name = WebUtility.UrlEncode(name);
+
+            return await dataFactory.BuildModel(String.Format("/api/connections/{0}", name), sentinel);
+        }
+
+     
     }
 }

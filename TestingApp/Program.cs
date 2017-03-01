@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using RabbitMQWebAPI.Library.Models.Channel;
+using RabbitMQWebAPI.Library.Models.Connection;
+using RabbitMQWebAPI.Library.Models.Definition;
 
 namespace TestingApp
 {
@@ -23,7 +25,7 @@ namespace TestingApp
             client.BaseAddress = new Uri("http://nc-mso-test01:15672/");
 
             Bindings bindings = new Bindings(client);
-            Channels channels = new Channels(client);
+            var manager = new Extentions(client);
 
             //var tmp1 = bindings.GetBindingInfos().Result;
             //var tmp2 = bindings.GetBindingInfosBetweenExchangeAndQueueOnVhost("ha-exchange-MainExchange", "ha.queue1", "/"); // Should return 1 binding
@@ -32,7 +34,7 @@ namespace TestingApp
             //var tmp5 = bindings.GetBindingInfosToExchangeOnVhost("ha.exchange-alternativeExchange", "/").Result;
 
 
-            var tmp1 = channels.GetChannel("<rabbit@nc-mso-test01.2.15874.0> (1)").Result;
+            var tmp1 = manager.GetExtentions().Result;
 
             //foreach (var idk in tmp1)
             //{

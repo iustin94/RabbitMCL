@@ -1,44 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using RabbitMQWebAPI.Library.DataAccess.DataFactory;
 
 namespace RabbitMQWebAPI.Library.DataAccess
 {
     class Miscellaneous
     {
-        /*TODO /api/overview	
-         * Various random bits of information that describe the whole system.
-         */
+        private HttpClient _client;
+        public Miscellaneous(HttpClient client)
+        {
+            _client = client;
+        }
 
-        /*TODO /api/cluster-name	
-         * Name identifying this RabbitMQ cluster.
-         */
+        /// <summary>
+        ///  Various random bits of information that describe the whole system.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<Dictionary<string, string>> GetOverview()
+        {
+            var result = GetJsonString("/api/overview");
 
-        /*TODO /api/nodes
-         * A list of nodes in the RabbitMQ cluster.
-         */
+            return JsonConvert.DeserializeObject<Dictionary<string, string>>(result.ToString());
+        }
 
-        /*TODO /api/nodes/name	
-         * An individual node in the RabbitMQ cluster. Add "?memory=true" to 
-         * get memory statistics, and "?binary=true" to get a breakdown of binary memory use (may be expensive if there are many small binaries in the system).
-         */
+        /// <summary>
+        /// Name identifying this RabbitMQ cluster.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<string> GetClusterName()
+        {
+            var result = GetJsonString("api/cluster-name");
 
-        /*TODO /api/extensions	
-         * A list of extensions to the management plugin.
-         */
+            return result.ToString();
+        }
 
-        /*TODO /api/definitions
-         *The server definitions - exchanges, queues, bindings, users, virtual hosts, permissions and parameters. Everything apart from messages. 
-         *POST to upload an existing set of definitions. Note that:
-         *    The definitions are merged. Anything already existing on the server but not in the uploaded definitions is untouched.
-         *    Conflicting definitions on immutable objects (exchanges, queues and bindings) will cause an error.
-         *    Conflicting definitions on mutable objects will cause the object in the server to be overwritten with the object from the definitions.
-         *    In the event of an error you will be left with a part-applied set of definitions.
-         *    For convenience you may upload a file from a browser to this URI (i.e. you can use multipart/form-data as well as application/json) in 
-         *    which case the definitions should be uploaded as a form field named "file".
-         */
+        
+
+        
+        
 
         /*TODO /api/whoami
          * 	Details of the currently authenticated user.
@@ -63,5 +67,23 @@ namespace RabbitMQWebAPI.Library.DataAccess
          *If something fails, will return HTTP status 200 with the body of
          *{"status":"failed","reason":"string"}
          */
+
+        private async Task<string> GetJsonString(string path)
+        {
+            string result;
+
+            using (_client)
+            {
+                using (
+                    var response =
+                        await _client.GetAsync(path, HttpCompletionOption.ResponseContentRead).ConfigureAwait(false))
+                {
+                    result = await response.Content.ReadAsStringAsync();
+                }
+            }
+
+
+            return result;
+        }
     }
 }

@@ -119,10 +119,10 @@ namespace RabbitMQWebAPI.Library.Models.Node
                 JsonConvert.DeserializeObject<Dictionary<string, double>>(
                     parametersDictionary["io_read_count_details"].ToString());
 
-            model.io_read_bytes = double.Parse(parametersDictionary["io_read_byte"].ToString());
+            model.io_read_bytes = double.Parse(parametersDictionary["io_read_bytes"].ToString());
             model.io_read_count_details = 
                 JsonConvert.DeserializeObject<Dictionary<string, double>>(
-                    parametersDictionary["io_read_count_details"].ToString());
+                    parametersDictionary["io_read_bytes_details"].ToString());
 
             model.io_read_avg_time = double.Parse(parametersDictionary["io_read_avg_time"].ToString());
             model.io_read_avg_time_details =
@@ -142,12 +142,12 @@ namespace RabbitMQWebAPI.Library.Models.Node
             model.io_write_avg_time = double.Parse(parametersDictionary["io_write_avg_time"].ToString());
             model.io_write_avg_time_details =
                 JsonConvert.DeserializeObject<Dictionary<string, double>>(
-                    parametersDictionary["io_write_avg_time"].ToString());
+                    parametersDictionary["io_write_avg_time_details"].ToString());
 
             model.io_sync_count = double.Parse(parametersDictionary["io_sync_count"].ToString());
             model.io_sync_count_details =
                 JsonConvert.DeserializeObject<Dictionary<string, double>>(
-                    parametersDictionary["io_sync_count"].ToString());
+                    parametersDictionary["io_sync_count_details"].ToString());
 
             model.io_sync_avg_time = double.Parse(parametersDictionary["io_sync_avg_time"].ToString());
             model.io_sync_avg_time_details =
@@ -198,12 +198,12 @@ namespace RabbitMQWebAPI.Library.Models.Node
             model.queue_index_read_count = double.Parse(parametersDictionary["queue_index_read_count"].ToString());
             model.queue_index_read_count_details =
                 JsonConvert.DeserializeObject<Dictionary<string, double>>(
-                    parametersDictionary["queue_index_read_count_deta"].ToString());
+                    parametersDictionary["queue_index_read_count_details"].ToString());
 
-            model.gc_num = double.Parse(parametersDictionary["gc_enum"].ToString());
+            model.gc_num = double.Parse(parametersDictionary["gc_num"].ToString());
             model.gc_num_details =
                 JsonConvert.DeserializeObject<Dictionary<string, double>>(
-                    parametersDictionary["gc_enum_details"].ToString());
+                    parametersDictionary["gc_num_details"].ToString());
 
             model.gc_bytes_reclaimed = double.Parse(parametersDictionary["gc_bytes_reclaimed"].ToString());
             model.gc_bytes_reclaimed_details =

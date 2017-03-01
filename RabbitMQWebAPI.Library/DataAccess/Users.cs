@@ -1,23 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using RabbitMQWebAPI.Library.DataAccess.DataFactory;
+using RabbitMQWebAPI.Library.Models.User;
+using UserSentinel = RabbitMQWebAPI.Library.Models.User.UserSentinel;
 
 namespace RabbitMQWebAPI.Library.DataAccess
 {
-    class Users
+    public class Users
     {
-        /*TODO /api/users	
-         * A list of all users.
-         */
+        private UserSentinel sentinel = new UserSentinel();
+        private DataFactory<User> dataFactory;
 
-        /*TODO /api/users/name
-         * An individual user.
-         */
+        public Users(HttpClient client)
+        {
+            dataFactory = new DataFactory<User>(client);
+        }
 
-        /*TODO /api/users/user/permissions	
-         * A list of all permissions for a given user.
-         */
+         /// <summary>
+         /// Returns a IEnumerable&lt;User&gt; with all users.
+         /// </summary>
+         /// <returns></returns>
+        public async Task<IEnumerable<User>> GetUsers()
+        {
+            return await dataFactory.BuildModels("/api/users", sentinel);
+        }
+
+        /// <summary>
+        /// Returns a User identified by his username.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<User> GetUserByName(string userName)
+        {
+            userName = WebUtility.UrlEncode(userName);
+
+            return await dataFactory.BuildModel(String.Format("/api/users/{0}", userName), sentinel);
+        } 
+
+        
     }
 }

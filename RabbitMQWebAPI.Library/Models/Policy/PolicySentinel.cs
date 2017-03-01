@@ -20,7 +20,7 @@ namespace RabbitMQWebAPI.Library.Models.Policy
             model.vhost = parametersDictionary["vhost"].ToString();
             model.name = parametersDictionary["name"].ToString();
             model.pattern = parametersDictionary["pattern"].ToString();
-            model.apply_to = parametersDictionary["apply_to"].ToString();
+            model.apply_to = parametersDictionary["apply-to"].ToString();
             model.definition =(PolicyDefinition.PolicyDefinition)
                 policyDefinitionSentinel.CreateModel(
                     JsonConvert.DeserializeObject<Dictionary<string, object>>(
