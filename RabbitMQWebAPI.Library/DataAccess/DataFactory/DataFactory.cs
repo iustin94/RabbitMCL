@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RabbitMQWebAPI.Library.Models.BaseModel;
+using RabbitMQWebAPI.Library.Models.Error;
 using RabbitMQWebAPI.Library.Models.Sentinel;
 
 namespace RabbitMQWebAPI.Library.DataAccess.DataFactory
@@ -11,6 +13,7 @@ namespace RabbitMQWebAPI.Library.DataAccess.DataFactory
     public class DataFactory<TResultModel>: IDataFactory<TResultModel> where TResultModel: IModel, new()
     { 
         private HttpClient _client;
+        private ErrorSentinel errorSentinel = new ErrorSentinel();
 
         public DataFactory(HttpClient client)
         {
@@ -21,20 +24,43 @@ namespace RabbitMQWebAPI.Library.DataAccess.DataFactory
 
         public async Task<List<TResultModel>> BuildModels(string path, ISentinel sentinel)
         {
-            var result = await GetJsonString(path);
-
-            JArray array = JsonConvert.DeserializeObject<JArray>(result);
 
             List<TResultModel> models = new List<TResultModel>();
 
-            foreach (JObject data in array)
-            {
-                TResultModel model = new TResultModel();
-                model = (TResultModel)sentinel.CreateModel(JsonConvert.DeserializeObject<Dictionary<string, object>>(data.ToString()), model);
+            var result = await GetJsonString(path);
 
-                models.Add(model);
+
+            Error errorModel= null;
+
+            try
+            {
+                errorModel =
+                    (Error)
+                    errorSentinel.CreateModel(JsonConvert.DeserializeObject<Dictionary<string, object>>(result),
+                        new Error());
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex);
             }
 
+            if (errorModel!= null)
+            {
+                throw new Exception("Call to RabbitMQ api has failed."+ errorModel.ToString());
+            }
+            else
+            {
+               
+                TResultModel model = new TResultModel();
+                JArray array = JsonConvert.DeserializeObject<JArray>(result);
+                foreach (JObject data in array)
+                {
+                    model = new TResultModel();
+                    model = (TResultModel)sentinel.CreateModel(JsonConvert.DeserializeObject<Dictionary<string, object>>(data.ToString()), model);
+
+                    models.Add(model);
+                }
+            }
             return models;
         }
 

@@ -22,19 +22,16 @@ namespace TestingApp
             handler.Credentials = new NetworkCredential("jssau4rmq", "iaohmf");
 
             HttpClient client = new HttpClient(handler, true);
-            client.BaseAddress = new Uri("http://nc-mso-test01:15672/");
+            client.BaseAddress = new Uri("http://nc-mso-test02:15672/");
 
             Bindings bindings = new Bindings(client);
-            var manager = new Extentions(client);
+            var manager = new Bindings(client);
 
-            //var tmp1 = bindings.GetBindingInfos().Result;
+            var tmp1 = bindings.GetBindingInfos().Result;
             //var tmp2 = bindings.GetBindingInfosBetweenExchangeAndQueueOnVhost("ha-exchange-MainExchange", "ha.queue1", "/"); // Should return 1 binding
             //var tmp3 = bindings.GetBindingInfosForExchangeOnVhost("/", "ha.exchange-alternativeExchange");
             //var tmp4 = bindings.GetBindingInfosForVhost("/");
             //var tmp5 = bindings.GetBindingInfosToExchangeOnVhost("ha.exchange-alternativeExchange", "/").Result;
-
-
-            var tmp1 = manager.GetExtentions().Result;
 
             //foreach (var idk in tmp1)
             //{

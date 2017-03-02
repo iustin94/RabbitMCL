@@ -39,9 +39,8 @@ namespace RabbitMQWebAPI.Library.DataAccess
         /// <returns></returns>
         public async Task<IEnumerable<Binding>> GetBindingInfos()
         {
-            List<Binding> bindings = await dataFactory.BuildModels("api/bindings", this.sentinel);
-
-            return bindings;
+            //return await dataFactory.BuildModels("api/bindings", this.sentinel);
+            return await dataFactory.BuildModels("api/badcall", this.sentinel);
         }
 
 

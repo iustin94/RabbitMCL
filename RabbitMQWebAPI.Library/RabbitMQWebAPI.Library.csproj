@@ -67,6 +67,8 @@
     <Compile Include="DictionaryMissingArgumentException.cs" />
     <Compile Include="Models\BaseModel\IModel.cs" />
     <Compile Include="Models\BaseModel\Model.cs" />
+    <Compile Include="Models\Error\Error.cs" />
+    <Compile Include="Models\Error\ErrorSentinel.cs" />
     <Compile Include="Models\Sentinel\ISentinel.cs" />
     <Compile Include="Models\Binding\Binding.cs" />
     <Compile Include="Models\Binding\BindingSentinel.cs" />

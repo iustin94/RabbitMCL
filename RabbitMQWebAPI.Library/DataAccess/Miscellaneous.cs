@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ using RabbitMQWebAPI.Library.DataAccess.DataFactory;
 
 namespace RabbitMQWebAPI.Library.DataAccess
 {
-    class Miscellaneous
+    public class Miscellaneous
     {
         private HttpClient _client;
         public Miscellaneous(HttpClient client)
@@ -21,11 +22,11 @@ namespace RabbitMQWebAPI.Library.DataAccess
         ///  Various random bits of information that describe the whole system.
         /// </summary>
         /// <returns></returns>
-        public async Task<Dictionary<string, string>> GetOverview()
+        public async Task<Dictionary<string, object>> GetOverview()
         {
-            var result = GetJsonString("/api/overview");
+            var result = await GetJsonString("/api/overview");
 
-            return JsonConvert.DeserializeObject<Dictionary<string, string>>(result.ToString());
+            return JsonConvert.DeserializeObject<Dictionary<string, object>>(result.ToString());
         }
 
         /// <summary>
@@ -34,39 +35,68 @@ namespace RabbitMQWebAPI.Library.DataAccess
         /// <returns></returns>
         public async Task<string> GetClusterName()
         {
-            var result = GetJsonString("api/cluster-name");
+            var result = await GetJsonString("api/cluster-name");
 
             return result.ToString();
         }
 
-        
+        /// <summary>
+        /// Details of the currently authenticated user.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<Dictionary<string, string>> WhoAmI()
+        {
+            var result = await GetJsonString("api/whoami");
+            return JsonConvert.DeserializeObject<Dictionary<string, string>>(result.ToString());
+        }
 
-        
-        
+        /// <summary>
+        /// Declares a test queue, then publishes and consumes a message. Intended for use by monitoring tools. If everything is working correctly, 
+        /// will return HTTP status 200 with body:	
+        /// </summary>
+        /// <param name="vhost"></param>
+        /// <returns></returns>
+        public async Task<Dictionary<string, string>> AlivenessTest(string vhost)
+        {
+            vhost = WebUtility.UrlEncode(vhost);
 
-        /*TODO /api/whoami
-         * 	Details of the currently authenticated user.
-         */
+            var result = await GetJsonString(String.Format("/api/aliveness-test/{0}", vhost));
 
-        /*TODO /api/aliveness-test/vhost
-         * Declares a test queue, then publishes and consumes a message. Intended for use by monitoring tools. If everything is working correctly, 
-         * will return HTTP status 200 with body:	
-         */
+            return JsonConvert.DeserializeObject<Dictionary<string, string>>(result.ToString());
 
-        /*TODO /api/healthchecks/node	
-         * Runs basic healthchecks in the current node. Checks that the rabbit application is running, channels and queues can be listed successfully, 
-         * and that no alarms are in effect. If everything is working correctly, will return HTTP status 200 with body:{"status":"ok"}
-         * If something fails, will return HTTP status 200 with the body of
-         *{"status":"failed","reason":"string"}
+        }
 
-         */
 
-        /*TODO /api/healthchecks/node/node	
-         * Runs basic healthchecks in the given node. Checks that the rabbit application is running, list_channels and list_queues return, and that no alarms are raised. If everything is working correctly, will return HTTP status 200 with body:
-         ';*{"status":"ok"}
-         *If something fails, will return HTTP status 200 with the body of
-         *{"status":"failed","reason":"string"}
-         */
+        /// <summary>
+        /// Runs basic healthchecks in the current node. Checks that the rabbit application is running, channels and queues can be listed successfully, 
+        /// and that no alarms are in effect.If everything is working correctly, will return HTTP status 200 with body:{"status":"ok"
+        /// If something fails, will return HTTP status 200 with the body of
+        /// {"status":"failed","reason":"string"}
+        /// </summary>
+        /// <returns></returns>
+
+        public async Task<Dictionary<string, string>> HealthCheckCurrentNode()
+        {
+            var result =await GetJsonString("/api/healthchecks/node");
+
+            return JsonConvert.DeserializeObject<Dictionary<string, string>>(result.ToString());
+        }
+
+        /// <summary>
+        ///  Runs basic healthchecks in the given node. Checks that the rabbit application is running, list_channels and list_queues return, and that no alarms are raised. If everything is working correctly, will return HTTP status 200 with body:
+        /// ';*{"status":"ok"
+        /// If something fails, will return HTTP status 200 with the body of
+        /// {"status":"failed","reason":"string"}
+        /// </summary>
+        /// <param name="nodeName"></param>
+        /// <returns></returns>
+        public async Task<Dictionary<string, string>> HealthcheckNode(string nodeName)
+        {
+            var result = await GetJsonString(String.Format("/api/healthchecks/node/{0}", nodeName));
+
+            return JsonConvert.DeserializeObject<Dictionary<string, string>>(result.ToString());
+        }
+
 
         private async Task<string> GetJsonString(string path)
         {
@@ -81,7 +111,6 @@ namespace RabbitMQWebAPI.Library.DataAccess
                     result = await response.Content.ReadAsStringAsync();
                 }
             }
-
 
             return result;
         }
