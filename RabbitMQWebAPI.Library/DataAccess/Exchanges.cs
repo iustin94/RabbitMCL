@@ -41,7 +41,7 @@ namespace RabbitMQWebAPI.Library.DataAccess
         /// <param name="exchangeName"></param>
         /// <param name="vhost"></param>
         /// <returns></returns>
-        public async Task<Exchange> GetExchangeInfoOnVhost(string exchangeName, string vhost)
+        public async Task<Exchange> GetExchangeOnVhost(string exchangeName, string vhost)
         {
             exchangeName = WebUtility.UrlEncode(exchangeName);
             vhost = WebUtility.UrlEncode("vhost");
@@ -55,7 +55,7 @@ namespace RabbitMQWebAPI.Library.DataAccess
         /// <param name="exchangeName"></param>
         /// <param name="vhost"></param>
         /// <returns></returns>
-        public  async Task<IEnumerable<Exchange>> GetExchangeInfosOnVhost(string vhost)
+        public  async Task<IEnumerable<Exchange>> GetExchangesOnVhost(string vhost)
         {
             vhost = WebUtility.UrlEncode(vhost);
 

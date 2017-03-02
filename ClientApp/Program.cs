@@ -202,7 +202,7 @@ namespace ClientApp
                            queueStatuses = new Dictionary<string, State.StateEnum>();
 
 
-                           var latestQueueInfos = queues.GetQueueInfos().Result;
+                           var latestQueueInfos = queues.GetQueues().Result;
 
                            foreach (Queue q in latestQueueInfos)
                            {
@@ -232,16 +232,18 @@ namespace ClientApp
 
             IEnumerable<Binding> bindings = await bindingsFactory.GetBindingInfos();
 
+            var exchangesManager = new Exchanges(client);
+
             foreach (var binding in bindings)
             {
                 if (binding.destination == "ha.queue1" && binding.source != String.Empty)
                 {
-                    ei1 = Exchanges.GetExchangeInfoOnVhost(binding.source, "/").Result;
+                    ei1 = exchangesManager.GetExchangeOnVhost(binding.source, "/").Result;
                     // return Exchanges.GetExchangeInfos().Result;
                 }
                 else if (binding.destination == "ha.queue1-FallBack" && binding.source != String.Empty)
                 {
-                    ei2 = Exchanges.GetExchangeInfoOnVhost(binding.source, "/").Result;
+                    ei2 = exchangesManager.GetExchangeOnVhost(binding.source, "/").Result;
                 }
             }
 
