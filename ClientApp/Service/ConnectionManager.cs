@@ -4,18 +4,18 @@ using System.Linq;
 using RabbitMQ.Client;
 using ClientApp.Model;
 
-namespace ClientApp
+namespace ClientApp.Service
 {
     public class ConnectionManager
     {
         private static ConnectionManager Instance;
 
-        private ConnectionFactory factory;
-        public IConnection Connection ;
-        public IModel Channel;
+        public ConnectionFactory Factory { get; set; }
+        public IConnection Connection { get; set; }
 
-        private ConnectionInfo info;
-        private IEnumerable<String> Hosts;
+
+        private ConnectionInfo info { get; set; }
+        private static IEnumerable<string> Hosts { get; set; }
 
         public static ConnectionManager GetInstance()
         {
@@ -31,7 +31,7 @@ namespace ClientApp
             
         }
 
-        public bool SetConnectionCredentials(string Ip, string Username, string Password, string Virtualhost, IEnumerable<string> Hosts  )
+        public bool CreateFactory(string Ip, string Username, string Password, string Virtualhost, IEnumerable<string> Hosts  )
         {
             try
             {
@@ -40,34 +40,43 @@ namespace ClientApp
         
                 info = new ConnectionInfo(Username, Password,Virtualhost);
 
-                factory = new ConnectionFactory();
-                factory.UserName = Username;
-                factory.Password = Password;
-                factory.VirtualHost = Virtualhost;
-                factory.HostName = Ip;
-                
-
+                Factory = new ConnectionFactory();
+                Factory.UserName = Username;
+                Factory.Password = Password;
+                Factory.VirtualHost = Virtualhost;
+                Factory.HostName = Ip;
+                Factory.ContinuationTimeout = new TimeSpan(5);
+                Factory.RequestedHeartbeat = 40;
                 if (Hosts != null)
                 {
-                    factory.HostnameSelector = new HostsnameSelector(Hosts.ToList());
-                    factory.AutomaticRecoveryEnabled = true;
-                    factory.TopologyRecoveryEnabled = true;
+                    Factory.HostnameSelector = new HostsnameSelector(Hosts.ToList());
+                    Factory.AutomaticRecoveryEnabled = true;
+                    Factory.TopologyRecoveryEnabled = true;
                 }
-
-                
-                Connection = Hosts!= null ? factory.CreateConnection(Hosts.ToList()): factory.CreateConnection();
-                Channel = Connection.CreateModel();
-                this.Hosts = Hosts;
 
                 return true;
             }
             catch (Exception ex)
             {
-                
                 Console.Write(ex.Message);
                 return false;
             }       
         }
-        
+
+
+        /// <summary>
+        /// Returns a connection item. If the ConnectionManager class has a list of host names set then it will use that list.
+        /// </summary>
+        /// <returns></returns>
+        public IConnection CreateConnection(IEnumerable<string> Hosts)
+        {
+            if(this.Factory == null)
+                throw new Exception("ConnectioManager does not have a RabbitMQ factory to use.");
+
+            if (Hosts != null)
+                return Factory.CreateConnection(Hosts.ToList());
+            else
+                return Factory.CreateConnection();
+        }
     }
 }

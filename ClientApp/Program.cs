@@ -2,13 +2,24 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Net.Mime;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Xml;
 using ClientApp.Model;
 using ClientApp.Service;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using CommandLine;
+using RabbitMQWebAPI.Library.DataAccess;
+using RabbitDataAccess = RabbitMQWebAPI.Library;
+using RabbitMQWebAPI.Library.Models;
+using RabbitMQWebAPI.Library.Models.Binding;
+using RabbitMQWebAPI.Library.Models.Exchange;
+using RabbitMQWebAPI.Library.Models.Queue;
 
 namespace ClientApp
 {
@@ -18,6 +29,9 @@ namespace ClientApp
 
         public static void Main(string[] args)
         {
+
+            System.Threading.Thread.CurrentThread.Name = "Main thread";
+
             var parser = new Parser(with =>
             {
                 with.CaseSensitive = false;
@@ -44,16 +58,15 @@ namespace ClientApp
             }
 
             if (invokedVerb == "Consume")
-            {       
-                    var consumeSubOptions = (ConsumeSubOptions)invokedVerbInstance;
-                    Consume(consumeSubOptions);
+            {
+                var consumeSubOptions = (ConsumeSubOptions)invokedVerbInstance;
+                Consume(consumeSubOptions);
             }
 
             if (invokedVerb == "Publish")
             {
-                
-                    var publishSubOptions = (PublishSubOptions)invokedVerbInstance;
-                    Publish(publishSubOptions);            
+                var publishSubOptions = (PublishSubOptions)invokedVerbInstance;
+                Publish(publishSubOptions);
             }
 
 
@@ -62,10 +75,12 @@ namespace ClientApp
 
         private static void Publish(PublishSubOptions options)
         {
+            try
+            {
                 if (options.FilePaths == null)
                     options.FilePaths = ConsoleManager.GetFilePaths().ToArray();
 
-                var watch = System.Diagnostics.Stopwatch.StartNew();
+                Stopwatch watch = System.Diagnostics.Stopwatch.StartNew();
                 double avrgLength = 0;
                 double minLength = 0;
                 double maxLength = 0;
@@ -84,22 +99,48 @@ namespace ClientApp
 
                 _connectionMngr = ConnectionManager.GetInstance();
 
-                _connectionMngr.SetConnectionCredentials(Username: options.UserName,
+                _connectionMngr.CreateFactory(Username: options.UserName,
                     Password: options.Password,
                     Virtualhost: options.VirtualHost,
                     Ip: options.Ip,
-                    Hosts: options.Hosts
-                );
+                    Hosts: options.Hosts);
 
-                using (var connection = _connectionMngr.Connection)
-                using (var channel = _connectionMngr.Channel)
+                using (var connection = _connectionMngr.CreateConnection(options.Hosts))
+                using (var channel = connection.CreateModel())
                 {
 
                     TopologyManager.DeclareTopology(channel: channel, options: options);
 
+                    connection.ConnectionBlocked += (sender, args) =>
+                    {
+                        Console.WriteLine("Connection State: Blocked \n");
+                    };
+
+                    connection.ConnectionShutdown += (sender, args) =>
+                    {
+                        Console.WriteLine("Connection State: Shutdown \n");
+                    };
+
+                    connection.ConnectionUnblocked += (sender, args) =>
+                    {
+                        Console.WriteLine("Connection State: Unblocked \n");
+                    };
+
+                    connection.ConnectionShutdown += (sender, args) =>
+                    {
+                        Console.WriteLine("Connection State: Shutdown," + args.Cause + ", " + ", " + args.ReplyText +
+                                          ", " + args.Initiator);
+                    };
+
+                    connection.CallbackException += (sender, args) =>
+                    {
+                        Console.WriteLine("Connection State: callback exception");
+                    };
+
                     if (options.ConfirmsEnabled)
                     {
                         channel.ConfirmSelect();
+                        channel.WaitForConfirmsOrDie();
                     }
 
                     IBasicProperties props = GenerateMessageProperties(channel, options.PersistentMessages);
@@ -107,57 +148,162 @@ namespace ClientApp
                     if (options.Count > 0)
                         PublishWithCount(channel, props, options.Count, messages, options);
                     else
+
                         PublishUntilStop(channel, props, messages, options);
                 }
 
                 ConsoleManager.PrintParameters(options, watch, maxLength, minLength, avrgLength);
 
-                Console.ReadLine();
-           
+            }
+            catch (Exception ex)
+            {
+                ConsoleManager.PrintException(ex);
+            }
         }
 
-        private static IBasicProperties GenerateMessageProperties(IModel channel, bool PersistentMessages)
+        private static IBasicProperties GenerateMessageProperties(IModel channel, bool persistentMessages)
         {
 
             IBasicProperties props = channel.CreateBasicProperties();
 
-            props.Persistent = PersistentMessages;
-            //props.Headers = new Dictionary<string, object>();
-            //props.Headers.Add("Timestamp", DateTime.Now);
-            //props.Headers.Add("Location", "Aarhus , Denmark");
+            props.Persistent = persistentMessages;
 
             return props;
         }
 
-        private static void PublishUntilStop(IModel channel, IBasicProperties props, List<string> messages, PublishSubOptions options)
+        private static async void PublishUntilStop(IModel channel, IBasicProperties props, List<string> messages, PublishSubOptions options)
         {
+            IEnumerable<RabbitMQWebAPI.Library.Models.Queue.Queue> latestQueueInfo = new List<Queue>();
+
+            IDictionary<string, State.StateEnum> queueStatuses = new Dictionary<string, State.StateEnum>();
+
+
+            var handler = new HttpClientHandler();
+
+            handler.Credentials = new NetworkCredential("jssau4rmq", "iaohmf");
+
+            HttpClient client = new HttpClient(handler);
+
+            client.BaseAddress = new Uri("http://nc-mso-test01:15671/api");
+
+
+
+            var queues = new Queues(client);
+
+
+            Thread queueInfoPoolingThread = new Thread(() =>
+           {
+               do
+               {
+                   lock (queueStatuses)
+                   {
+                       try
+                       {
+                           queueStatuses = new Dictionary<string, State.StateEnum>();
+
+
+                           var latestQueueInfos = queues.GetQueues().Result;
+
+                           foreach (Queue q in latestQueueInfos)
+                           {
+                               //??
+                           }
+
+                       }
+                       catch (Exception ex)
+                       {
+                           ConsoleManager.PrintException(ex);
+                       }
+                   }
+                   Thread.Sleep(15000);
+
+               } while (true);
+           });
+
+            queueInfoPoolingThread.Name = "Queue Info Pooling Thread";
+            queueInfoPoolingThread.IsBackground = true;
+            queueInfoPoolingThread.Start();
+
+
+            Exchange ei1 = new Exchange();
+            Exchange ei2 = new Exchange();
+
+            Bindings bindingsFactory = new Bindings(client);
+
+            IEnumerable<Binding> bindings = await bindingsFactory.GetBindingInfos();
+
+            var exchangesManager = new Exchanges(client);
+
+            foreach (var binding in bindings)
+            {
+                if (binding.destination == "ha.queue1" && binding.source != String.Empty)
+                {
+                    ei1 = exchangesManager.GetExchangeOnVhost(binding.source, "/").Result;
+                    // return Exchanges.GetExchangeInfos().Result;
+                }
+                else if (binding.destination == "ha.queue1-FallBack" && binding.source != String.Empty)
+                {
+                    ei2 = exchangesManager.GetExchangeOnVhost(binding.source, "/").Result;
+                }
+            }
+
             ConsoleManager.AnnouncePublishingStarted();
 
-            do
+            while (!Console.KeyAvailable)
             {
-                while (!Console.KeyAvailable)
+                foreach (var messageBody in messages)
                 {
-                    foreach (var messageBody in messages)
-                    {
-                        var body = Encoding.UTF8.GetBytes(messageBody);
+                    var body = Encoding.UTF8.GetBytes(messageBody);
 
-                        try
+                    try
+                    {
+
+
+                        if (queueStatuses.ContainsKey("ha.queue1") &&
+                            queueStatuses["ha.queue1"] != State.StateEnum.Syncing)
                         {
-                            channel.BasicPublish(exchange: options.QueueName + "-Exchange",
-                                routingKey: options.BindingKey,
-                                basicProperties: props,
-                                body: body,
-                                mandatory: true);
-                            if (options.ConfirmsEnabled)
-                                channel.WaitForConfirmsOrDie();
+                            channel.BasicPublish(exchange: ei1.name,
+                            routingKey: options.BindingKey,
+                            basicProperties: props,
+                            body: body,
+                            mandatory: true);
                         }
-                        catch (Exception ex)
+                        else if (queueStatuses.ContainsKey("ha.queue1-Fallback") &&
+                                 queueStatuses["ha.queue1-Fallback"] != State.StateEnum.Syncing)
                         {
-                            ConsoleManager.PrintException(ex);
+                            channel.BasicPublish(exchange: ei2.name,
+                            routingKey: options.BindingKey,
+                            basicProperties: props,
+                            body: body,
+                            mandatory: true);
+                        }
+
+                    }
+                    catch (System.Net.Sockets.SocketException ex)
+                    {
+                        ConsoleManager.PrintException(ex);
+
+                        if (options.ExchangeName.EndsWith("-MainExchange"))
+                        {
+                            options.ExchangeName = options.ExchangeName.Remove(options.ExchangeName.Length - 13);
+                            options.ExchangeName = options.ExchangeName + "-alternativeExchange";
+                        }
+                        else
+                        {
+                            options.ExchangeName = options.ExchangeName.Remove(options.ExchangeName.Length - 20);
+                            options.ExchangeName = options.ExchangeName + "-MainExchange";
                         }
                     }
+
+                    catch (Exception ex)
+                    {
+                        ConsoleManager.PrintException(ex);
+                    }
                 }
-            } while (Console.ReadKey(true).Key != ConsoleKey.Escape);
+            }
+
+            queueInfoPoolingThread.Abort();
+
         }
 
 
@@ -167,7 +313,6 @@ namespace ClientApp
         {
             for (int i = 0; i <= options.Count; i++)
             {
-
                 foreach (var messageBody in messages)
                 {
                     var body = Encoding.UTF8.GetBytes(messageBody);
@@ -191,28 +336,18 @@ namespace ClientApp
             double maxLength = 0;
             double minLength = 0;
 
-            var factory = new ConnectionFactory()
-            {
-                HostName = options.Ip,
-                UserName = options.UserName,
-                Password = options.Password,
-                VirtualHost = options.VirtualHost
-            };
-
             _connectionMngr = ConnectionManager.GetInstance();
 
-            _connectionMngr.SetConnectionCredentials(Username: options.UserName,
+            _connectionMngr.CreateFactory(Username: options.UserName,
                Password: options.Password,
                Virtualhost: options.VirtualHost,
                Ip: options.Ip,
                Hosts: options.Hosts
                 );
 
-            using (var connection = _connectionMngr.Connection)
-            using (var channel = _connectionMngr.Channel)
+            using (var connection = _connectionMngr.Factory.CreateConnection())
+            using (var channel = connection.CreateModel())
             {
-                //channel.BasicQos(1000, 5000, true);
-
 
                 var consumer = new EventingBasicConsumer(channel);
 
@@ -250,25 +385,11 @@ namespace ClientApp
 
                 Console.WriteLine();
                 Console.ReadKey();
-
-                channel.Close();
-                connection.Close();
             }
 
             watch.Stop();
             ConsoleManager.PrintParameters(options, watch, maxLength, minLength, avrgLength);
 
-        }
-
-        public static void ReadLine(IModel channel, IConnection connection)
-        {
-            if (Console.ReadLine().ToLower().Trim() == "Stop")
-            {
-                channel.Close();
-                connection.Close();
-            }
-            else
-                ReadLine(channel, connection);
         }
     }
 }

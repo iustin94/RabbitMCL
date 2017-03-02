@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A71A6E31-36EE-4864-829A-BC65258554CA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RabbitMQWebAPI.Library</RootNamespace>
+    <AssemblyName>RabbitMQWebAPI.Library</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DataAccess\Bindings.cs" />
+    <Compile Include="DataAccess\Channels.cs" />
+    <Compile Include="DataAccess\Connections.cs" />
+    <Compile Include="DataAccess\Consumers.cs" />
+    <Compile Include="DataAccess\DataFactory\DataFactory.cs" />
+    <Compile Include="DataAccess\Definitions.cs" />
+    <Compile Include="DataAccess\Exchanges.cs" />
+    <Compile Include="DataAccess\DataFactory\IDataFactory.cs" />
+    <Compile Include="DataAccess\Extentions.cs" />
+    <Compile Include="DataAccess\Miscellaneous.cs" />
+    <Compile Include="DataAccess\Nodes.cs" />
+    <Compile Include="DataAccess\Parameters.cs" />
+    <Compile Include="DataAccess\Permissions.cs" />
+    <Compile Include="DataAccess\Policies.cs" />
+    <Compile Include="DataAccess\Queues.cs" />
+    <Compile Include="DataAccess\Users.cs" />
+    <Compile Include="DataAccess\Vhosts.cs" />
+    <Compile Include="DictionaryMissingArgumentException.cs" />
+    <Compile Include="Models\BaseModel\IModel.cs" />
+    <Compile Include="Models\BaseModel\Model.cs" />
+    <Compile Include="Models\Error\Error.cs" />
+    <Compile Include="Models\Error\ErrorSentinel.cs" />
+    <Compile Include="Models\Sentinel\ISentinel.cs" />
+    <Compile Include="Models\Binding\Binding.cs" />
+    <Compile Include="Models\Binding\BindingSentinel.cs" />
+    <Compile Include="Models\Channel\Channel.cs" />
+    <Compile Include="Models\Channel\ChannelSentinel.cs" />
+    <Compile Include="Models\Channel\ChannelConnectionDetails\ChannelConnectionDetails.cs" />
+    <Compile Include="Models\Channel\ChannelConnectionDetails\ChannelConnectionDetailsSentinel.cs" />
+    <Compile Include="Models\Connection\ConnectionSentinel.cs" />
+    <Compile Include="Models\Channel\ChannelGarbageCollection\ChannelGarbageCollection.cs" />
+    <Compile Include="Models\Channel\ChannelGarbageCollection\ChannelGarbageCollectionSentinel.cs" />
+    <Compile Include="Models\Channel\ChannelMessageStats\ChannelMessageStatsSentinel.cs" />
+    <Compile Include="Models\Connection\Connection.cs" />
+    <Compile Include="Models\Consumer\ConsumerChannelDetails\ConsumerChannelDetails.cs" />
+    <Compile Include="Models\Consumer\ConsumerChannelDetails\ConsumerChannelDetailsSentinel.cs" />
+    <Compile Include="Models\Consumer\Consumer.cs" />
+    <Compile Include="Models\Consumer\ConsumerSentinel.cs" />
+    <Compile Include="Models\Definition\DefinitionBinding\DefinitionBinding.cs" />
+    <Compile Include="Models\Definition\DefinitionBinding\DefinitionBindingSentinel.cs" />
+    <Compile Include="Models\Definition\DefinitionExchange\DefinitionExchange.cs" />
+    <Compile Include="Models\Definition\DefinitionExchange\DefinitionExchangeSentinel.cs" />
+    <Compile Include="Models\Definition\Definition.cs" />
+    <Compile Include="Models\Definition\DefinitionSentinel.cs" />
+    <Compile Include="Models\Definition\DefinitionParameter\DefinitionParameter.cs" />
+    <Compile Include="Models\Definition\DefinitionParameter\DefinitionParameterSentinel.cs" />
+    <Compile Include="Models\Definition\DefinitionParameter\DefinitionParameterValue\DefinitionParameterValue.cs" />
+    <Compile Include="Models\Definition\DefinitionParameter\DefinitionParameterValue\DefinitionParameterValueSentinel.cs" />
+    <Compile Include="Models\Definition\DefinitionPermission\DefinitionPermission.cs" />
+    <Compile Include="Models\Definition\DefinitionPermission\DefinitionPermissionSentinel.cs" />
+    <Compile Include="Models\Definition\DefinitionPolicy\DefinitionPolicy.cs" />
+    <Compile Include="Models\Definition\DefinitionPolicy\DefinitionPolicyDefinition\DefinitionPolicyDefinition.cs" />
+    <Compile Include="Models\Definition\DefinitionPolicy\DefinitionPolicyDefinition\DefinitionPolicyDefinitionSentinel.cs" />
+    <Compile Include="Models\Definition\DefinitionPolicy\DefinitionPolicySentinel.cs" />
+    <Compile Include="Models\Definition\DefinitionQueue\DefinitionQueue.cs" />
+    <Compile Include="Models\Definition\DefinitionQueue\DefinitionQueueSentinel.cs" />
+    <Compile Include="Models\Definition\DefinitionUser\DefinitionUser.cs" />
+    <Compile Include="Models\Definition\DefinitionUser\DefinitionUserSentinel.cs" />
+    <Compile Include="Models\Exchange\Exchange.cs" />
+    <Compile Include="Models\Exchange\ExchangeSentinel.cs" />
+    <Compile Include="Models\Exchange\ExchangeMessageStats\ExchangeMessageStats.cs" />
+    <Compile Include="Models\Exchange\ExchangeMessageStats\ExchangeMessageStatsSentinel.cs" />
+    <Compile Include="Models\Channel\ChannelMessageStats\ChannelMessageStats.cs" />
+    <Compile Include="Models\Extention\Extention.cs" />
+    <Compile Include="Models\Extention\ExtentionSentinel.cs" />
+    <Compile Include="Models\Node\NodeApplication\NodeApplication.cs" />
+    <Compile Include="Models\Node\NodeApplication\NodeApplicationSentinel.cs" />
+    <Compile Include="Models\Node\NodeAuthMechanisms\NodeAuthMechanisms.cs" />
+    <Compile Include="Models\Node\NodeAuthMechanisms\NodeAuthMechanismsSentinel.cs" />
+    <Compile Include="Models\Node\NodeClusterLink\NodeClusterLink.cs" />
+    <Compile Include="Models\Node\NodeClusterLink\NodeClusterLinkSentinel.cs" />
+    <Compile Include="Models\Node\NodeClusterLink\NodeClusterLinkStats\NodeClusterLinkStats.cs" />
+    <Compile Include="Models\Node\NodeClusterLink\NodeClusterLinkStats\NodeClusterLinkStatsSentinel.cs" />
+    <Compile Include="Models\Node\NodeContext\NodeContext.cs" />
+    <Compile Include="Models\Node\NodeContext\NodeContextSentinel.cs" />
+    <Compile Include="Models\Node\NodeExchangeType\NodeExchangeType.cs" />
+    <Compile Include="Models\Node\NodeExchangeType\NodeExchangeTypeSentinel.cs" />
+    <Compile Include="Models\Node\Node.cs" />
+    <Compile Include="Models\Node\NodeSentinel.cs" />
+    <Compile Include="Models\Parameter\Parameter.cs" />
+    <Compile Include="Models\Parameter\ParameterSentinel.cs" />
+    <Compile Include="Models\Parameter\ParameterValue\ParameterValue.cs" />
+    <Compile Include="Models\Parameter\ParameterValue\ParameterValueSentinel.cs" />
+    <Compile Include="Models\Permission\PermissionSentinel.cs" />
+    <Compile Include="Models\Permission\Permission.cs" />
+    <Compile Include="Models\Policy\PolicyDefinition\PolicyDefinition.cs" />
+    <Compile Include="Models\Policy\PolicyDefinition\PolicyDefinitionSentinel.cs" />
+    <Compile Include="Models\Policy\Policy.cs" />
+    <Compile Include="Models\Policy\PolicySentinel.cs" />
+    <Compile Include="Models\Queue\QueueGarbageCollection\QueueGarbageCollection.cs" />
+    <Compile Include="Models\Queue\QueueGarbageCollection\QueueGarbageCollectionSentinel.cs" />
+    <Compile Include="Models\Queue\Queue.cs" />
+    <Compile Include="Models\Queue\QueueSentinel.cs" />
+    <Compile Include="Models\Sentinel\Sentinel.cs" />
+    <Compile Include="Models\State.cs" />
+    <Compile Include="Models\User\User.cs" />
+    <Compile Include="Models\User\UserSentinel.cs" />
+    <Compile Include="Models\Queue\QueueBackingQueue\QueueBackingQueueStatusSentinel.cs" />
+    <Compile Include="Models\Queue\QueueBackingQueue\QueueBackingQueueStatus.cs" />
+    <Compile Include="Models\Vhost\Vhost.cs" />
+    <Compile Include="Models\Vhost\VhostInfoMessageStats\VhostInfoMessageStats.cs" />
+    <Compile Include="Models\Vhost\VhostInfoMessageStats\VhostInfoMessageStatsSentinel.cs" />
+    <Compile Include="Models\Vhost\VhostSentinel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

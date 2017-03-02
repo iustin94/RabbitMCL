@@ -6,8 +6,6 @@ using CommandLine.Text;
 
 namespace ClientApp.Model
 {
-
-
     class PublishSubOptions
     {
         [Option(longName: "QueueName", HelpText = "")]

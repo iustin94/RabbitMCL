@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 using ClientApp.Service;
 using RabbitMQ.Client;
 
-namespace ClientApp
+namespace ClientApp.Service
 {
     class HostsnameSelector : IHostnameSelector
     {
         private int count;
         private int _currentIndex;
 
+        //Do I really need this?
         public HostsnameSelector(IList<String> Hosts)
         {
            
