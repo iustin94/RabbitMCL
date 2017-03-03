@@ -3,11 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientApp", "ClientApp\ClientApp.csproj", "{66960F13-1047-4689-B065-8F7BBAC50B38}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQWebAPI.Library", "RabbitMQWebAPI.Library\RabbitMQWebAPI.Library.csproj", "{A71A6E31-36EE-4864-829A-BC65258554CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingApp", "TestingApp\TestingApp.csproj", "{B6FC3F11-20C4-4B95-84E6-48310C8DA051}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQWebAPI.CLITest", "TestingApp\RabbitMQWebAPI.CLITest.csproj", "{B6FC3F11-20C4-4B95-84E6-48310C8DA051}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +13,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{66960F13-1047-4689-B065-8F7BBAC50B38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{66960F13-1047-4689-B065-8F7BBAC50B38}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{66960F13-1047-4689-B065-8F7BBAC50B38}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{66960F13-1047-4689-B065-8F7BBAC50B38}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A71A6E31-36EE-4864-829A-BC65258554CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A71A6E31-36EE-4864-829A-BC65258554CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A71A6E31-36EE-4864-829A-BC65258554CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
