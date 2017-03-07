@@ -1,0 +1,6 @@
+C:\Users\jol\Documents\Visual Studio 2015\Projects\FileTransferQueue\TestingApp\bin\Debug\TestingApp.exe.config
+C:\Users\jol\Documents\Visual Studio 2015\Projects\FileTransferQueue\TestingApp\obj\Debug\TestingApp.exe
+C:\Users\jol\Documents\Visual Studio 2015\Projects\FileTransferQueue\TestingApp\obj\Debug\TestingApp.pdb
+C:\Users\jol\Documents\Visual Studio 2015\Projects\RabbitMQWebAPI\TestingApp\bin\Debug\TestingApp.exe.config
+C:\Users\jol\Documents\Visual Studio 2015\Projects\RabbitMQWebAPI\TestingApp\obj\Debug\TestingApp.exe
+C:\Users\jol\Documents\Visual Studio 2015\Projects\RabbitMQWebAPI\TestingApp\obj\Debug\TestingApp.pdb
