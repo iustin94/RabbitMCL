@@ -6,9 +6,7 @@ This is a small library that I made to wrap the HTTP api funcitonality of Rabbit
 
 # THE LIBRARI CURRENTLY HANDELS ONLY THE "GET" API CALLS. NOTHING MORE.
 
-I used this library to retrieve information about the actual rabbitmq server/cluster status since I did not find any way to do it from the
-RabbitMQ.Client library.
-
+I used this library to retrieve information about the actual rabbitmq server/cluster status.
 The library api consists of several classes, each class representing on API domain from the rabbitmq api. 
 
 ex:
